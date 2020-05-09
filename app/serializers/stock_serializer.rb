@@ -1,6 +1,7 @@
 class StockSerializer < ActiveModel::Serializer
-  attributes :title
-  attribute :description
-  attribute :path
-  attribute :category_id
+  attributes :id, :title, :path, :category
+
+  def category
+    CategorySerializer.new(object.category)
+  end
 end

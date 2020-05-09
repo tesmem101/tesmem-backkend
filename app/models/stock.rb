@@ -1,8 +1,5 @@
 class Stock < ApplicationRecord
-  attribute :title
-  attribute :description
-  attribute :path
-  attribute :category_id
-
-  mount_uploaders :images, ImageUploader
+  belongs_to :category
+  
+  mount_uploaders :image, ImageUploader
 end

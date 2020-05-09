@@ -16,22 +16,18 @@ module V1
       params do
         requires :category_id, type: String, :desc => "category"
         optional :file, type: Array do
-          requires :images, :type => Rack::Multipart::UploadedFile, :desc => "Stock Images."
+          requires :image, :type => Rack::Multipart::UploadedFile, :desc => "Stock Images."
         end
       end
 
-      post :file do
+      post :create do
         uploader = ImageUploader.new
-        uploader.store!(params[:images])
+        uploader.store!(params[:image])
+        stock = Stock.new(title: uploader.identifier, description: uploader.current_path, path: uploader.url, category_id: params[:category_id])
 
-        stock = Stock.new
-        stock.title = uploader.identifier
-        stock.description = uploader.current_path
-        stock.path = uploader.url
-        stock.category_id = params[:category_id]
         if stock.save!
+          serialization = StockSerializer.new(stock)
           render_success(serialization.as_json)
-          # uploader.retrieve_from_store!(params[:path])
         else
           render_error(RESPONSE_CODE[:unprocessable_entity], stock.errors.full_messages.join(", "))
         end
