@@ -17,8 +17,7 @@ module V1
         requires :title, type: String, desc: "Title"
         optional :description, type: String, desc: "Description"
       end
-
-      post :create do
+      post "/create" do
         category = Category.new(params)
         if category.save!
           serialization = CategorySerializer.new(category)
@@ -28,26 +27,86 @@ module V1
         end
       end
 
-      # desc "Update Category",
-      #      { consumes: ["application/x-www-form-urlencoded"],
-      #       http_codes: [
-      #        { code: 200, message: "success" },
-      #        { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-      #        { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-      #        { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-      #      ] }
-      # params do
-      #   requires :title, type: String, desc: "Title"
-      #   optional :description, type: String, desc: "Description"
-      # end
+      desc "Get all Categories",
+           { consumes: ["application/x-www-form-urlencoded"],
+            http_codes: [
+             { code: 200, message: "success" },
+             { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+             { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+             { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
+           ] }
+      get "/all" do
+        category = Category.all
+        render_success(category.as_json)
+      end
 
-      # put :update do
-      #   if Category.update(params)
-      #     render_success(response.as_json)
-      #   else
-      #     render_error(RESPONSE_CODE[:unauthorized], category.errors.full_messages.join(", "))
-      #   end
-      # end
+      desc "Get Category",
+           { consumes: ["application/x-www-form-urlencoded"],
+            http_codes: [
+             { code: 200, message: "success" },
+             { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+             { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+             { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
+           ] }
+      get "/:id" do
+        category = Category.find(params[:id])
+        if category.present?
+          serialization = CategorySerializer.new(category)
+          render_success(serialization.as_json)
+        end
+      end
+
+      desc "Update Category",
+           { consumes: ["application/x-www-form-urlencoded"],
+            http_codes: [
+             { code: 200, message: "success" },
+             { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+             { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+             { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
+           ] }
+      params do
+        requires :title, type: String, desc: "Title"
+        optional :description, type: String, desc: "Description"
+      end
+      put "/update/:id" do
+        category = Category.find(params[:id])
+        if category.update(params)
+          serialization = CategorySerializer.new(category)
+          render_success(serialization.as_json)
+        else
+          render_error(RESPONSE_CODE[:unprocessable_entity], category.errors.full_messages.join(", "))
+        end
+      end
+
+      desc "Delete Category",
+           { consumes: ["application/x-www-form-urlencoded"],
+            http_codes: [
+             { code: 200, message: "success" },
+             { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+             { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+             { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
+           ] }
+
+      delete "/delete/:id" do
+        Category.find(params[:id]).destroy
+        render_success("Category Deleted Successfully".as_json)
+      end
+
+      desc "Get All Categories with Images",
+        { consumes: ["application/x-www-form-urlencoded"],
+         http_codes: [
+          { code: 200, message: "success" },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
+        ] }
+
+      get "/stocks" do
+        byebug
+        category = Category.all.includes(:stocks)
+        serialization = serialize_collection(category, serializer: CategorySerializer)
+        render_success(serialization.as_json)
+      end
     end
   end
 end
