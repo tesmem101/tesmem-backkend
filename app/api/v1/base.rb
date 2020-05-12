@@ -6,6 +6,7 @@ module V1
     mount V1::Images
     mount V1::Categories
     mount V1::Stocks
+    mount V1::Designs
 
     add_swagger_documentation(
       api_version: 'v1',

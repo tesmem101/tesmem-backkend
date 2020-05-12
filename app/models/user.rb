@@ -7,6 +7,7 @@ class User < ApplicationRecord
   mount_uploader :profile_photo, ImageUploader
 
   has_many :user_tokens, dependent: :destroy
+  has_many :designs
 
   validates_presence_of :email, uniqueness: true, case_sensitive: false
 

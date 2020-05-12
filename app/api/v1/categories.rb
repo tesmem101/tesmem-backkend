@@ -101,8 +101,7 @@ module V1
           { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
         ] }
 
-      get "/stocks" do
-        byebug
+      get "stocks/all" do
         category = Category.all.includes(:stocks)
         serialization = serialize_collection(category, serializer: CategorySerializer)
         render_success(serialization.as_json)
