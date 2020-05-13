@@ -23,7 +23,7 @@ module V1
       end
 
       post :create do
-        stock = Stock.create(params)
+        stock = Stock.new(params)
         if stock.save!
           serialization = StockSerializer.new(stock)
           render_success(serialization.as_json)
