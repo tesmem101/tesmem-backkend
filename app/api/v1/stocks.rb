@@ -15,16 +15,15 @@ module V1
         ] }
       params do
         requires :category_id, type: String, :desc => "category"
-        optional :file, type: Array do
-          requires :image, :type => Rack::Multipart::UploadedFile, :desc => "Stock Images."
-        end
+        requires :title, type: String, :desc => "title"
+        requires :stocktype, type: String, :desc => "stocktype"
+        requires :source, type: String, :desc => "source"
+        requires :height, type: String, :desc => "height"
+        requires :size, type: String, :desc => "size"
       end
 
       post :create do
-        uploader = ImageUploader.new
-        uploader.store!(params[:image])
-        stock = Stock.new(title: uploader.identifier, description: uploader.current_path, path: uploader.url, category_id: params[:category_id])
-
+        stock = Stock.create(params)
         if stock.save!
           serialization = StockSerializer.new(stock)
           render_success(serialization.as_json)
@@ -62,8 +61,6 @@ module V1
         serialization = StockSerializer.new(stock)
         render_success(serialization.as_json)
       end
-
-      
     end
   end
 end
