@@ -1,11 +1,11 @@
 module V1
-  class Categories < Grape::API
+  class SubCategories < Grape::API
     include AuthenticateRequest
     include V1Base
     version "v1", using: :path
 
-    resource :categories do
-      desc "Add Category",
+    resource :subcategories do
+      desc "Add SubCategory",
            { consumes: ["application/x-www-form-urlencoded"],
             http_codes: [
              { code: 200, message: "success" },
@@ -16,18 +16,19 @@ module V1
       params do
         requires :title, type: String, desc: "Title"
         optional :description, type: String, desc: "Description"
+        requires :category_id, type: Integer, desc: "Category Id"
       end
       post "/create" do
-        category = Category.new(params)
-        if category.save!
-          serialization = CategorySerializer.new(category)
+        subcategory = SubCategory.new(params)
+        if subcategory.save!
+          serialization = SubCategorySerializer.new(subcategory)
           render_success(serialization.as_json)
         else
-          render_error(RESPONSE_CODE[:forbidden], category.errors.full_messages.join(", "))
+          render_error(RESPONSE_CODE[:forbidden], subcategory.errors.full_messages.join(", "))
         end
       end
 
-      desc "Get all Categories",
+      desc "Get all Subcategories",
            { consumes: ["application/x-www-form-urlencoded"],
             http_codes: [
              { code: 200, message: "success" },
@@ -36,11 +37,12 @@ module V1
              { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
            ] }
       get "/all" do
-        category = Category.all
-        render_success(category.as_json)
+        subcategory = SubCategory.all
+        serialization = serialize_collection(subcategory, serializer: SubCategorySerializer)
+        render_success(serialization.as_json)
       end
 
-      desc "Get Category",
+      desc "Get SubCategory",
            { consumes: ["application/x-www-form-urlencoded"],
             http_codes: [
              { code: 200, message: "success" },
@@ -49,14 +51,14 @@ module V1
              { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
            ] }
       get "/:id" do
-        category = Category.find(params[:id])
-        if category.present?
-          serialization = CategorySerializer.new(category)
+        subcategory = SubCategory.find(params[:id])
+        if subcategory.present?
+          serialization = SubCategorySerializer.new(subcategory)
           render_success(serialization.as_json)
         end
       end
 
-      desc "Update Category",
+      desc "Update SubCategory",
            { consumes: ["application/x-www-form-urlencoded"],
             http_codes: [
              { code: 200, message: "success" },
@@ -67,18 +69,19 @@ module V1
       params do
         requires :title, type: String, desc: "Title"
         optional :description, type: String, desc: "Description"
+        requires :category_id, type: Integer, desc: "Category Id"
       end
       put "/update/:id" do
-        category = Category.find(params[:id])
-        if category.update(params)
-          serialization = CategorySerializer.new(category)
+        subcategory = SubCategory.find(params[:id])
+        if subcategory.update(params)
+          serialization = SubCategorySerializer.new(subcategory)
           render_success(serialization.as_json)
         else
-          render_error(RESPONSE_CODE[:unprocessable_entity], category.errors.full_messages.join(", "))
+          render_error(RESPONSE_CODE[:unprocessable_entity], subcategory.errors.full_messages.join(", "))
         end
       end
 
-      desc "Delete Category",
+      desc "Delete SubCategory",
            { consumes: ["application/x-www-form-urlencoded"],
             http_codes: [
              { code: 200, message: "success" },
@@ -88,11 +91,11 @@ module V1
            ] }
 
       delete "/delete/:id" do
-        Category.find(params[:id]).destroy
-        render_success("Category Deleted Successfully".as_json)
+        SubCategory.find(params[:id]).destroy
+        render_success("SubCategory Deleted Successfully".as_json)
       end
 
-      desc "Get All Categories with Images",
+      desc "Get All Subategories with Images",
         { consumes: ["application/x-www-form-urlencoded"],
          http_codes: [
           { code: 200, message: "success" },
@@ -102,26 +105,10 @@ module V1
         ] }
 
       get "stocks/all" do
-        category = Category.all.includes(:stocks)
-        serialization = serialize_collection(category, serializer: CategorySerializer)
+        subcategory = SubCategory.all.includes(:stocks)
+        serialization = serialize_collection(subcategory, serializer: SubCategorySerializer)
         render_success(serialization.as_json)
       end
-
-      desc "Get All Categories with Subcategories",
-        { consumes: ["application/x-www-form-urlencoded"],
-         http_codes: [
-          { code: 200, message: "success" },
-          { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-          { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-          { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-        ] }
-
-      get "subcategories/all" do
-        category = Category.all.includes(:sub_categories)
-        serialization = serialize_collection(category, serializer: CategorySerializer)
-        render_success(serialization.as_json)
-      end
-
     end
   end
 end
