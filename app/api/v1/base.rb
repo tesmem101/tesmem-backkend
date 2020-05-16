@@ -5,6 +5,7 @@ module V1
     mount V1::Users
     mount V1::Images
     mount V1::Categories
+    mount V1::SubCategories
     mount V1::Stocks
     mount V1::Designs
 
