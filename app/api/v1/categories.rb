@@ -37,7 +37,8 @@ module V1
            ] }
       get "/all" do
         category = Category.all
-        render_success(category.as_json)
+        serialization = serialize_collection(category, serializer: CategorySerializer)
+        render_success(serialization.as_json)
       end
 
       desc "Get Category",
