@@ -5,6 +5,7 @@ module V1
     version "v1", using: :path
 
     resource :stocks do
+      # CREATE
       desc "Create Image",
         { consumes: ["application/x-www-form-urlencoded"],
          http_codes: [
@@ -22,7 +23,6 @@ module V1
         requires :height, type: String, :desc => "height"
         requires :size, type: String, :desc => "size"
       end
-
       post :create do
         stock = Stock.new(params)
         if stock.save!
@@ -32,48 +32,41 @@ module V1
           render_error(RESPONSE_CODE[:unprocessable_entity], stock.errors.full_messages.join(", "))
         end
       end
+      # SHOW
+      desc "Get Image by Id",
+           { consumes: ["application/x-www-form-urlencoded"],
+             http_codes: [{ code: 200, message: "success" }] }
+
+      get "/:id" do
+        stock = Stock.find(params[:id])
+        serialization = StockSerializer.new(stock)
+        render_success(serialization.as_json)
+      end
+      # DESTROY
+      desc "Delete Image",
+           { consumes: ["application/x-www-form-urlencoded"],
+             http_codes: [{ code: 200, message: "success" }] }
+      delete "/:id" do
+        Stock.find(params[:id]).destroy
+        render_success("Image Deleted Successfully".as_json)
+      end
 
       desc "Get Images by CategoryId",
-        { consumes: ["application/x-www-form-urlencoded"],
-         http_codes: [
-          { code: 200, message: "success" },
-          { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-          { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-          { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-        ] }
-
-      get "/categories/:id" do
+           { consumes: ["application/x-www-form-urlencoded"],
+             http_codes: [{ code: 200, message: "success" }] }
+      get "/category/:id" do
         stock = Stock.where(category_id: params[:id])
         serialization = serialize_collection(stock, serializer: StockSerializer)
         render_success(serialization.as_json)
       end
 
       desc "Get Images by SubCategoryId",
-      { consumes: ["application/x-www-form-urlencoded"],
-       http_codes: [
-        { code: 200, message: "success" },
-        { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-        { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-        { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-      ] }
-
-    get "/subcategories/:id" do
-      stock = Stock.where(sub_category_id: params[:id])
-      serialization = serialize_collection(stock, serializer: StockSerializer)
-      render_success(serialization.as_json)
-    end
-      desc "Get Image by Id",
            { consumes: ["application/x-www-form-urlencoded"],
-            http_codes: [
-             { code: 200, message: "success" },
-             { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-             { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-             { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-           ] }
+             http_codes: [{ code: 200, message: "success" }] }
 
-      get "/image/:id" do
-        stock = Stock.find(params[:id])
-        serialization = StockSerializer.new(stock)
+      get "/subcategory/:id" do
+        stock = Stock.where(sub_category_id: params[:id])
+        serialization = serialize_collection(stock, serializer: StockSerializer)
         render_success(serialization.as_json)
       end
     end

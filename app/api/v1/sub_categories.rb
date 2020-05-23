@@ -5,6 +5,7 @@ module V1
     version "v1", using: :path
 
     resource :subcategories do
+      # CREATE
       desc "Add SubCategory",
            { consumes: ["application/x-www-form-urlencoded"],
             http_codes: [
@@ -27,29 +28,19 @@ module V1
           render_error(RESPONSE_CODE[:forbidden], subcategory.errors.full_messages.join(", "))
         end
       end
-
+      # INDEX
       desc "Get all Subcategories",
-           { consumes: ["application/x-www-form-urlencoded"],
-            http_codes: [
-             { code: 200, message: "success" },
-             { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-             { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-             { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-           ] }
-      get "/all" do
+        { consumes: ["application/x-www-form-urlencoded"],
+          http_codes: [{ code: 200, message: "success" }] }
+      get "/" do
         subcategory = SubCategory.all
         serialization = serialize_collection(subcategory, serializer: SubCategorySerializer)
         render_success(serialization.as_json)
       end
-
+      # SHOW
       desc "Get SubCategory",
            { consumes: ["application/x-www-form-urlencoded"],
-            http_codes: [
-             { code: 200, message: "success" },
-             { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-             { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-             { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-           ] }
+             http_codes: [{ code: 200, message: "success" }] }
       get "/:id" do
         subcategory = SubCategory.find(params[:id])
         if subcategory.present?
@@ -57,7 +48,7 @@ module V1
           render_success(serialization.as_json)
         end
       end
-
+      # UPDATE
       desc "Update SubCategory",
            { consumes: ["application/x-www-form-urlencoded"],
             http_codes: [
@@ -69,9 +60,8 @@ module V1
       params do
         requires :title, type: String, desc: "Title"
         optional :description, type: String, desc: "Description"
-        requires :category_id, type: Integer, desc: "Category Id"
       end
-      put "/update/:id" do
+      put "/:id" do
         subcategory = SubCategory.find(params[:id])
         if subcategory.update(params)
           serialization = SubCategorySerializer.new(subcategory)
@@ -80,34 +70,14 @@ module V1
           render_error(RESPONSE_CODE[:unprocessable_entity], subcategory.errors.full_messages.join(", "))
         end
       end
-
+      # DESTROY
       desc "Delete SubCategory",
            { consumes: ["application/x-www-form-urlencoded"],
-            http_codes: [
-             { code: 200, message: "success" },
-             { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-             { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-             { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-           ] }
+             http_codes: [{ code: 200, message: "success" }] }
 
-      delete "/delete/:id" do
+      delete "/:id" do
         SubCategory.find(params[:id]).destroy
         render_success("SubCategory Deleted Successfully".as_json)
-      end
-
-      desc "Get All Subategories with Images",
-        { consumes: ["application/x-www-form-urlencoded"],
-         http_codes: [
-          { code: 200, message: "success" },
-          { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
-          { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
-          { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
-        ] }
-
-      get "stocks/all" do
-        subcategory = SubCategory.all.includes(:stocks)
-        serialization = serialize_collection(subcategory, serializer: SubCategorySerializer)
-        render_success(serialization.as_json)
       end
     end
   end
