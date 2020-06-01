@@ -41,7 +41,6 @@ module V1
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
       get '/:id' do
-        byebug
         folder = Folder.find(params[:id])
         serialization = FolderSerializer.new(folder)
         render_success(serialization.as_json)
