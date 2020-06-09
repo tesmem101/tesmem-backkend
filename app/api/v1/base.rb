@@ -8,6 +8,7 @@ module V1
     mount V1::SubCategories
     mount V1::Stocks
     mount V1::Designs
+    mount V1::Templates
 
     add_swagger_documentation(
       api_version: 'v1',
