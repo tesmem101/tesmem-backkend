@@ -16,7 +16,7 @@ module V1
         ] }
       params do
         requires :title, type: String, desc: 'Name'
-        requires :description, type: String, desc: 'Pata'
+        optional :description, type: String, desc: 'Pata'
         requires :user_id, type: Integer, desc: 'Creator'
         requires :styles, type: JSON, desc: 'Styles'
       end
@@ -59,13 +59,13 @@ module V1
         ] }
       params do
         requires :title, type: String, desc: 'Name'
-        requires :description, type: String, desc: 'Pata'
+        optional :description, type: String, desc: 'Pata'
         requires :user_id, type: Integer, desc: 'Creator'
         requires :styles, type: JSON, desc: 'Styles'
       end
       put '/:id' do
         design = Design.find(params[:id])
-        if design.update!(params)
+          if design.update!(params)
           serialization = DesignSerializer.new(design)
           render_success(serialization.as_json)
         else
