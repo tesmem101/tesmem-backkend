@@ -31,6 +31,20 @@ module V1
         end
       end
 
+      desc 'Get Designs',
+           { consumes: ['application/x-www-form-urlencoded'],
+             http_codes: [{ code: 200, message: 'success' }] }
+      get '/' do
+        auth_token = !headers['Authorization'].blank? ? headers['Authorization'] : nil
+        user = UserToken.where(token: auth_token).first
+        if user.nil?
+          render_error(RESPONSE_CODE[:unauthorized], I18n.t('errors.session.invalid_token'))
+        end
+        user_id = user['user_id']
+        design = User.find(user_id).designs
+        serialization = serialize_collection(design, serializer: DesignSerializer)
+        render_success(serialization.as_json)
+      end
 
       desc 'Update a Design',
         { consumes: [ 'application/x-www-form-urlencoded' ],
@@ -70,6 +84,22 @@ module V1
         Design.find(params[:id]).destroy
         render_success("Design Deleted Successfully".as_json)
       end
+
+      desc 'Get Designs by design_id',
+           { consumes: ['application/x-www-form-urlencoded'],
+             http_codes: [{ code: 200, message: 'success' }] }
+      get '/:id' do
+        auth_token = !headers['Authorization'].blank? ? headers['Authorization'] : nil
+        user = UserToken.where(token: auth_token).first
+        if user.nil?
+          render_error(RESPONSE_CODE[:unauthorized], I18n.t('errors.session.invalid_token'))
+        end
+        user_id = user['user_id']
+        design = User.find(user_id).designs.where(id: params[:id])
+        serialization = serialize_collection(design, serializer: DesignSerializer)
+        render_success(serialization.as_json)
+      end
+
     end
   end
 end
