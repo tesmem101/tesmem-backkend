@@ -1,10 +1,11 @@
 module V1
   class Folders < Grape::API
-    include AuthenticateRequest
+    include AuthenticateUser
     include V1Base
     version 'v1', using: :path
 
     resource :folders do
+
       desc 'Create Folder',
            { consumes: ['application/x-www-form-urlencoded'],
             http_codes: [
@@ -15,36 +16,36 @@ module V1
            ] }
       params do
         requires :name, type: String, desc: 'Name'
-        requires :user_id, type: Integer, desc: 'Creator'
       end
-      post '/create' do
-        folder = Folder.find_or_initialize_by(params)
-        if folder.id.nil?
-          folder.save!
+      post :create do
+        params['user_id'] = authenticate_user.id
+        folder = Folder.new(params)
+        if folder.save!
           serialization = FolderSerializer.new(folder)
           render_success(serialization.as_json)
         else
-          render_error(RESPONSE_CODE[:forbidden], 'forbidden', 'Folder already exist'.as_json)
+          render_error(RESPONSE_CODE[:unauthorized], I18n.t("errors.folder.not_processed"))
         end
       end
 
-      desc 'Get Folder by UserId',
-           { consumes: ['application/x-www-form-urlencoded'],
-             http_codes: [{ code: 200, message: 'success' }] }
-      get 'user/:user_id' do
-        user_id = params[:user_id]
-        folder = Folder.where(user_id: user_id)
-        serialization = serialize_collection(folder, serializer: FolderSerializer)
+      desc "Get folders",
+           { consumes: ["application/x-www-form-urlencoded"],
+             http_codes: [{ code: 200, message: "success" }] }
+      get "/" do
+        folders = authenticate_user.folders
+        serialization = serialize_collection(folders, serializer: FolderSerializer)
         render_success(serialization.as_json)
       end
-      desc 'Get Folder by Id',
+
+      desc 'Show folder',
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
       get '/:id' do
-        folder = Folder.find(params[:id])
-        serialization = FolderSerializer.new(folder)
+        folder = authenticate_user.folders.where(id: params[:id])
+        serialization = serialize_collection(folder, serializer: FolderSerializer)
         render_success(serialization.as_json)
       end
+
       desc 'Update Folder',
            { consumes: ['application/x-www-form-urlencoded'],
             http_codes: [
@@ -55,13 +56,13 @@ module V1
            ] }
       params do
         requires :name, type: String, desc: 'Name'
-        requires :user_id, type: Integer, desc: 'Creator'
       end
       put '/:id' do
-        folder = Folder.find_or_create_by(params)
-        if folder.update!(params)
-          serialization = FolderSerializer.new(folder)
-          render_success(serialization.as_json)
+        params['user_id'] = authenticate_user.id
+        folder = authenticate_user.folders.where(id: params[:id])
+        if folder.update(params)
+          serialization = serialize_collection(folder, serializer: FolderSerializer)
+          render_success(folder.as_json)
         else
           render_error(RESPONSE_CODE[:unprocessable_entity], folder.errors.full_messages.join(', '))
         end
@@ -71,8 +72,8 @@ module V1
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
       delete '/:id' do
-        Folder.find(params[:id]).destroy
-        render_success('Folder deleted'.as_json)
+        authenticate_user.folders.find(params[:id]).destroy
+        render_success("Folder is deleted".as_json)
       end
     end
   end

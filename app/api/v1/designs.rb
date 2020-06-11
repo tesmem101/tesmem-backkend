@@ -2,9 +2,11 @@ module V1
   class Designs < Grape::API
     include AuthenticateRequest
     include V1Base
+    include AuthenticateUser
     version "v1", using: :path
 
     resource :designs do
+
       desc "Create a design",
         { consumes: ["application/x-www-form-urlencoded"],
          http_codes: [
@@ -29,20 +31,6 @@ module V1
         end
       end
 
-      desc "Get Designs",
-           { consumes: ["application/x-www-form-urlencoded"],
-             http_codes: [{ code: 200, message: "success" }] }
-      get "/" do
-        auth_token = !headers["Authorization"].blank? ? headers["Authorization"] : nil
-        user = UserToken.where(token: auth_token).first
-        if user.nil?
-          render_error(RESPONSE_CODE[:unauthorized], I18n.t("errors.session.invalid_token"))
-        end
-        user_id = user["user_id"]
-        design = User.find(user_id).designs
-        serialization = serialize_collection(design, serializer: DesignSerializer)
-        render_success(serialization.as_json)
-      end
       desc "Update a Design",
         { consumes: ["application/x-www-form-urlencoded"],
          http_codes: [
@@ -70,23 +58,27 @@ module V1
       desc "Delete Design",
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
-
       delete "/:id" do
         Design.find(params[:id]).destroy
         render_success("Design Deleted Successfully".as_json)
       end
 
-      desc "Get Designs by design_id",
+      desc "Get Designs",
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
+      before { authenticate_user }
+      get "/" do
+        design = authenticate_user.designs
+        serialization = serialize_collection(design, serializer: DesignSerializer)
+        render_success(serialization.as_json)
+      end
+
+      desc "Show design",
+           { consumes: ["application/x-www-form-urlencoded"],
+             http_codes: [{ code: 200, message: "success" }] }
+      before { authenticate_user }
       get "/:id" do
-        auth_token = !headers["Authorization"].blank? ? headers["Authorization"] : nil
-        user = UserToken.where(token: auth_token).first
-        if user.nil?
-          render_error(RESPONSE_CODE[:unauthorized], I18n.t("errors.session.invalid_token"))
-        end
-        user_id = user["user_id"]
-        design = User.find(user_id).designs.where(id: params[:id])
+        design = authenticate_user.designs.where(id: params[:id])
         serialization = serialize_collection(design, serializer: DesignSerializer)
         render_success(serialization.as_json)
       end

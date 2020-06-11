@@ -13,3 +13,6 @@ en:
     session:
       invalid: "Invalid email or password"
       invalid_token: "Invalid access token"
+    folder:
+      already_exist: "Folder already exists"
+      not_processed: "Cant processrequest "
