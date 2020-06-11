@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   has_many :user_tokens, dependent: :destroy
   has_many :designs
+  has_many :folders
 
   validates_presence_of :email, uniqueness: true, case_sensitive: false
 
