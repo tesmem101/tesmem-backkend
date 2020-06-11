@@ -32,9 +32,15 @@ module V1
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
       get "/" do
-        folders = authenticate_user.folders
-        serialization = serialize_collection(folders, serializer: FolderSerializer)
-        render_success(serialization.as_json)
+        folders = authenticate_user.folders.where(parent_id: nil)
+        allFolder = folders.map { |folder| { 
+            id: folder.id,
+            name: folder.name,
+            parent_id: folder.parent_id,
+            folders: folder.subfolders,
+            designs: folder.containers.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first }
+        } }
+        render_success(allFolder.as_json)
       end
 
       desc 'Show folder',
@@ -42,8 +48,14 @@ module V1
              http_codes: [{ code: 200, message: 'success' }] }
       get '/:id' do
         folder = authenticate_user.folders.where(id: params[:id])
-        serialization = serialize_collection(folder, serializer: FolderSerializer)
-        render_success(serialization.as_json)
+        allFolder = folder.map { |folder| { 
+            id: folder.id,
+            name: folder.name,
+            parent_id: folder.parent_id,
+            folders: folder.subfolders,
+            designs: folder.containers.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first }
+        } }
+        render_success(allFolder.as_json)
       end
 
       desc 'Update Folder',
