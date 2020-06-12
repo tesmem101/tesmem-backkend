@@ -1,12 +1,12 @@
 module V1
-  class Folders < Grape::API
+  class Containers < Grape::API
     include AuthenticateUser
     include V1Base
     version 'v1', using: :path
 
-    resource :folders do
+    resource :containers do
 
-      desc 'Create Folder',
+      desc 'Create Container',
            { consumes: ['application/x-www-form-urlencoded'],
             http_codes: [
              { code: 200, message: 'success' },
@@ -15,17 +15,19 @@ module V1
              { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
            ] }
       params do
-        requires :name, type: String, desc: 'Name'
+        requires :folder_id, type: Integer, desc: 'Folder id'
+        requires :type_id, type: Integer, desc: 'Type id'
+        requires :options, type: String, desc: 'Options'
       end
       post :create do
-        params['user_id'] = authenticate_user.id
-        folder = Folder.new(params)
-        if folder.save!
-          serialization = FolderSerializer.new(folder)
-          render_success(serialization.as_json)
-        else
-          render_error(RESPONSE_CODE[:unauthorized], I18n.t("errors.folder.not_processed"))
-        end
+        puts "#{params['folder_id']} ---- #{params['type_id']} ------ #{params['options']}"
+        # container = Container.new(params)
+        # if container.save!
+        #   # serialization = FolderSerializer.new(folder)
+        #   render_success(container.as_json)
+        # else
+        #   render_error(RESPONSE_CODE[:unauthorized], I18n.t("errors.folder.not_processed"))
+        # end
       end
 
       desc "Get folders",
@@ -38,8 +40,7 @@ module V1
             name: folder.name,
             parent_id: folder.parent_id,
             folders: folder.subfolders,
-            designs: folder.containers.select { |element| element.options == 'design' }.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first },
-            images: folder.containers.select { |element| element.options == 'image' }.map { |cont| {source: cont.type_id} }
+            designs: folder.containers.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first }
         } }
         render_success(allFolder.as_json)
       end
@@ -54,8 +55,7 @@ module V1
             name: folder.name,
             parent_id: folder.parent_id,
             folders: folder.subfolders,
-            designs: folder.containers.select { |element| element.options == 'design' }.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first },
-            images: folder.containers.select { |element| element.options == 'image' }.map { |cont| cont.type_id }
+            designs: folder.containers.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first }
         } }
         render_success(allFolder.as_json)
       end
