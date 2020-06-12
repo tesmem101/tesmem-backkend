@@ -32,7 +32,7 @@ module V1
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
       get "/" do
-        folders = authenticate_user.folders
+        folders = authenticate_user.folders.where(parent_id: nil)
         serialization = serialize_collection(folders, serializer: FolderSerializer)
         render_success(serialization.as_json)
       end
