@@ -9,3 +9,8 @@ RESPONSE_CODE = {
   internal_server_error: 500,
   common_error: 1001
 }
+
+OPTIONS = {
+  design: 0,
+  image: 1
+}

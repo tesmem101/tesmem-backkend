@@ -37,9 +37,8 @@ module V1
             id: folder.id,
             name: folder.name,
             parent_id: folder.parent_id,
-            folders: folder.subfolders,
-            designs: folder.containers.select { |element| element.options == 'design' }.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first },
-            images: folder.containers.select { |element| element.options == 'image' }.map { |cont| {source: cont.type_id} }
+            subfolders: folder.subfolders,
+            designs: folder.containers.select { |element| element.options == 'design' }.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first }
         } }
         render_success(allFolder.as_json)
       end
@@ -53,9 +52,8 @@ module V1
             id: folder.id,
             name: folder.name,
             parent_id: folder.parent_id,
-            folders: folder.subfolders,
-            designs: folder.containers.select { |element| element.options == 'design' }.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first },
-            images: folder.containers.select { |element| element.options == 'image' }.map { |cont| cont.type_id }
+            subfolders: folder.subfolders,
+            designs: folder.containers.select { |element| element.options == 'design' }.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first }
         } }
         render_success(allFolder.as_json)
       end
