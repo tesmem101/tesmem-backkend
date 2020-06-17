@@ -77,6 +77,35 @@ module V1
         Category.find(params[:id]).destroy
         render_success('Category Deleted Successfully'.as_json)
       end
+
+      desc "Get All Categories with Images",
+        { consumes: ["application/x-www-form-urlencoded"],
+         http_codes: [
+          { code: 200, message: "success" },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
+        ] }
+      get "stocks/all" do
+        category = Category.all.includes(:stocks)
+        serialization = serialize_collection(category, serializer: CategorySerializer)
+        render_success(serialization.as_json)
+      end
+
+      desc "Get All Categories with Subcategories",
+        { consumes: ["application/x-www-form-urlencoded"],
+         http_codes: [
+          { code: 200, message: "success" },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
+        ] }
+      get "subcategories/all" do
+        category = Category.all.includes(:sub_categories)
+        serialization = serialize_collection(category, serializer: CategorySerializer)
+        render_success(serialization.as_json)
+      end
+
     end
   end
 end
