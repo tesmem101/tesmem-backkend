@@ -1,5 +1,7 @@
 class ImageSerializer < ActiveModel::Serializer
-  attributes :name
-  attribute :pata
-
+  attribute :name 
+  attribute :description
+  attribute :url
+  attribute :height
+  attribute :width
 end
