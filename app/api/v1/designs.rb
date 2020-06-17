@@ -4,6 +4,7 @@ module V1
     include V1Base
     include AuthenticateUser
     include SaveImage
+    # include CarrierWave::RMagick
     version "v1", using: :path
 
     resource :designs do
@@ -23,8 +24,10 @@ module V1
         requires :styles, type: JSON, desc: "Styles"
         optional :height, type: String, desc: "Height"
         optional :width, type: String, desc: "Width"
+        requires :image, type: String, desc: "Image"
       end
       post :create do
+        params[:image] = encode_image(params[:title], params[:image])
         design = Design.new(params)
         if design.save!
           insert_image(design)
@@ -51,6 +54,7 @@ module V1
         optional :width, type: String, desc: "Width"
       end
       put "/:id" do
+        params[:image] = encode_image(params[:title], params[:image])
         design = Design.find(params[:id])
         if design.update!(params)
           update_image(design)

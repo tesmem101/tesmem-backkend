@@ -6,6 +6,15 @@ module SaveImage
   included do
     helpers do
 
+      def encode_image(title, image)
+        regex = /\Adata:([-\w]+\/[-\w\+\.]+)?;base64,(.*)/m
+        data_uri_parts = image.match(regex) || []
+        image_data = Base64.decode64(data_uri_parts[2])
+        extension = data_uri_parts[1].split('/')[1]
+        form_data = File.new("#{title}.#{extension}", 'wb')
+        form_data.write(image_data)
+        return form_data
+      end
       def get_dimensions(image)
         image = MiniMagick::Image.open(request.base_url + image)
         return { height: image[:height], width: image[:width] }
