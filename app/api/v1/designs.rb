@@ -87,7 +87,7 @@ module V1
              http_codes: [{ code: 200, message: "success" }] }
       before { authenticate_user }
       get "/:id" do
-        design = authenticate_user.designs.where('id = ? AND is_trashed = ?', params[:id], 0)
+        design = authenticate_user.designs.where(id: params[:id], is_trashed: 0)
         serialization = serialize_collection(design, serializer: DesignSerializer)
         render_success(serialization.as_json)
       end

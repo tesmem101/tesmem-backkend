@@ -77,6 +77,22 @@ module V1
         authenticate_user.folders.find(params[:id]).destroy
         render_success("Folder is deleted".as_json)
       end
+      desc 'Breadcrumbs'
+        {consumes: ['application/x-www-form-urlencoded'],
+        http_codes: [{ code: 200, message: 'success' }] }
+      get 'breadcrumbs/:id' do
+        breadcrumbs = []
+        folder = authenticate_user.folders.find(params[:id])
+        return render_success([].as_json) if !folder.present?
+        breadcrumbs.push(folder)
+        parent = folder.parent_id
+        while parent != nil
+          parent_folder = authenticate_user.folders.find(parent)
+          parent = parent_folder.parent_id
+          breadcrumbs.unshift(parent_folder)
+        end
+        render_success(breadcrumbs.as_json)
+      end
     end
   end
 end
