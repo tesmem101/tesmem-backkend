@@ -44,7 +44,7 @@ module V1
         requires :id, type: Integer, desc: 'Id'
       end
       get '/:id' do
-        folder = authenticate_user.folders.find(params[:id])
+        folder = authenticate_user.folders.where(id: params[:id])
         allFolder = get_folder(folder)
         render_success(allFolder.as_json)
       end
