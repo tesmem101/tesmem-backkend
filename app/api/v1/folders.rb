@@ -2,6 +2,7 @@ module V1
   class Folders < Grape::API
     include AuthenticateUser
     include V1Base
+    include FetchFolder
     version 'v1', using: :path
 
     resource :folders do
@@ -16,6 +17,7 @@ module V1
            ] }
       params do
         requires :name, type: String, desc: 'Name'
+        optional :parent_id, type: Integer, desc: "Parent folder"
       end
       post :create do
         params['user_id'] = authenticate_user.id
@@ -27,37 +29,25 @@ module V1
           render_error(RESPONSE_CODE[:unauthorized], I18n.t("errors.folder.not_processed"))
         end
       end
-
       desc "Get folders",
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
       get "/" do
         folders = authenticate_user.folders.where(parent_id: nil)
-        allFolder = folders.map { |folder| { 
-            id: folder.id,
-            name: folder.name,
-            parent_id: folder.parent_id,
-            subfolders: folder.subfolders,
-            designs: folder.containers.select { |element| element.options == 'design' }.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first }
-        } }
+        allFolder = get_folder(folders)
         render_success(allFolder.as_json)
       end
-
       desc 'Show folder',
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
+      params do
+        requires :id, type: Integer, desc: 'Id'
+      end
       get '/:id' do
-        folder = authenticate_user.folders.where(id: params[:id])
-        allFolder = folder.map { |folder| { 
-            id: folder.id,
-            name: folder.name,
-            parent_id: folder.parent_id,
-            subfolders: folder.subfolders,
-            designs: folder.containers.select { |element| element.options == 'design' }.map { |cont| serialize_collection(authenticate_user.designs.where(id: cont.type_id), serializer: DesignSerializer).first }
-        } }
+        folder = authenticate_user.folders.find(params[:id])
+        allFolder = get_folder(folder)
         render_success(allFolder.as_json)
       end
-
       desc 'Update Folder',
            { consumes: ['application/x-www-form-urlencoded'],
             http_codes: [
@@ -67,7 +57,8 @@ module V1
              { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
            ] }
       params do
-        requires :name, type: String, desc: 'Name'
+        optional :name, type: String, desc: 'Name'
+        optional :parent_id, type: Integer, desc: "Parent folder"
       end
       put '/:id' do
         params['user_id'] = authenticate_user.id
@@ -79,7 +70,6 @@ module V1
           render_error(RESPONSE_CODE[:unprocessable_entity], folder.errors.full_messages.join(', '))
         end
       end
-
       desc 'Delete Folder',
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }

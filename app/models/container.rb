@@ -1,4 +1,4 @@
 class Container < ApplicationRecord
-    enum options: ['design', 'image']
     belongs_to :folder
+    belongs_to :instance, polymorphic: true
 end
