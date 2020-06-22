@@ -10,6 +10,9 @@ module V1
     mount V1::Designs
     mount V1::Folders
     mount V1::Templates
+    mount V1::Containers
+    mount V1::Trash
+    mount V1::Uploads
 
     add_swagger_documentation(
       api_version: 'v1',

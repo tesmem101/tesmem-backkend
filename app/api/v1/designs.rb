@@ -4,7 +4,6 @@ module V1
     include V1Base
     include AuthenticateUser
     include SaveImage
-    # include CarrierWave::RMagick
     version "v1", using: :path
 
     resource :designs do
@@ -25,6 +24,7 @@ module V1
         optional :height, type: String, desc: "Height"
         optional :width, type: String, desc: "Width"
         requires :image, type: String, desc: "Image"
+        optional :is_trashed, type: Integer, desc: "Trash"
       end
       post :create do
         params[:image] = encode_image(params[:title], params[:image])
@@ -52,6 +52,8 @@ module V1
         requires :styles, type: JSON, desc: "Styles"
         optional :height, type: String, desc: "Height"
         optional :width, type: String, desc: "Width"
+        requires :image, type: String, desc: "Image"
+        optional :is_trashed, type: Integer, desc: "Trash"
       end
       put "/:id" do
         params[:image] = encode_image(params[:title], params[:image])
@@ -76,7 +78,7 @@ module V1
              http_codes: [{ code: 200, message: "success" }] }
       before { authenticate_user }
       get "/" do
-        design = authenticate_user.designs
+        design = authenticate_user.designs.where(is_trashed: 0)
         serialization = serialize_collection(design, serializer: DesignSerializer)
         render_success(serialization.as_json)
       end
@@ -85,7 +87,7 @@ module V1
              http_codes: [{ code: 200, message: "success" }] }
       before { authenticate_user }
       get "/:id" do
-        design = authenticate_user.designs.where(id: params[:id])
+        design = authenticate_user.designs.where('id = ? AND is_trashed = ?', params[:id], 0)
         serialization = serialize_collection(design, serializer: DesignSerializer)
         render_success(serialization.as_json)
       end
