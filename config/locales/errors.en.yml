@@ -16,3 +16,5 @@ en:
     folder:
       already_exist: "Folder already exists"
       not_processed: "Cant processrequest "
+    super_admin:
+      is_required: "Super admin authorization is required"

@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :uploads
   has_many :images, as: :image
 
+  enum role: [:user, :admin, :super_admin]
+
   validates_presence_of :email, uniqueness: true, case_sensitive: false
 
   before_save do
