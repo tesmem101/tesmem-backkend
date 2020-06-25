@@ -48,18 +48,20 @@ module V1
       params do
         requires :title, type: String, desc: "Name"
         optional :description, type: String, desc: "Description"
-        requires :user_id, type: Integer, desc: "Creator"
-        requires :styles, type: JSON, desc: "Styles"
+        optional :user_id, type: Integer, desc: "Creator"
+        optional :styles, type: JSON, desc: "Styles"
         optional :height, type: String, desc: "Height"
         optional :width, type: String, desc: "Width"
-        requires :image, type: String, desc: "Image"
+        optional :image, type: String, desc: "Image"
         optional :is_trashed, type: Integer, desc: "Trash"
       end
       put "/:id" do
-        params[:image] = encode_image(params[:title], params[:image])
+        if params[:image]
+          params[:image] = encode_image(params[:title], params[:image])
+        end
         design = Design.find(params[:id])
         if design.update!(params)
-          update_image(design)
+          update_image(design) if params[:image]
           serialization = DesignSerializer.new(design)
           render_success(serialization.as_json)
         else
