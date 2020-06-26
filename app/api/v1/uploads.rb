@@ -17,7 +17,7 @@ module V1
            ] }
       params do
         optional :title, type: String, desc: 'Title'
-        requires :image, type: File, desc: 'Image file'
+        optional :image, type: File, desc: 'Image file'
         optional :is_trashed, type: Integer, desc: "Trash"
       end
       post '/' do
