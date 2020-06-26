@@ -1,3 +1,3 @@
 class StockSerializer < ActiveModel::Serializer
-  attributes :id, :title, :source, :stocktype, :height, :size, :json
+  attributes :id, :title, :url, :stocktype, :height, :size, :json
 end

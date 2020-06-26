@@ -19,7 +19,7 @@ module V1
         requires :sub_category_id, type: Integer, :desc => 'subcategory id'
         requires :title, type: String, :desc => 'title'
         requires :stocktype, type: String, :desc => 'stocktype'
-        requires :source, type: String, :desc => 'source'
+        requires :url, type: String, :desc => 'source'
         requires :height, type: String, :desc => 'height'
         requires :size, type: String, :desc => 'size'
       end
