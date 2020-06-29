@@ -39,7 +39,11 @@ module V1
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
         search = params['search'].present? ? params['search'].downcase : nil
-        stocks = Category.find_by_title(TITLES[:photo]).sub_categories.find_by_title(TITLES[:photo]).stocks.where("lower(title) LIKE ?", "%#{search}%")
+        category = Category.where(title: TITLES[:photo])
+        stocks = []
+        if category.present?
+          stocks = category.first.sub_categories.find_by_title(TITLES[:photo]).stocks.where("lower(title) LIKE ?", "%#{search}%")
+        end
         serialization = serialize_collection(stocks, serializer: StockSerializer)
         render_success(serialization.as_json)
       end

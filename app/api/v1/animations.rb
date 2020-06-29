@@ -61,7 +61,7 @@ module V1
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
       get '/subcatgories/all' do
-        sub_categories = Category.where(title: TITLES[:animation]).first.sub_categories
+        sub_categories = Category.where(title: TITLES[:animation]).includes(:sub_categories).map(&:sub_categories).flatten
         serialization = serialize_collection(sub_categories, serializer: SubCategorySerializer)
         render_success(serialization.as_json)
       end
@@ -70,7 +70,11 @@ module V1
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
         search = params['search'].present? ? params['search'].downcase : nil
-        searched_animations = Category.where(title: TITLES[:animation]).first.sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_template(sub_c) }
+        category = Category.where(title: TITLES[:animation])
+        searched_animations = []
+        if category.present?
+          searched_animations = category.first.sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_template(sub_c) }
+        end
         render_success(searched_animations.as_json)
       end
     end
