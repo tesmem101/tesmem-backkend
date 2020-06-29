@@ -2,6 +2,7 @@ module V1
   class Icons < Grape::API
     include AuthenticateRequest
     include V1Base
+    include FetchTemplate
     version "v1", using: :path
 
     resource :icons do
@@ -69,7 +70,7 @@ module V1
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
         search = params['search'].present? ? params['search'].downcase : nil
-        searched_icons = Category.where(title: TITLES[:icon]).first.sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| {id: sub_c.id, name: sub_c.title, data: serialize_collection(sub_c.stocks, serializer: StockSerializer)}}
+        searched_icons = Category.where(title: TITLES[:icon]).first.sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_template(sub_c) }
         render_success(searched_icons.as_json)
       end
     end
