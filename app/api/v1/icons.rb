@@ -19,7 +19,7 @@ module V1
         requires :title, type: String, desc: 'Title'
         optional :description, type: String, desc: 'Description'
       end
-      post "subcategory/create" do
+      post "subcategories/create" do
         category = Category.where(title: TITLES[:icon]).first_or_create
         params['category_id'] = category.id
         subcategory = SubCategory.new(params)
@@ -60,7 +60,7 @@ module V1
       desc 'Get sub categories of icons',
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
-      get '/subcatgories/all' do
+      get '/subcategories/all' do
         sub_categories = Category.where(title: TITLES[:icon]).includes(:sub_categories).map(&:sub_categories).flatten
         serialization = serialize_collection(sub_categories, serializer: SubCategorySerializer)
         render_success(serialization.as_json)
