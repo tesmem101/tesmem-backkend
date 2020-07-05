@@ -2,6 +2,7 @@ module V1
   class SubCategories < Grape::API
     include AuthenticateRequest
     include V1Base
+    include FetchSubCategories
     version 'v1', using: :path
 
     resource :subcategories do
@@ -33,7 +34,7 @@ module V1
         { consumes: ['application/x-www-form-urlencoded'],
           http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
-        subcategory = SubCategory.all
+        subcategory = all_sub_categories()
         serialization = serialize_collection(subcategory, serializer: SubCategorySerializer)
         render_success(serialization.as_json)
       end

@@ -30,6 +30,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'warden'
 gem 'rails_admin', '~> 2.0'
 gem 'cancancan'
+gem 'fog-aws'
+gem 'figaro'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

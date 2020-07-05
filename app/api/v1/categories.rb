@@ -2,6 +2,7 @@ module V1
   class Categories < Grape::API
     include AuthenticateRequest
     include V1Base
+    include FetchCategories
     version 'v1', using: :path
 
     resource :categories do
@@ -32,7 +33,7 @@ module V1
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
-        category = Category.all
+        category = all_categories()
         serialization = serialize_collection(category, serializer: CategorySerializer)
         render_success(serialization.as_json)
       end
@@ -87,7 +88,7 @@ module V1
           { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
         ] }
       get "stocks/all" do
-        category = Category.all.includes(:stocks)
+        category = all_categories().includes(:stocks)
         serialization = serialize_collection(category, serializer: CategorySerializer)
         render_success(serialization.as_json)
       end
@@ -101,7 +102,7 @@ module V1
           { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
         ] }
       get "subcategories/all" do
-        category = Category.all.includes(:sub_categories)
+        category = all_categories().includes(:sub_categories)
         serialization = serialize_collection(category, serializer: CategorySerializer)
         render_success(serialization.as_json)
       end
