@@ -16,10 +16,7 @@ module V1
         ] }
       params do
         requires :title, type: String, :desc => 'title'
-        requires :stocktype, type: String, :desc => 'stocktype'
-        requires :url, type: String, :desc => 'source'
-        requires :height, type: String, :desc => 'height'
-        requires :size, type: String, :desc => 'size'
+        requires :image, type: File, :desc => 'source'
       end
       post :create do
         category = Category.where(title: TITLES[:photo]).first_or_create
