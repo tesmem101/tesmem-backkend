@@ -18,10 +18,8 @@ module V1
         requires :category_id, type: Integer, :desc => 'category'
         requires :sub_category_id, type: Integer, :desc => 'subcategory id'
         requires :title, type: String, :desc => 'title'
-        requires :stocktype, type: String, :desc => 'stocktype'
-        requires :url, type: String, :desc => 'source'
-        requires :height, type: String, :desc => 'height'
-        requires :size, type: String, :desc => 'size'
+        requires :image, type: File, :desc => 'source'
+        optional :json, type: String, :desc => 'json object'
       end
       post :create do
         stock = Stock.new(params)

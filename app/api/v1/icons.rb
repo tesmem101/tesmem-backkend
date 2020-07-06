@@ -40,10 +40,7 @@ module V1
         ] }
       params do
         requires :title, type: String, :desc => 'title'
-        requires :stocktype, type: String, :desc => 'stocktype'
-        requires :url, type: String, :desc => 'source'
-        requires :height, type: String, :desc => 'height'
-        requires :size, type: String, :desc => 'size'
+        requires :image, type: File, :desc => 'source'
         requires :sub_category_id, type: Integer, :desc => 'sub category id'
       end
       post :create do
