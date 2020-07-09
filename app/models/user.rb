@@ -4,7 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  mount_uploader :profile_photo, ImageUploader
+  mount_uploader :profile, ImageUploader
+  has_one :image, as: :image, dependent: :destroy
+  after_save :move_profile_photo_to_image_table
 
   has_many :user_tokens, dependent: :destroy
   has_many :designs
@@ -31,4 +33,23 @@ class User < ApplicationRecord
     user_token = UserToken.find_by_token(auth_token)
     user_token.nil? ? false : user_token.destroy
   end
+
+  def move_profile_photo_to_image_table
+    if self.profile.present? && self.profile.thumb.url.present?
+      current_image = self.profile.thumb.url
+      img = MiniMagick::Image::open(current_image)
+      height = img[:height].to_s
+      width = img[:width].to_s
+      username = self.email
+      Image.create(image: self, name: username, url: current_image, height: height, width: width)
+    end
+    if self.identity_provider_profile.present?
+      current_image = self.identity_provider_profile
+      img = MiniMagick::Image::open(current_image)
+      height = img[:height].to_s
+      width = img[:width].to_s
+      username = self.email
+      Image.create(image: self, name: username, url: current_image, height: height, width: width)
+    end
+  end  
 end
