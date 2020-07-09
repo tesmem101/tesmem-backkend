@@ -66,7 +66,7 @@ module V1
       params do
         requires :email, type: String, desc: 'User email'
         requires :google_id, type: String, desc: 'Google Id'
-        requires :profile, type: String, desc: 'Google profile image'
+        optional :profile, type: String, desc: 'Google profile image'
       end
 
       post :google_sign_in do
@@ -94,7 +94,7 @@ module V1
       params do
         requires :email, type: String, desc: 'User email'
         requires :fb_id, type: String, desc: 'Facebook Id'
-        requires :profile, type: String, desc: 'Facebook profile image'
+        optional :profile, type: String, desc: 'Facebook profile image'
       end
 
       post :facebook_sign_in do
