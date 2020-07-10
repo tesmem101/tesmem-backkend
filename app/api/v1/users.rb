@@ -2,6 +2,7 @@ module V1
   class Users < Grape::API
     include AuthenticateRequest
     include V1Base
+    include AuthenticateUser
     version 'v1', using: :path
 
     resource :users do
@@ -15,9 +16,23 @@ module V1
             { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
         ]}
       params do
-        requires :email, type: String, desc: 'Email'
+        requires :id, type: String, desc: 'user id'
+        optional :profile, type: File, desc: 'Profile photo'
       end
-
+      put '/:id' do
+        if authenticate_user.email != User.find(params[:id]).email
+          render_error(RESPONSE_CODE[:unauthorized], message: I18n.t('errors.not_found')) 
+        end
+        if params[:role]
+          render_error(RESPONSE_CODE[:unauthorized], "You are not allowed to alter role")
+        end
+        if authenticate_user.update(params)
+          serialization = UserSerializer.new(authenticate_user)
+          render_success(serialization.as_json)
+        else
+          render_error(RESPONSE_CODE[:unauthorized], authenticate_user.errors.full_messages.join(', '))
+        end
+      end
       put :update do
         if current_user.update!(params)
           serialization = UserSerializer.new(current_user)

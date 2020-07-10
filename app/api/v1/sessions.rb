@@ -17,7 +17,6 @@ module V1
         requires :email, type: String, desc: 'Email'
         requires :password, type: String, desc: 'Password'
         requires :password_confirmation, type: String, desc: 'Password confirmation'
-        optional :profile, type: File, desc: 'Profile photo'
       end
 
       post :sign_up do
@@ -66,16 +65,14 @@ module V1
       params do
         requires :email, type: String, desc: 'User email'
         requires :google_id, type: String, desc: 'Google Id'
-        optional :profile, type: String, desc: 'Google profile image'
       end
 
       post :google_sign_in do
         email = params[:email]
         google_id = params[:google_id]
-        profile_image = params[:profile]
         user = User.where(email: email.downcase).first
         if user.nil?
-          user = User.new(email: email.downcase, password: 'password', password_confirmation: 'password', identity_provider_profile: profile_image)
+          user = User.new(email: email.downcase, password: 'password', password_confirmation: 'password')
           user.save
         end
 
@@ -94,16 +91,14 @@ module V1
       params do
         requires :email, type: String, desc: 'User email'
         requires :fb_id, type: String, desc: 'Facebook Id'
-        optional :profile, type: String, desc: 'Facebook profile image'
       end
 
       post :facebook_sign_in do
         email = params[:email]
         fb_id = params[:fb_id]
-        profile_image = params[:profile]
         user = User.where(email: email.downcase).first
         if user.nil?
-          user = User.new(email: email.downcase, password: 'password', password_confirmation: 'password', identity_provider_profile: profile_image)
+          user = User.new(email: email.downcase, password: 'password', password_confirmation: 'password')
           user.save
         end
 

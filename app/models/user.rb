@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   mount_uploader :profile, ImageUploader
   has_one :image, as: :image, dependent: :destroy
-  after_save :move_profile_photo_to_image_table
+  after_update :move_profile_photo_to_image_table
 
   has_many :user_tokens, dependent: :destroy
   has_many :designs
@@ -35,21 +35,17 @@ class User < ApplicationRecord
   end
 
   def move_profile_photo_to_image_table
-    if self.profile.present? && self.profile.thumb.url.present?
-      current_image = self.profile.thumb.url
+    if profile_changed?
+      current_image = "#{ENV["RAIL_SERVER_URL"]}#{self.profile.thumb.url}"
       img = MiniMagick::Image::open(current_image)
       height = img[:height].to_s
       width = img[:width].to_s
       username = self.email
-      Image.create(image: self, name: username, url: current_image, height: height, width: width)
-    end
-    if self.identity_provider_profile.present?
-      current_image = self.identity_provider_profile
-      img = MiniMagick::Image::open(current_image)
-      height = img[:height].to_s
-      width = img[:width].to_s
-      username = self.email
-      Image.create(image: self, name: username, url: current_image, height: height, width: width)
+      if Image.where(image: self).present?
+        Image.where(image: self).update(name: username, url: self.profile.thumb.url, height: height, width: width)
+      else
+        Image.create(image: self, name: username, url: self.profile.thumb.url, height: height, width: width)
+      end
     end
   end  
 end
