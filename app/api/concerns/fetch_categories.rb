@@ -6,7 +6,7 @@ module FetchCategories
   included do
     helpers do
         def all_categories
-          return Category.where.not(title: TITLES.map{ |key, title| title })
+          return Category.where.not(title: TITLES.map{ |key, title| title }, super_category_id: nil)
         end
     end
   end
