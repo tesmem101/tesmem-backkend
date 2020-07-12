@@ -90,7 +90,7 @@ module V1
       }
       params do
         requires :email, type: String, desc: 'User email'
-        requires :fb_id, type: String, desc: 'Google Id'
+        requires :fb_id, type: String, desc: 'Facebook Id'
       end
 
       post :facebook_sign_in do
