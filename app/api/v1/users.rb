@@ -3,7 +3,7 @@ module V1
     include AuthenticateRequest
     include AuthenticateUser
     include V1Base
-    include AuthenticateUser
+    include AuthenticateAdmin
     version 'v1', using: :path
 
     resource :users do
@@ -42,13 +42,14 @@ module V1
             { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
             { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
         ]}
+      before { authenticate_admin }
       params do
         requires :email, type: String, desc: 'Email'
         requires :role, type: String, desc: 'Role'
       end
       put '/update/role/:id' do
         user = User.where(id: params[:id], email: params[:email]).first
-        if user && user.update(role: params[:role])
+        if user.update(role: params[:role])
           serialization = UserSerializer.new(user)
           render_success(serialization.as_json)
         else
