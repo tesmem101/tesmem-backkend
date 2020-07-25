@@ -18,6 +18,7 @@ module V1
     mount V1::Backgrounds
     mount V1::Animations
     mount V1::Icons
+    mount V1::Unsplash
 
     add_swagger_documentation(
       api_version: 'v1',
