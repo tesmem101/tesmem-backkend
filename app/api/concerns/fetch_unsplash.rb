@@ -8,9 +8,19 @@ module FetchUnsplash
           return {
             id: photo.id, 
             title: photo.description, 
-            url: photo.urls.small, 
-            height: photo.height, 
-            width: photo.width
+            image: {
+              url:photo.urls.small,
+              height: photo.height, 
+              width: photo.width
+            },
+            artist: {
+              name: "By #{photo.user.name}",
+              url: photo.user.links.html
+            },
+            source: {
+              name: 'Photo via Unsplash',
+              url: photo.links.html
+            }
           }
       end
       def all_unsplash(search)
