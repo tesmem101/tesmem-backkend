@@ -17,6 +17,8 @@ module V1
         requires :email, type: String, desc: 'Email'
         requires :password, type: String, desc: 'Password'
         requires :password_confirmation, type: String, desc: 'Password confirmation'
+        requires :first_name, type: String, desc: 'user first name'
+        optional :last_name, type: String, desc: 'user last name'
       end
 
       post :sign_up do
@@ -65,14 +67,18 @@ module V1
       params do
         requires :email, type: String, desc: 'User email'
         requires :google_id, type: String, desc: 'Google Id'
+        requires :first_name, type: String, desc: 'user first name'
+        optional :last_name, type: String, desc: 'user last name'
       end
 
       post :google_sign_in do
         email = params[:email]
         google_id = params[:google_id]
+        first_name = params[:first_name]
+        last_name = params[:last_name]
         user = User.where(email: email.downcase).first
         if user.nil?
-          user = User.new(email: email.downcase, password: 'password', password_confirmation: 'password')
+          user = User.new(first_name: first_name, last_name: last_name, email: email.downcase, password: 'password', password_confirmation: 'password', identity_provider: 'google', identity_provider_id: google_id)
           user.save
         end
 
