@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :email, :token, :id, :image
+  attributes :email, :token, :id, :image, :first_name, :last_name
   has_one :image
 
   def token
