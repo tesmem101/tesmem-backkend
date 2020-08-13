@@ -23,12 +23,19 @@ module FetchUnsplash
             }
           }
       end
-      def all_unsplash(search)
+      def all_unsplash(search, page_number=1)
         if search
-          return Unsplash::Photo.search(search, page = 1, per_page = 50, orientation = nil)
+          return Unsplash::Photo.search(search, page = page_number, per_page = 30, orientation = nil)
         else
-          return Unsplash::Photo.all(page = 1, per_page = 50, order_by = "latest")
+          return Unsplash::Photo.all(page = page_number, per_page = 30, order_by = "latest")
         end
+      end
+      def get_unsplash_response(unsplash_images)
+        return {
+          unsplash: unsplash_images,
+          total_images: unsplash_images.length(),
+          per_page: 90
+        }
       end
     end
   end
