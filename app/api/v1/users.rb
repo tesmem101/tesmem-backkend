@@ -48,12 +48,16 @@ module V1
         requires :role, type: String, desc: 'Role'
       end
       put '/update/role/:id' do
-        user = User.where(id: params[:id], email: params[:email]).first
-        if user.update(role: params[:role])
-          serialization = UserSerializer.new(user)
-          render_success(serialization.as_json)
+        user = User.where(id: params[:id], email: params[:email])
+        if(user.length() > 0)
+          if user.first.update(role: params[:role])
+            serialization = UserSerializer.new(user.first)
+            render_success(serialization.as_json)
+          else
+            render_error(RESPONSE_CODE[:not_found], I18n.t('errors.not_found'))
+          end
         else
-          render_error(RESPONSE_CODE[:not_found], I18n.t('errors.not_found'))
+          render_error(RESPONSE_CODE[:not_found], I18n.t('errors.user.not_found'))
         end
       end
     end
