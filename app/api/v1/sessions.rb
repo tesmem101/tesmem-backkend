@@ -78,7 +78,7 @@ module V1
         last_name = params[:last_name]
         user = User.where(email: email.downcase).first
         if user.nil?
-          user = User.new(first_name: first_name, last_name: last_name, email: email.downcase, password: 'password', password_confirmation: 'password', identity_provider: 'google', identity_provider_id: google_id)
+          user = User.new(first_name: first_name, last_name: last_name, email: email.downcase, password: 'password', password_confirmation: 'password', identity_provider: 'google')
           user.save
         end
 
