@@ -4,12 +4,12 @@ module FetchUnsplash
   extend ActiveSupport::Concern
   included do
     helpers do
-      def map_unsplash_images(photo)
+      def map_unsplash_images(photo, size)
           return {
             id: photo.id, 
             title: photo.description, 
             image: {
-              url:photo.urls.small,
+              url:photo.urls[size],
               height: photo.height, 
               width: photo.width
             },
@@ -23,19 +23,26 @@ module FetchUnsplash
             }
           }
       end
-      def all_unsplash(search, page_number=1)
-        if search
-          return Unsplash::Photo.search(search, page = page_number, per_page = 30, orientation = nil)
-        else
-          return Unsplash::Photo.all(page = page_number, per_page = 30, order_by = "latest")
-        end
-      end
+      def map_unsplash_backgrounds(photo, size)
+        return {
+          id: photo.id, 
+          title: photo.description, 
+          url:photo.urls[size]
+        }
+    end
       def get_unsplash_response(unsplash_images)
         return {
           unsplash: unsplash_images,
           total_images: unsplash_images.length(),
-          per_page: 90
+          per_page: unsplash_images.length()
         }
+      end
+      def get_unsplash_images(search, page_number=1, orientation=nil, page_size=30, order_by='latest')
+        if search
+          return Unsplash::Photo.search(search, page = page_number, per_page = page_size, orientation = orientation)
+        else
+          return Unsplash::Photo.all(page = page_number, per_page = page_size, order_by = order_by)
+        end
       end
     end
   end
