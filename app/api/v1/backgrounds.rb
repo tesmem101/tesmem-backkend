@@ -2,6 +2,7 @@ module V1
   class Backgrounds < Grape::API
     include AuthenticateRequest
     include V1Base
+    include FetchUnsplash
     version "v1", using: :path
 
     resource :backgrounds do
@@ -35,14 +36,13 @@ module V1
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
-        search = params['search'].present? ? params['search'].downcase : nil
-        category = Category.where(title: TITLES[:background])
-        stocks = []
-        if category.present?
-          stocks = category.first.sub_categories.find_by_title(TITLES[:background]).stocks.where("lower(title) LIKE ?", "%#{search}%")
+        search = params['search'].present? ? params['search'].downcase : 'background'
+        unsplash_images = []
+        page_limit = 1
+        for page_number in 1..page_limit do
+          unsplash_images.concat get_unsplash_images(search, page_number, 'portrait', 20, 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'small') }
         end
-        serialization = serialize_collection(stocks, serializer: StockSerializer)
-        render_success(serialization.as_json)
+        render_success(unsplash_images.as_json)
       end
     end
   end

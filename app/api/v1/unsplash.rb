@@ -11,8 +11,9 @@ module V1
         get '/' do
           search = params['search'].present? ? params['search'].downcase : nil
           unsplash_images = []
-          for page_number in 1..3 do
-            unsplash_images.concat all_unsplash(search, page_number).map { |photo| map_unsplash_images(photo.table) }
+          page_limit = 3
+          for page_number in 1..page_limit do
+            unsplash_images.concat get_unsplash_images(search, page_number, nil, 30, 'latest').map { |photo| map_unsplash_images(photo.table, 'small') }
           end
           records = get_unsplash_response(unsplash_images)
           render_success(records.as_json)
