@@ -40,7 +40,7 @@ module V1
         unsplash_images = []
         page_limit = 1
         for page_number in 1..page_limit do
-          unsplash_images.concat get_unsplash_images(search, page_number, 'portrait', 20, 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'small') }
+          unsplash_images.concat get_unsplash_images(search, page_number, 'portrait', 20, 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'full') }
         end
         render_success(unsplash_images.as_json)
       end
