@@ -13,7 +13,7 @@ module V1
           unsplash_images = []
           page_limit = 3
           for page_number in 1..page_limit do
-            unsplash_images.concat get_unsplash_images(search, page_number, nil, 30, 'latest').map { |photo| map_unsplash_images(photo.table, 'full') }
+            unsplash_images.concat get_unsplash_images(search, page_number, nil, 30, 'latest').map { |photo| map_unsplash_images(photo.table, 'regular') }
           end
           records = get_unsplash_response(unsplash_images)
           render_success(records.as_json)
