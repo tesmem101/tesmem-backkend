@@ -14,7 +14,7 @@ module V1
         cat_id = params['category_id']
         search = params['search'].present? ? params['search'].downcase : nil
         templates = Category.find(cat_id).sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:designers).all.map { |sub_c| get_template(sub_c) }
-        render_success(templates)
+        render_success(templates.as_json)
       end
 
     end
