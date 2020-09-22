@@ -33,8 +33,9 @@ module V1
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
         search = params['search'].present? ? params['search'].downcase : nil
-        category = all_super_categories().where("lower(title) LIKE ?", "%#{search}%").includes(:image, :intermediate_categories).all.map {|super_cat| fetch_super_categories(super_cat)}
-        render_success(category.as_json)
+        category = all_super_categories().where("lower(title) LIKE ?", "%#{search}%")
+        serialization = serialize_collection(category, serializer: CategorySerializer)
+        render_success(serialization.as_json)
       end
       desc 'Get Super Category by ID',
            { consumes: ['application/x-www-form-urlencoded'],

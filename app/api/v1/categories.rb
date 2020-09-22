@@ -36,8 +36,9 @@ module V1
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
         search = params['search'].present? ? params['search'].downcase : nil
-        category = all_categories().where("lower(title) LIKE ?", "%#{search}%").includes(:designers, :image).all.map { |cat| fetch_categories(cat) }
-        render_success(category.as_json)
+        category = all_categories().where("lower(title) LIKE ?", "%#{search}%")
+        serialization = serialize_collection(category, serializer: CategorySerializer)
+        render_success(serialization.as_json)
       end
       
       desc 'Get Category by ID',
