@@ -1,6 +1,7 @@
 class Category < ApplicationRecord
   has_many :sub_categories, dependent: :destroy
   has_many :stocks, dependent: :destroy
+  has_many :designers, dependent: :destroy
 
   has_many   :intermediate_categories, class_name: "Category", foreign_key: "super_category_id", dependent: :destroy
   belongs_to :super_category,     class_name: "Category", optional: true

@@ -13,8 +13,8 @@ module V1
       get '/' do
         cat_id = params['category_id']
         search = params['search'].present? ? params['search'].downcase : nil
-        cat = Category.find(cat_id).sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_template(sub_c) }
-        render_success(cat.as_json)
+        templates = Category.find(cat_id).sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:designers).all.map { |sub_c| get_template(sub_c) }
+        render_success(templates.as_json)
       end
 
     end

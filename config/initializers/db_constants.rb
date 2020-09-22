@@ -4,3 +4,7 @@ TITLES = {
     animation: "RESERVED_ANIMATIONS",
     icon: "RESERVED_ICONS"
 }.freeze
+
+DESIGNERS = {
+    subCategory: "Recent Design(s)"
+}.freeze
