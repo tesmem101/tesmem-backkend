@@ -2,7 +2,7 @@ module V1
   class SuperCategories < Grape::API
     include AuthenticateRequest
     include V1Base
-    include FetchSuperCategories
+    include FetchCategories
     version 'v1', using: :path
 
     resource :supercategories do
@@ -33,9 +33,8 @@ module V1
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
         search = params['search'].present? ? params['search'].downcase : nil
-        category = all_super_categories().where("lower(title) LIKE ?", "%#{search}%")
-        serialization = serialize_collection(category, serializer: CategorySerializer)
-        render_success(serialization.as_json)
+        category = all_super_categories().where("lower(title) LIKE ?", "%#{search}%").includes(:image, :intermediate_categories).all.map {|super_cat| fetch_super_categories(super_cat)}
+        render_success(category.as_json)
       end
       desc 'Get Super Category by ID',
            { consumes: ['application/x-www-form-urlencoded'],
@@ -43,8 +42,8 @@ module V1
       get '/:id' do
         category = all_super_categories().find(params[:id])
         if category.present?
-          serialization = CategorySerializer.new(category)
-          render_success(serialization.as_json)
+          category = fetch_super_categories(category)
+          render_success(category.as_json)
         end
       end
       desc 'Update Super Category',

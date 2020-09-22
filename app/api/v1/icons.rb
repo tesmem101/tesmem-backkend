@@ -2,7 +2,7 @@ module V1
   class Icons < Grape::API
     include AuthenticateRequest
     include V1Base
-    include FetchTemplate
+    include FetchIcon
     version "v1", using: :path
 
     resource :icons do
@@ -70,7 +70,7 @@ module V1
         category = Category.where(title: TITLES[:icon])
         searched_animations = []
         if category.present?
-          searched_animations = category.first.sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_template(sub_c) }
+          searched_animations = category.first.sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_icons(sub_c) }
         end
         render_success(searched_animations.as_json)
       end

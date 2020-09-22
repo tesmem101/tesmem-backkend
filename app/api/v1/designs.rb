@@ -20,6 +20,7 @@ module V1
         requires :title, type: String, desc: "Name"
         optional :description, type: String, desc: "Pata"
         requires :user_id, type: Integer, desc: "Creator"
+        requires :category_id, type: Integer, desc: "Category"
         requires :styles, type: JSON, desc: "Styles"
         optional :height, type: String, desc: "Height"
         optional :width, type: String, desc: "Width"
@@ -27,10 +28,18 @@ module V1
         optional :is_trashed, type: Integer, desc: "Trash"
       end
       post :create do
+        categoryId = params[:category_id]
+        params.delete("category_id")
         params[:image] = encode_image(params[:title], params[:image])
         design = Design.new(params)
         if design.save!
           insert_image(design)
+          userId = params[:user_id]
+          user = User.find(userId)
+          if user.role == 'designer'
+            sub_category = SubCategory.where(title: DESIGNERS[:subCategory]).first_or_create({category_id:categoryId})
+            Designer.create(design_id: design.id, category_id: categoryId, sub_category_id: sub_category.id, url: design.image)
+          end
           serialization = DesignSerializer.new(design)
           render_success(serialization.as_json)
         else
@@ -62,6 +71,11 @@ module V1
         design = Design.find(params[:id])
         if design.update!(params)
           update_image(design) if params[:image]
+          userId = params[:user_id]
+          user = User.find(userId)
+          if user.role == 'designer'
+            Designer.where(design_id: params[:id]).update(url: design.image)
+          end
           serialization = DesignSerializer.new(design)
           render_success(serialization.as_json)
         else
