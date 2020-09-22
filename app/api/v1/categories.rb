@@ -37,7 +37,7 @@ module V1
       get '/' do
         search = params['search'].present? ? params['search'].downcase : nil
         category = all_categories().where("lower(title) LIKE ?", "%#{search}%").includes(:designers, :image).all.map { |cat| fetch_categories(cat) }
-        render_success(category.as_json)
+        render_success(category)
       end
       
       desc 'Get Category by ID',
