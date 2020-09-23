@@ -6,5 +6,6 @@ TITLES = {
 }.freeze
 
 DESIGNERS = {
+    category: "RESERVED_DESIGNS",
     subCategory: "Recent Design(s)"
 }.freeze
