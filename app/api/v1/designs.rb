@@ -25,6 +25,7 @@ module V1
         optional :width, type: String, desc: "Width"
         requires :image, type: String, desc: "Image"
         optional :is_trashed, type: Integer, desc: "Trash"
+        optional :cat_id, type: Integer, desc: "Category Id"
       end
       post :create do
         params[:image] = encode_image(params[:title], params[:image])
@@ -61,6 +62,7 @@ module V1
         optional :width, type: String, desc: "Width"
         optional :image, type: String, desc: "Image"
         optional :is_trashed, type: Integer, desc: "Trash"
+        optional :cat_id, type: Integer, desc: "Category Id"
       end
       put "/:id" do
         if params[:image]
