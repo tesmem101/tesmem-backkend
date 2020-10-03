@@ -132,6 +132,29 @@ module V1
         serialization = serialize_collection(category, serializer: CategorySerializer)
         render_success(serialization.as_json)
       end
+      desc "Get All Desings by search category title",
+        { consumes: ["application/x-www-form-urlencoded"],
+         http_codes: [
+          { code: 200, message: "success" },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
+        ] }
+      get "design/search" do
+        if params['locale'].present?
+          if params['locale'] != "ar"
+            render_error(RESPONSE_CODE[:not_found], I18n.t("errors.locale.not_found"))
+          end
+        end
+        if params['search'].blank?
+          render_error(RESPONSE_CODE[:not_found], I18n.t("errors.search.not_found"))
+        end
+        search = params['search'].downcase
+        locale = params['locale'].present? ? "_#{params['locale']}" : ""
+        designs = all_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:designers).all.map { |cat| cat.designers.where('approved', true).includes(:design).all.map { |des| des.design } }.flatten
+        serialization = serialize_collection(designs, serializer: DesignSerializer)
+        render_success(serialization.as_json)
+      end
 
     end
   end
