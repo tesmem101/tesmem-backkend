@@ -66,11 +66,17 @@ module V1
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
       get '/' do
+        if params['locale'].present?
+          if params['locale'] != "ar"
+            render_error(RESPONSE_CODE[:not_found], I18n.t("errors.locale.not_found"))
+          end
+        end
         search = params['search'].present? ? params['search'].downcase : nil
+        locale = params['locale'].present? ? "_#{params['locale']}" : ""
         category = Category.where(title: TITLES[:icon])
         searched_animations = []
         if category.present?
-          searched_animations = category.first.sub_categories.where("lower(title) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_icons(sub_c) }
+          searched_animations = category.first.sub_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_icons(sub_c) }
         end
         render_success(searched_animations.as_json)
       end

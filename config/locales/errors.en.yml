@@ -18,3 +18,7 @@ en:
       not_processed: "Cant processrequest "
     super_admin:
       is_required: "Super admin authorization is required"
+    locale:
+      not_found: "Locale is invalid"
+    search:
+      not_found: "Search parameter is required"
