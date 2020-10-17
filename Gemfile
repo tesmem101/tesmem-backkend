@@ -33,6 +33,7 @@ gem 'cancancan'
 gem 'fog-aws'
 gem 'figaro'
 gem 'unsplash'
+gem 'nokogiri'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
