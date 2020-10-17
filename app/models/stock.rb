@@ -29,7 +29,7 @@ class Stock < ApplicationRecord
             color: tag['fill']
           })
       }
-      self.specs = colors.to_json
+      self.specs = colors
     end
   end
 
