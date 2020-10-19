@@ -30,7 +30,7 @@ class Stock < ApplicationRecord
           })
       }
       self.specs = colors
-      self.description = doc
+      self.description = svg
     end
   end
 
