@@ -22,7 +22,7 @@ class Stock < ApplicationRecord
       count = 1
       colors = []
       svg.xpath('//path').each{|tag| 
-          tag['id'] = "PATH_#{count}"
+          tag['id'] = "#{self.title}_PATH_#{count}"
           count = count + 1
           colors.push({
             id: tag['id'],
@@ -30,6 +30,7 @@ class Stock < ApplicationRecord
           })
       }
       self.specs = colors
+      self.description = doc
     end
   end
 
