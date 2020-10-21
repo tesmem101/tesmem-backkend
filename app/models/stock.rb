@@ -21,13 +21,19 @@ class Stock < ApplicationRecord
       svg = doc.at_css 'svg'
       count = 1
       colors = []
+      title = self.title
+      title.gsub! ' ', '_'
       svg.xpath('//path').each{|tag| 
-          tag['id'] = "#{self.title}_PATH_#{count}"
-          count = count + 1
-          colors.push({
-            id: tag['id'],
-            color: tag['fill']
-          })
+          if tag['fill'].present?
+            tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
+            tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
+            count = count + 1
+            colors.push({
+              id: tag['id'],
+              color: tag['fill'],
+              class: tag['class']
+            })
+          end
       }
       self.specs = colors
       self.description = svg
