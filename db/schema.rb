@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200516041734) do
+ActiveRecord::Schema.define(version: 20201017170511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,36 @@ ActiveRecord::Schema.define(version: 20200516041734) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "super_category_id"
+    t.string "cover"
+    t.string "title_ar"
+    t.string "width"
+    t.string "height"
+    t.string "unit"
+    t.index ["super_category_id"], name: "index_categories_on_super_category_id"
+    t.index ["title"], name: "index_categories_on_title"
+  end
+
+  create_table "containers", force: :cascade do |t|
+    t.integer "folder_id", null: false
+    t.integer "instance_id", null: false
+    t.string "instance_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["folder_id"], name: "index_containers_on_folder_id"
+    t.index ["instance_id"], name: "index_containers_on_instance_id"
+    t.index ["instance_type"], name: "index_containers_on_instance_type"
+  end
+
+  create_table "designers", force: :cascade do |t|
+    t.integer "design_id"
+    t.integer "category_id"
+    t.integer "sub_category_id"
+    t.boolean "approved", default: false
+    t.boolean "private", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "url"
   end
 
   create_table "designs", force: :cascade do |t|
@@ -29,27 +59,50 @@ ActiveRecord::Schema.define(version: 20200516041734) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image"
+    t.string "height"
+    t.string "width"
+    t.integer "is_trashed", default: 0, null: false
+    t.integer "cat_id"
     t.index ["user_id"], name: "design_by_user"
+  end
+
+  create_table "folders", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "parent_id"
+    t.index ["parent_id"], name: "index_folders_on_parent_id"
+    t.index ["user_id"], name: "index_folders_on_user_id"
   end
 
   create_table "images", force: :cascade do |t|
     t.string "name"
-    t.string "pata"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "image_id"
+    t.string "image_type"
+    t.string "url"
+    t.integer "version", default: 1
+    t.string "height"
+    t.string "width"
   end
 
   create_table "stocks", force: :cascade do |t|
     t.string "title"
     t.text "description"
-    t.string "source"
-    t.string "stocktype"
-    t.string "height"
-    t.string "size"
+    t.string "url"
     t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sub_category_id", default: 0, null: false
+    t.json "json"
+    t.string "image"
+    t.string "svg"
+    t.integer "stocktype", default: 0
+    t.json "specs"
   end
 
   create_table "sub_categories", force: :cascade do |t|
@@ -58,15 +111,18 @@ ActiveRecord::Schema.define(version: 20200516041734) do
     t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title_ar"
+    t.index ["title"], name: "index_sub_categories_on_title"
   end
 
-  create_table "template_images", force: :cascade do |t|
+  create_table "uploads", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "image", null: false
     t.string "title"
-    t.text "description"
-    t.string "type"
-    t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "is_trashed", default: 0, null: false
+    t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 
   create_table "user_tokens", force: :cascade do |t|
@@ -93,8 +149,13 @@ ActiveRecord::Schema.define(version: 20200516041734) do
     t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "role", default: 0
+    t.string "profile"
+    t.integer "identity_provider", default: 0
+    t.integer "identity_provider_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "folders", "users"
 end
