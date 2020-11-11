@@ -12,7 +12,7 @@ class Category < ApplicationRecord
 
   def add_cover_photo
     if self.cover.present? && self.cover.thumb.url.present?
-      current_image = self.cover.thumb.url
+      current_image = Rails.env.development? ? "public#{self.cover.thumb.url}" : self.cover.thumb.url
       img = MiniMagick::Image::open(current_image)
       height = img[:height].to_s
       width = img[:width].to_s
