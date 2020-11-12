@@ -15,8 +15,9 @@ class Stock < ApplicationRecord
   before_save :add_ids_to_svg
 
   def add_ids_to_svg
+
     if self.svg.present?
-      url = "#{ENV["RAIL_SERVER_URL"]}#{self.svg}"
+      url = "#{ENV["HOST_URL"]}#{self.svg}"
       doc = Nokogiri::HTML open(url)
       svg = doc.at_css 'svg'
       count = 1
