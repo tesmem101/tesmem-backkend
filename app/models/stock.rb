@@ -16,7 +16,7 @@ class Stock < ApplicationRecord
 
   def add_ids_to_svg
 
-    if self.svg.present?
+    if self.svg.present? && svg.file.path.include?('.svg')
       url = "#{ENV["HOST_URL"]}#{self.svg}"
       doc = Nokogiri::HTML open(url)
       svg = doc.at_css 'svg'
