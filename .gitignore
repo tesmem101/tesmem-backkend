@@ -11,6 +11,5 @@ config/application.yml
 
 .byebug_history
 config/database.yml
-public/attachment
 public/uploads
 
