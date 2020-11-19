@@ -12,4 +12,5 @@ config/application.yml
 .byebug_history
 config/database.yml
 public/uploads
+public/assets
 
