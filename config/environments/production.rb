@@ -28,7 +28,7 @@ Rails.application.configure do
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -85,6 +85,26 @@ Rails.application.configure do
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
+
+  #-------------------------------------------------------------
+  # config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: 'https://tesmem-backend.herokuapp.com/' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.smtp_settings = {
+    :address=> "smtp.gmail.com",
+    :port => 587,
+    :domain => "gmail.com",
+    :user_name => ENV['SMTP_USERNAME'],
+    :password => ENV['SMTP_PASSWORD'],
+    :authentication => :plain,
+    :enable_starttls_auto => true
+  }
+  config.action_mailer.raise_delivery_errors = true
+  # Send email in development mode.
+  config.action_mailer.perform_deliveries = true
+  #-------------------------------------------------------------
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

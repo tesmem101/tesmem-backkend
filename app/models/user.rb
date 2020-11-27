@@ -37,6 +37,14 @@ class User < ApplicationRecord
     user_token.nil? ? false : user_token.destroy
   end
 
+  def reset_password!
+    # self.password = SecureRandom.hex(8)
+    self.password = Array.new(8){[*"A".."Z", *"0".."9"].sample}.join
+    self.password_confirmation = password
+    save!
+    UserMailer.new_password(self).deliver
+  end
+
   def move_profile_photo_to_image_table
     if self.profile.blank?
       current_image = "https://tesmem-staging.s3.us-east-2.amazonaws.com/uploads/dummy/user.png"

@@ -57,6 +57,29 @@ module V1
         render_success(serialization.as_json)
       end
 
+      # ==================================
+      desc 'Reset Password',{
+        consumes: [ 'application/x-www-form-urlencoded' ],
+        http_codes: [
+          { code: 200, message: 'success'},
+          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
+        ]
+      }
+      params do
+        requires :email, type: String, desc: 'User email'
+      end
+
+      post :reset_password do
+        email = params[:email]
+        user = User.find_by(email: email.downcase)
+        if user.nil?
+          render_error(RESPONSE_CODE[:not_found], I18n.t('errors.not_found'))
+        end
+        user.reset_password!
+        render_success('New Password has been sent to your email'.as_json)
+      end
+      # ==================================
+
       desc 'Sign in/up user via google',{
         consumes: [ 'application/x-www-form-urlencoded' ],
         http_codes: [

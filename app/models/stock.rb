@@ -16,8 +16,20 @@ class Stock < ApplicationRecord
 
   def add_ids_to_svg
 
-    if self.svg.present?
-      url = "#{ENV["HOST_URL"]}#{self.svg}"
+    if self.svg.present? # ALSO CHECK IF THIS ATTR CHANGED
+      if Rails.env.development?
+        url = "#{ENV["HOST_URL"]}#{self.svg}"
+      else
+        url = "#{self.svg}"
+      end
+
+      puts "=============================================="
+      puts "SELECTED_URL: #{url}"
+      puts "HOST_URL: #{ENV["HOST_URL"]}"
+      puts "SVG: #{self.svg}"
+      puts "SVG Path: #{self.svg.file.path}"
+
+
       doc = Nokogiri::HTML open(url)
       svg = doc.at_css 'svg'
       count = 1
