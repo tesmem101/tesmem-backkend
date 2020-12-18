@@ -57,7 +57,7 @@ module V1
              http_codes: [{ code: 200, message: 'success' }] }
       get '/intermediate/:id' do
         category = Category.find(params[:id])
-        render_success(category.as_json)
+        # render_success(category.as_json)
 
         serialization = IntermediateCategorySerializer.new(category)
         render_success(serialization.as_json)
