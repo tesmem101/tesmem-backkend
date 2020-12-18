@@ -51,6 +51,17 @@ module V1
           render_success(category.as_json)
         end
       end
+
+      desc 'Get Intermediate Category by ID',
+           { consumes: ['application/x-www-form-urlencoded'],
+             http_codes: [{ code: 200, message: 'success' }] }
+      get '/intermediate/:id' do
+        category = Category.find(params[:id])
+        render_success(category.as_json)
+
+        serialization = IntermediateCategorySerializer.new(category)
+        render_success(serialization.as_json)
+      end
       
       desc 'Update Category',
            { consumes: ['application/x-www-form-urlencoded'],
