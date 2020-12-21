@@ -5,3 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+puts "Creating First User"
+User.create(email: "super.admin@tesmem.com", password: "live@tesmem", role: "super_admin")
