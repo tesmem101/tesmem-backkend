@@ -54,9 +54,14 @@ class Stock < ApplicationRecord
       self.url = self.svg.url
     end
   end
+
   def update_url
     if self.image.present?
       self.url = self.image.url
     end
+  end
+
+  def self.search_keyword(locale = '', keyword)
+    where("lower(stocks.title#{locale}) LIKE ?", "%#{keyword}%")
   end
 end
