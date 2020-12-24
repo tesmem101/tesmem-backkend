@@ -81,8 +81,18 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+staging:
+  <<: *default
+  username: <%= ENV['DATABASE_USER']%>
+  password: <%= ENV['DATABASE_PASSWORD']%>
+  database: <%= ENV['DATABASE_NAME']%>
+  host: <%= ENV['DATABASE_HOST']%>
+  pool: 30
+
 production:
   <<: *default
-  database: tesmem_backend_production
-  username: tesmem_backend
-  password: <%= ENV['tesmem_BACKEND_DATABASE_PASSWORD'] %>
+  username: <%= ENV['DATABASE_USER']%>
+  password: <%= ENV['DATABASE_PASSWORD']%>
+  database: <%= ENV['DATABASE_NAME']%>
+  host: <%= ENV['DATABASE_HOST']%>
+  pool: 30

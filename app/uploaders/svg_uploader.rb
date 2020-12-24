@@ -9,4 +9,5 @@ class SvgUploader < CarrierWave::Uploader::Base
     [:svg]
   end
 
+
 end
