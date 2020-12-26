@@ -16,7 +16,7 @@ module SaveImage
         return form_data
       end
       def get_dimensions(image)
-        image = MiniMagick::Image.open(image)
+        image = MiniMagick::Image.open("#{ENV["HOST_URL"]}#{image}")
         return { height: image[:height], width: image[:width] }
       end
       def insert_image(design)

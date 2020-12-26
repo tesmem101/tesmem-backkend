@@ -38,9 +38,9 @@ module V1
       get '/' do
         search = params['search'].present? ? params['search'].downcase : 'background'
         unsplash_images = []
-        page_limit = 1
+        page_limit = 5
         for page_number in 1..page_limit do
-          unsplash_images.concat get_unsplash_images(search, page_number, 'portrait', 20, 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'regular') }
+          unsplash_images.concat get_unsplash_images(search, page_number, nil, 20, 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'regular') }
         end
         render_success(unsplash_images.as_json)
       end

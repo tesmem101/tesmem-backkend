@@ -43,6 +43,12 @@ class Stock < ApplicationRecord
       }
       self.specs = colors
       self.description = svg
+
+      # 1) If fill exists Attach class and id where 
+      # 2) Else fill not found 
+      #   -> fill with black + Class + ID
+
+      # Send specs aray Uniq by color
     end
   end
 
