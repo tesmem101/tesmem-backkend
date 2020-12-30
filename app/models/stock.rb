@@ -15,34 +15,51 @@ class Stock < ApplicationRecord
   before_save :add_ids_to_svg
 
   def add_ids_to_svg
-
     if self.svg.present? # ALSO CHECK IF THIS ATTR CHANGED
       if Rails.env.development?
         url = "#{ENV["HOST_URL"]}#{self.svg}"
       else
         url = "#{self.svg}"
       end
-      # puts "=============================================="
-      # puts "SELECTED_URL: #{url}"
-      # puts "HOST_URL: #{ENV["HOST_URL"]}"
-      # puts "SVG: #{self.svg}"
       # puts "SVG Path: #{self.svg.file.path}"
       doc = Nokogiri::HTML open(url)
       svg = doc.at_css 'svg'
-      count = 1
-      colors = []
       title = self.title
       title.gsub! ' ', '_'
-      svg.xpath('//path').each{|tag| 
-        tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
-        tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
-        tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
-        count = count + 1
-        colors.push({ id: tag['id'], color: tag['fill'], class: tag['class'] })
-        colors.uniq { |row| [row['color']] }
-      }
-      self.specs = colors
+
+      count = 1
+      colors_arr = []
+      specs_arr = []
+      svg.xpath('//g').each do |g_tag|
+          g_tag.children.each do |tag|
+            tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
+            tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
+            tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
+            count = count + 1
+            # Making Specs Array
+            if tag.attributes['fill'].present? && 
+                tag.attributes['fill'].value !='none' &&
+              !(colors_arr.include? tag.attributes['fill'].value)
+              colors_arr << tag.attributes['fill'].value
+              specs_arr << { id: tag['id'], color: tag.attributes['fill'].value, class: tag['class'] }
+            end
+          end
+      end
+
+      # Previous implementation
+      # svg.xpath('//path').each{|tag| 
+      #   tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
+      #   tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
+      #   tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
+      #   count = count + 1
+      #   # unless colors_arr.include? tag['fill']
+      #   #   colors_arr << tag['fill']
+      #   #   specs_arr << { id: tag['id'], color: tag['fill'], class: tag['class'] }
+      #   # end
+      # }
+
       self.description = svg
+      self.specs = specs_arr
     end
   end
 
