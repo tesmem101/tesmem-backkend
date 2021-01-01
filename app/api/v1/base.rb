@@ -19,6 +19,7 @@ module V1
     mount V1::Animations
     mount V1::Icons
     mount V1::Unsplash
+    mount V1::Triggers
 
     add_swagger_documentation(
       api_version: 'v1',

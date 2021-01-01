@@ -5,6 +5,7 @@ module FetchUnsplash
   included do
     helpers do
       def map_unsplash_images(photo, size)
+
           return {
             id: photo.id, 
             title: photo.description, 
@@ -19,8 +20,10 @@ module FetchUnsplash
             },
             source: {
               name: 'Photo via Unsplash',
-              url: photo.links.html
+              url: photo.links.html,
+              download_Url: photo.links.download_location
             }
+          
           }
       end
       def map_unsplash_backgrounds(photo, size)
@@ -43,6 +46,14 @@ module FetchUnsplash
         else
           return Unsplash::Photo.all(page = page_number, per_page = page_size, order_by = order_by)
         end
+      end
+      def track_unsplash_download(id)
+        puts(id.class)
+        puts(123.class)
+        debugger
+        photo = Unsplash::Photo.find(id)
+        debugger
+        return photo.track_download
       end
     end
   end
