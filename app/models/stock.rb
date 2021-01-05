@@ -32,6 +32,7 @@ class Stock < ApplicationRecord
       specs_arr = []
       svg.xpath('//g').each do |g_tag|
           g_tag.children.each do |tag|
+            next if tag.name == "g"
             tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
             tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
             tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"

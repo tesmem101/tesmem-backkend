@@ -32,6 +32,7 @@ module V1
         params[:image] = encode_image(params[:title], params[:image])
         design = Design.new(params)
         if design.save!
+          File.delete(params[:image]) if File.exists? params[:image]
           insert_image(design)
           userId = params[:user_id]
           user = User.find(userId)
@@ -72,6 +73,7 @@ module V1
         design = Design.find(params[:id])
         if design.update!(params)
           update_image(design) if params[:image]
+          File.delete(params[:image]) if File.exists? params[:image]
           userId = params[:user_id]
           user = User.find(userId)
           if user.role == 'designer'
