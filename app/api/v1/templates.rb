@@ -24,12 +24,15 @@ module V1
           templates = Category.find(cat_id).sub_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:designers).all.map { |sub_c| get_template(sub_c) }
           render_success(templates.as_json)
         else
-          templates = all_categories.includes(:sub_categories).all.map {|cat| 
-            cat.sub_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:designers).all.map { |sub_c| get_template(sub_c) }
-          }.flatten
+          templates = all_categories.includes(:sub_categories).all
+            .map { |cat| 
+                cat.sub_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%")
+                .includes(:designers).all.map { |sub_c| get_template(sub_c) }
+            }.flatten
           render_success(templates.as_json)
         end
       end
+
 
     end
   end

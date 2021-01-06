@@ -162,7 +162,7 @@ module V1
         end
         search = params['search'].downcase
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
-        designs = all_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:designers).all.map { |cat| cat.designers.where('approved', true).includes(:design).all.map { |des| des.design } }.flatten
+        designs = all_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:designers).all.map { |cat| cat.designers.approved.includes(:design).all.map { |des| des.design } }.flatten
         serialization = serialize_collection(designs, serializer: DesignSerializer)
         render_success(serialization.as_json)
       end

@@ -6,10 +6,10 @@ module FetchCategories
   included do
     helpers do
         def all_categories
-          return Category.where.not(title: TITLES.map{ |key, title| title }, super_category_id: nil)
+          Category.where.not(title: TITLES.values, super_category_id: nil)
         end
         def all_super_categories
-          return Category.where.not(title: TITLES.map{ |key, title| title }).where(super_category_id: nil)
+          Category.where.not(title: TITLES.values).where(super_category_id: nil)
         end
         def fetch_categories(categories)
           return {
