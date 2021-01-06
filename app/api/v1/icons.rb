@@ -76,7 +76,7 @@ module V1
         category = Category.where(title: TITLES[:icon])
         searched_animations = []
         if category.present?
-          searched_animations = category.first.sub_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:stocks).all.map { |sub_c| get_icons(sub_c) }
+          searched_animations = category.first.search_keyword(locale, search).includes(:stocks).all.map { |sub_c| get_icons(sub_c) }
         end
         render_success(searched_animations.as_json)
         # stocks = Stock.joins(:category)
