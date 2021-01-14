@@ -21,9 +21,7 @@ module FetchCategories
             height: categories.height,
             unit: categories.unit,
             image: ImageSerializer.new(categories.image),
-            stocks: categories.designers.includes(:design).all.filter { |designer, key|
-              designer.approved
-            }.map { |designer, key| 
+            stocks: categories.designers.includes(:design).approved.map { |designer, key| 
               {
                 id: designer.design.id,
                 title: designer.design.title,
