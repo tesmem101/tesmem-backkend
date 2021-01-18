@@ -8,6 +8,16 @@ class ImageUploader < CarrierWave::Uploader::Base
   # storage :file
   # storage :fog
 
+  def filename
+    @name ||= "#{timestamp}-#{super}" if original_filename.present? and 
+    super.present?
+  end
+
+  def timestamp
+    var = :"@#{mounted_as}_timestamp"
+    model.instance_variable_get(var) or model.instance_variable_set(var, Time.current.to_i)
+  end
+
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir

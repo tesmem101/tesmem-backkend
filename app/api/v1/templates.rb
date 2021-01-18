@@ -21,15 +21,18 @@ module V1
         search = params['search'].present? ? params['search'].downcase : nil
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
         if cat_id
-          templates = Category.find(cat_id).sub_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:designers).all.map { |sub_c| get_template(sub_c) }
+          templates = Category.find(cat_id).sub_categories.search_keyword(locale, search).includes(:designers).all.map { |sub_c| get_template(sub_c) }
           render_success(templates.as_json)
         else
-          templates = all_categories.includes(:sub_categories).all.map {|cat| 
-            cat.sub_categories.where("lower(title#{locale}) LIKE ?", "%#{search}%").includes(:designers).all.map { |sub_c| get_template(sub_c) }
-          }.flatten
+          templates = all_categories.includes(:sub_categories).all
+            .map { |cat| 
+                cat.sub_categories.search_keyword(locale, search)
+                .includes(:designers).all.map { |sub_c| get_template(sub_c) }
+            }.flatten
           render_success(templates.as_json)
         end
       end
+
 
     end
   end
