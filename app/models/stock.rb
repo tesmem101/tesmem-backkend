@@ -29,8 +29,7 @@ class Stock < ApplicationRecord
 
       count = 1
       colors_arr = []
-      specs_arr = []     
-
+      specs_arr = []
       svg.xpath('//g').each do |g_tag|
           g_tag.children.each do |tag|
             next if tag.name == "g"
@@ -59,38 +58,9 @@ class Stock < ApplicationRecord
       #   #   specs_arr << { id: tag['id'], color: tag['fill'], class: tag['class'] }
       #   # end
       # }
+
       self.description = svg
       self.specs = specs_arr
-#       self.description = svg
-#       t_svg = self.description
-#       t_svg = t_svg.gsub("<path d", "<path fill='#000000' d")
-#       matches = t_svg.scan(/fill=['|"]#\w*\d*\w*\d*['|"]/)
-#       matches.each do |fill|
-#         colorCode = fill.split(/#/,-1)[1].split(/"|'/,-1)[0]
-#         t_svg = t_svg.gsub(fill,fill+' class="'+title+'_SVG_#'+colorCode+'"') 
-#         specs_arr << { id: 'svg', color: '#'+colorCode, class: title+'_SVG_#'+colorCode }
-#       end
-#       self.description = t_svg
-
-#       # t_svg["<path d"] = "<path fill=\"#000000\" d"
-#       temarr = []
-# flag = true
-#       specs_arr.each do |el|
-#         flag = true
-#         temarr.each do |obj|
-#           if(obj==el)
-#             flag  = false
-#           end
-          
-#         end
-#         if(flag)
-#           temarr<<el
-#         end
-#       end
-
-
-
-#       self.specs = temarr
     end
   end
 
