@@ -73,12 +73,16 @@ module V1
         end
         search = params['search'].present? ? params['search'].downcase : nil
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
-        category = Category.where(title: TITLES[:icon])
+        category = Category.where(title: TITLES[:icon]).take
         searched_animations = []
+
         if category.present?
-          searched_animations = category.first.sub_categories.search_keyword(locale, search).includes(:stocks).all.map { |sub_c| get_icons(sub_c) }
+          searched_animations = category.sub_categories
+            .search_keyword(locale, search).includes(:stocks)
+            .all.map { |sub_c| get_icons(sub_c) }
         end
         render_success(searched_animations.as_json)
+        
         # stocks = Stock.joins(:category)
         #   .where(categories: {title: TITLES[:icon]})
         #   .search_keyword(locale, search)
