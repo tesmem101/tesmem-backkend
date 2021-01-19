@@ -50,9 +50,7 @@ module FetchUnsplash
       def track_unsplash_download(id)
         puts(id.class)
         puts(123.class)
-        debugger
         photo = Unsplash::Photo.find(id)
-        debugger
         return photo.track_download
       end
     end
