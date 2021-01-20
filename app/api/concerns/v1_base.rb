@@ -59,6 +59,10 @@ module V1Base
           total_count: object.total_count
         }
       end
+
+      def true?(obj)
+        obj.to_s.downcase == "true"
+      end
     end
   end
 end
