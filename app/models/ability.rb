@@ -10,6 +10,7 @@ class Ability
       can :manage, SubCategory
       can :manage, Stock
       can :manage, Designer
+      can :manage, Tag
       can :read, Design
     end
     if user.role == 'designer'
@@ -19,6 +20,7 @@ class Ability
       can :manage, SubCategory
       can :manage, Stock
       can :manage, Designer
+      can :manage, Tag
       can :read, Design
     end
     if user.role == 'super_admin'
