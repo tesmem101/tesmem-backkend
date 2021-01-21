@@ -2,14 +2,18 @@ class Stock < ApplicationRecord
   include CarrierWave::MiniMagick
   include Nokogiri
   
-  belongs_to :category
-  belongs_to :sub_category
-
   enum stocktype: [:image, :svg]
 
   mount_uploader :image, StockUploader
   mount_uploader :svg, SvgUploader
-  
+
+  belongs_to :category
+  belongs_to :sub_category
+  has_many :stock_tags, dependent: :destroy
+  has_many :tags, through: :stock_tags
+
+  accepts_nested_attributes_for :stock_tags
+
   after_find :mapping_image_url
   after_save :update_url
   before_save :add_ids_to_svg
