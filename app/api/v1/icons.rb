@@ -85,9 +85,7 @@ module V1
           end
           render_success(searched_animations.as_json)
         else
-          stocks = Stock.joins(:category)
-            .where(categories: {title: TITLES[:icon]})
-            .search_keyword(locale, search)
+          stocks = Stock.icons_stock.search_keyword(locale, search)
           result = serialize_collection(stocks, serializer: StockSerializer)
           render_success(result.as_json)
         end

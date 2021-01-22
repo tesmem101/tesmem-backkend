@@ -12,6 +12,8 @@ class Stock < ApplicationRecord
   has_many :stock_tags, dependent: :destroy
   has_many :tags, through: :stock_tags
 
+  scope :icons_stock, -> { joins(:category).where(categories: {title: TITLES[:icon]}) }
+
   accepts_nested_attributes_for :stock_tags
 
   after_find :mapping_image_url
@@ -83,7 +85,13 @@ class Stock < ApplicationRecord
     end
   end
 
+  # def self.search_keyword(locale = '', keyword)
+  #   where("lower(stocks.title#{locale}) LIKE ?", "%#{keyword}%")
+  # end
+
   def self.search_keyword(locale = '', keyword)
-    where("lower(stocks.title#{locale}) LIKE ?", "%#{keyword}%")
+    includes(:tags).joins(:tags).
+    where("LOWER(stocks.title#{locale}) LIKE :keyword OR
+           LOWER(tags.name#{locale}) LIKE :keyword", {:keyword => "%#{keyword.downcase}%"}) if keyword.present?
   end
 end
