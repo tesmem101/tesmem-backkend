@@ -85,9 +85,10 @@ module V1
           end
           render_success(searched_animations.as_json)
         else
-          stocks = Stock.icons_stock.search_keyword(locale, search)
-          result = serialize_collection(stocks, serializer: StockSerializer)
-          render_success(result.as_json)
+          icons_stock = Stock.icons_stock
+          icons_stock = icons_stock.search_keyword(locale, search) if search
+          icons_stock = serialize_collection(icons_stock, serializer: StockSerializer)
+          render_success(icons_stock.as_json)
         end
       end
     end

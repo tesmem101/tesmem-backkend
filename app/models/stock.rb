@@ -90,8 +90,10 @@ class Stock < ApplicationRecord
   # end
 
   def self.search_keyword(locale = '', keyword)
-    includes(:tags).joins(:tags).
-    where("LOWER(stocks.title#{locale}) LIKE :keyword OR
-           LOWER(tags.name#{locale}) LIKE :keyword", {:keyword => "%#{keyword.downcase}%"}) if keyword.present?
+    includes(:tags)
+    .left_outer_joins(:tags)
+    .where("LOWER(stocks.title#{locale}) LIKE :keyword OR
+           LOWER(tags.name#{locale}) LIKE :keyword", 
+           {:keyword => "%#{keyword.downcase}%"}).uniq if keyword.present?
   end
 end
