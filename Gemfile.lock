@@ -369,7 +369,7 @@ DEPENDENCIES
   hashie-forbidden_attributes
   jbuilder (~> 2.5)
   kaminari
-  listen (>= 3.0.5, < 3.2)
+  listen
   mini_magick
   nokogiri
   omniauth
