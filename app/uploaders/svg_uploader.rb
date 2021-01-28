@@ -6,6 +6,7 @@ class SvgUploader < CarrierWave::Uploader::Base
   end
 
   version :thumb do
+    process :convert => 'png'
     process resize_to_fit: [100, 100]
   end
 
