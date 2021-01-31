@@ -14,7 +14,7 @@ class Stock < ApplicationRecord
 
   scope :icons_stock, -> { joins(:category).where(categories: {title: TITLES[:icon]}) }
 
-  accepts_nested_attributes_for :stock_tags
+  accepts_nested_attributes_for :stock_tags, :allow_destroy => true
 
   after_find :mapping_image_url
   after_save :update_url
