@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210120124355) do
+ActiveRecord::Schema.define(version: 20210202215925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 20210120124355) do
     t.integer "stocktype", default: 0
     t.json "specs"
     t.string "title_ar"
+    t.string "svg_thumb"
   end
 
   create_table "sub_categories", force: :cascade do |t|
