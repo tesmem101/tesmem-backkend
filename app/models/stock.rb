@@ -6,7 +6,7 @@ class Stock < ApplicationRecord
 
   mount_uploader :image, StockUploader
   mount_uploader :svg, SvgUploader
-  mount_uploader :svg_thumb, SvgUploader
+  mount_uploader :svg_thumb, SvgThumbUploader
 
   belongs_to :category
   belongs_to :sub_category
