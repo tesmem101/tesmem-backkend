@@ -127,6 +127,22 @@ class Stock < ApplicationRecord
     end
   end
 
+  def fill_id_class(tag, title, count)
+    tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
+    tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
+    tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
+    count = count + 1
+  end
+
+  def make_specs_array(tag, colors_arr, specs_arr)
+    if tag.attributes['fill'].present? && 
+        tag.attributes['fill'].value !='none' &&
+      !(colors_arr.include? tag.attributes['fill'].value)
+      colors_arr << tag.attributes['fill'].value
+      specs_arr << { id: tag['id'], color: tag.attributes['fill'].value, class: tag['class'] }
+    end
+  end
+
   def mapping_image_url
     if self.image.present?
       self.url = self.image.url
