@@ -12,8 +12,8 @@ module FetchUnsplash
             image: {
               url:photo.urls[size],
               height: photo.height, 
-              width: photo.width
-              thumb:photo.urls.thumb
+              width: photo.width,
+              thumb: photo.urls.thumb
             },
             artist: {
               name: "By #{photo.user.name}",
