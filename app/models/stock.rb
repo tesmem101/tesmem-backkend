@@ -37,23 +37,34 @@ class Stock < ApplicationRecord
       count = 1
       colors_arr = []
       specs_arr = []
-      svg.xpath('//g').each do |g_tag|
-          g_tag.children.each do |tag|
-            next if tag.name == "g"
-            tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
-            tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
-            tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
-            count = count + 1
-            # Making Specs Array
-            if tag.attributes['fill'].present? && 
-                tag.attributes['fill'].value !='none' &&
-              !(colors_arr.include? tag.attributes['fill'].value)
-              colors_arr << tag.attributes['fill'].value
-              specs_arr << { id: tag['id'], color: tag.attributes['fill'].value, class: tag['class'] }
+      g_tags = svg.xpath('//g')
+      if g_tags.present?
+        g_tags.each do |g_tag|
+            g_tag.children.each do |tag|
+              next if tag.name == "g"
+              fill_id_class(tag, title, count)
+              make_specs_array(tag, colors_arr, specs_arr)
             end
+        end
+      else
+        svg.xpath('//path').each do |g_tag|
+          g_tag.children.each do |tag|
+            fill_id_class(tag, title, count)
+            make_specs_array(tag, colors_arr, specs_arr)
           end
+        end
       end
 
+      # V: 1.2
+      # svg.xpath('//g').each do |g_tag|
+      #     g_tag.children.each do |tag|
+      #       next if tag.name == "g"
+      #       fill_id_class(tag, title, count)
+      #       make_specs_array(tag, colors_arr, specs_arr)
+      #     end
+      # end
+
+      # V: 1.0
       # Previous implementation
       # svg.xpath('//path').each{|tag| 
       #   tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
@@ -68,6 +79,22 @@ class Stock < ApplicationRecord
 
       self.description = svg
       self.specs = specs_arr
+    end
+  end
+
+  def fill_id_class(tag, title, count)
+    tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
+    tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
+    tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
+    count = count + 1
+  end
+
+  def make_specs_array(tag, colors_arr, specs_arr)
+    if tag.attributes['fill'].present? && 
+        tag.attributes['fill'].value !='none' &&
+      !(colors_arr.include? tag.attributes['fill'].value)
+      colors_arr << tag.attributes['fill'].value
+      specs_arr << { id: tag['id'], color: tag.attributes['fill'].value, class: tag['class'] }
     end
   end
 
