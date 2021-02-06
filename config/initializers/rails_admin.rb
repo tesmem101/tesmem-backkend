@@ -1,5 +1,5 @@
 RailsAdmin.config do |config|
-  config.excluded_models = ["StockTag"]
+  config.excluded_models = ["StockTag", "UserToken"]
 
   ### Popular gems integration
 
