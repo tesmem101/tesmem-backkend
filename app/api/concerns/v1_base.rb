@@ -47,7 +47,7 @@ module V1Base
       end
 
       def serialize_collection(model, serializer: ModelSerializer)
-        ActiveModel::Serializer::CollectionSerializer.new(model, each_serializer: serializer)
+        ActiveModel::Serializer::CollectionSerializer.new(model, serializer: serializer)
       end
 
       def pagination_dict(object)

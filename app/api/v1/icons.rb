@@ -87,8 +87,8 @@ module V1
         else
           icons_stock = Stock.icons_stock
           icons_stock = icons_stock.search_keyword(locale, search) if search
-          icons_stock = serialize_collection(icons_stock, serializer: StockSerializer)
-          render_success(icons_stock.as_json)
+          icons_stock = serialize_collection(icons_stock, serializer: StockListSerializer)
+          render_success(icons_stock)
         end
       end
     end

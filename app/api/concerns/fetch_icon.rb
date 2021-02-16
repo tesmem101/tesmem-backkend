@@ -10,7 +10,7 @@ module FetchIcon
             id: sub_c.id, 
             name: sub_c.title, 
             name_ar: sub_c.title_ar,
-            images: serialize_collection(sub_c.stocks, serializer: StockSerializer)
+            images: serialize_collection(sub_c.stocks, serializer: StockListSerializer)
           }
       end
     end
