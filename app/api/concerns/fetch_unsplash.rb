@@ -31,7 +31,8 @@ module FetchUnsplash
         return {
           id: photo.id, 
           title: photo.description, 
-          url:photo.urls[size]
+          url: photo.urls[size],
+          thumb: photo.urls.thumb
         }
     end
       def get_unsplash_response(unsplash_images)
