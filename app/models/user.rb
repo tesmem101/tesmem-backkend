@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include UserAdmin
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, #:registerable,
@@ -59,7 +60,7 @@ class User < ApplicationRecord
       end
     end
     if profile_changed?
-      current_image = self.profile.thumb.url
+      current_image = Rails.env.development? ? "public#{self.profile.thumb.url}" : self.profile.thumb.url
       img = MiniMagick::Image::open(current_image)
       height = img[:height].to_s
       width = img[:width].to_s
