@@ -1,6 +1,7 @@
 class Stock < ApplicationRecord
   include CarrierWave::MiniMagick
   include Nokogiri
+  include StockAdmin
   
   enum stocktype: [:image, :svg]
 
