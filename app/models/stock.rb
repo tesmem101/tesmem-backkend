@@ -34,25 +34,25 @@ class Stock < ApplicationRecord
       title = self.title
       title.gsub! ' ', '_'
 
-      # count = 1
-      # colors_arr = []
+      count = 1
+      colors_arr = []
       specs_arr = []
-      # svg.xpath('//g').each do |g_tag|
-      #     g_tag.children.each do |tag|
-      #       next if tag.name == "g"
-      #       tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
-      #       tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
-      #       tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
-      #       count = count + 1
-      #       # Making Specs Array
-      #       if tag.attributes['fill'].present? && 
-      #           tag.attributes['fill'].value !='none' &&
-      #         !(colors_arr.include? tag.attributes['fill'].value)
-      #         colors_arr << tag.attributes['fill'].value
-      #         specs_arr << { id: tag['id'], color: tag.attributes['fill'].value, class: tag['class'] }
-      #       end
-      #     end
-      # end
+      svg.xpath('//g').each do |g_tag|
+          g_tag.children.each do |tag|
+            next if tag.name == "g"
+            tag['fill'] = "#000000" if tag['fill'].blank? || tag['fill'] === "none"
+            tag['id'] = "#{title}_#{self.sub_category.title}_#{count}"
+            tag['class'] = "#{title}_#{self.sub_category.title}_#{tag['fill']}"
+            count = count + 1
+            # Making Specs Array
+            if tag.attributes['fill'].present? && 
+                tag.attributes['fill'].value !='none' &&
+              !(colors_arr.include? tag.attributes['fill'].value)
+              colors_arr << tag.attributes['fill'].value
+              specs_arr << { id: tag['id'], color: tag.attributes['fill'].value, class: tag['class'] }
+            end
+          end
+      end
 
       # Previous implementation
       # svg.xpath('//path').each{|tag| 
@@ -68,36 +68,34 @@ class Stock < ApplicationRecord
 
       self.description = svg
       self.specs = specs_arr
-      self.description = svg
-      t_svg = self.description
-      t_svg = t_svg.gsub("<path d", "<path fill='#000000' d")
-      matches = t_svg.scan(/fill=['|"]#\w*\d*\w*\d*['|"]/)
-      matches.each do |fill|
-        colorCode = fill.split(/#/,-1)[1].split(/"|'/,-1)[0]
-        t_svg = t_svg.gsub(fill,fill+' class="'+title+'_SVG_#'+colorCode+'"') 
-        specs_arr << { id: 'svg', color: '#'+colorCode, class: title+'_SVG_#'+colorCode }
-      end
-      self.description = t_svg
 
-      # t_svg["<path d"] = "<path fill=\"#000000\" d"
-      temarr = []
-flag = true
-      specs_arr.each do |el|
-        flag = true
-        temarr.each do |obj|
-          if(obj==el)
-            flag  = false
-          end
+# Work done by Hassan
+      # t_svg = self.description
+      # t_svg = t_svg.gsub("<path d", "<path fill='#000000' d")
+      # matches = t_svg.scan(/fill=['|"]#\w*\d*\w*\d*['|"]/)
+      # matches.each do |fill|
+      #   colorCode = fill.split(/#/,-1)[1].split(/"|'/,-1)[0]
+      #   t_svg = t_svg.gsub(fill,fill+' class="'+title+'_SVG_#'+colorCode+'"') 
+      #   specs_arr << { id: 'svg', color: '#'+colorCode, class: title+'_SVG_#'+colorCode }
+      # end
+      # self.description = t_svg
+
+      # # t_svg["<path d"] = "<path fill=\"#000000\" d"
+      # temarr = []
+      # flag = true
+      # specs_arr.each do |el|
+      #   flag = true
+      #   temarr.each do |obj|
+      #     if(obj==el)
+      #       flag  = false
+      #     end
           
-        end
-        if(flag)
-          temarr<<el
-        end
-      end
-
-
-
-      self.specs = temarr
+      #   end
+      #   if(flag)
+      #     temarr<<el
+      #   end
+      # end
+      # self.specs = temarr
     end
   end
 
