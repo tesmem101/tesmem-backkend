@@ -38,11 +38,11 @@ gem 'unsplash'
 gem 'nokogiri'
 gem 'listen'
 
-gem 'rack-mini-profiler'
-# For memory profiling
-gem 'memory_profiler'
-# For call-stack profiling flamegraphs
-gem 'stackprof'
+gem 'rack-mini-profiler'#, require: false
+# # For memory profiling
+# gem 'memory_profiler'
+# # For call-stack profiling flamegraphs
+# gem 'stackprof'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
