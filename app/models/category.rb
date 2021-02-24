@@ -9,7 +9,7 @@ class Category < ApplicationRecord
   belongs_to :super_category,     class_name: "Category", optional: true
 
   mount_uploader :cover, CoverUploader
-  has_one :image, as: :image, dependent: :destroy
+  has_one :image, as: :image, dependent: :destroy 
   after_save :add_cover_photo
 
   def add_cover_photo
