@@ -5,7 +5,7 @@ module FetchTemplate
 
   included do
     helpers do
-      def get_template(sub_c)
+      def get_template(sub_c, json = true)
           return {
             id: sub_c.id, 
             name: sub_c.title, 
@@ -16,7 +16,7 @@ module FetchTemplate
                 id: designer.design.id,
                 title: designer.design.title,
                 url: designer.design.image.thumb.url,
-                json: designer.design.styles,
+                json: json ? designer.design.styles : {},
                 height: designer.design.height,
                 width: designer.design.width,
                 is_trashed: designer.design.is_trashed
