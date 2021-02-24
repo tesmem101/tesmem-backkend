@@ -47,7 +47,7 @@ module V1Base
       end
 
       def serialize_collection(model, serializer: ModelSerializer)
-        ActiveModel::Serializer::CollectionSerializer.new(model, serializer: serializer)
+        ActiveModel::Serializer::CollectionSerializer.new(model, serializer: serializer, is_image: params[:for_create_design].eql?('true') ? false : true)
       end
 
       def pagination_dict(object)
