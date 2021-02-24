@@ -16,7 +16,7 @@ module FetchTemplate
                 id: designer.design.id,
                 title: designer.design.title,
                 url: designer.design.image.thumb.url,
-                json: json ? designer.design.styles : {},
+                json: {},
                 height: designer.design.height,
                 width: designer.design.width,
                 is_trashed: designer.design.is_trashed
