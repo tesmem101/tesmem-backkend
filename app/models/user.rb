@@ -62,6 +62,7 @@ class User < ApplicationRecord
     if profile_changed?
       current_image = Rails.env.development? ? "public#{self.profile.thumb.url}" : self.profile.thumb.url
       img = MiniMagick::Image::open(current_image)
+      current_image = "#{ENV["HOST_URL"]}#{self.profile.thumb.url}" if Rails.env.development?
       height = img[:height].to_s
       width = img[:width].to_s
       username = self.email
