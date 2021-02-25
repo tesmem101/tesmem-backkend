@@ -110,6 +110,21 @@ module V1
         serialization = serialize_collection(design, serializer: DesignSerializer)
         render_success(serialization.as_json)
       end
+
+      desc "Show design",
+           { consumes: ["application/x-www-form-urlencoded"],
+             http_codes: [{ code: 200, message: "success" }] }
+      # before { authenticate_user }
+      get "/designers/:id" do
+        # design = authenticate_user.designs.where(id: params[:id], is_trashed: 0)
+
+        design_id = Designer.joins("inner join designs on designers.design_id = designs.id").where(design_id: params[:id]).select("designs.id")
+        design = Design.where(id: design_id).collect{ |design| make_design_object(design, true) }
+        # serialization = serialize_collection(design, serializer: DesignSerializer)
+        render_success(design.as_json)
+        # render json: design
+      end
+
     end
   end
 end
