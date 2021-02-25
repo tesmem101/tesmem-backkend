@@ -27,12 +27,12 @@ module V1Base
 
     helpers do
 
-      def make_design_object(design) 
+      def make_design_object(design, needStyle = false) 
         {
           id: design.id,
           title: design.title,
           url: design.image.thumb.url,
-          # json: designer.design.styles,
+          json: needStyle ? design.styles : {},
           height: design.height,
           width: design.width,
           is_trashed: design.is_trashed
