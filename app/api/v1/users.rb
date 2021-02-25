@@ -60,6 +60,25 @@ module V1
           render_error(RESPONSE_CODE[:not_found], I18n.t('errors.user.not_found'))
         end
       end
+
+      desc 'Get Desing on User and Design Id base',
+        { consumes: [ 'application/x-www-form-urlencoded' ],
+          http_codes: [
+            { code: 200, message: 'success' },
+            { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+            { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+            { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
+        ]}
+      before { authenticate_user }
+      get '/:user_id/designs/:id' do
+        user = User.find(params[:user_id])
+        if user
+          design = Design.find_by(id: params[:id],user_id: user.id)
+          design = {id: params[:id], user_id: user.id, json: design.styles}
+          render_success(design.as_json)          
+        end
+      end
+
     end
   end
 end
