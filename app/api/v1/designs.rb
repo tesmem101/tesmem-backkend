@@ -92,15 +92,19 @@ module V1
         Design.find(params[:id]).destroy
         render_success("Design Deleted Successfully".as_json)
       end
+
+
       desc "Get Designs",
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
-      before { authenticate_user }
+      # before { authenticate_user }
       get "/" do
         design = authenticate_user.designs.where(is_trashed: 0)
         serialization = serialize_collection(design, serializer: DesignSerializer)
+        serialization = serialization.collect {|design| design.attributes.except(:styles, :user).merge(user_id: authenticate_user.id)}
         render_success(serialization.as_json)
       end
+
       desc "Show design",
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
