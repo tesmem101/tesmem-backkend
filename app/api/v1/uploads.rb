@@ -55,14 +55,19 @@ module V1
       end
       put '/:id' do
         upload = authenticate_user.uploads.find(params[:id])
-        if upload.update!(params)
-          if params[:image]
-            update_image(upload)
+        container = Container.find_by(instance_id: upload.id)
+        if container
+          if upload.update!(params)
+            if params[:image]
+              update_image(upload)
+            end
+            serialization = UploadSerializer.new(upload)
+            render_success(serialization.as_json)
+          else
+            render_error(RESPONSE_CODE[:unauthorized], user.errors.full_messages.join(", "))
           end
-          serialization = UploadSerializer.new(upload)
-          render_success(serialization.as_json)
         else
-          render_error(RESPONSE_CODE[:unauthorized], user.errors.full_messages.join(", "))
+          render_error(422, 'Sorry! Image cannot restore. Somehow folder Against this image is deleted.')
         end
       end
       desc 'Delete upload',
