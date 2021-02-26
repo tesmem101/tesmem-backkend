@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'support@tesmem.com'
+  default from: 'tesmem.ar@gmail.com'
   layout 'mailer'
 end
