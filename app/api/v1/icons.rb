@@ -77,13 +77,16 @@ module V1
         if true?(params['with_categories'])
           category = Category.where(title: TITLES[:icon]).take
           searched_animations = []
+          sorted_icons_reponse = []
 
           if category.present?
             searched_animations = category.sub_categories
               .search_keyword(locale, search).includes(:stocks)
               .all.map { |sub_c| get_icons(sub_c) }
           end
-          render_success(searched_animations.as_json)
+          sorted_icons = SortReservedIcon.order(:position).map(&:title)
+          sorted_icons.collect{|icon| searched_animations.collect{|animation| icon == animation[:name] ? sorted_icons_reponse.push(animation) : nil}}
+          render_success(sorted_icons_reponse.as_json)
         else
           icons_stock = Stock.icons_stock
           icons_stock = icons_stock.search_keyword(locale, search) if search
