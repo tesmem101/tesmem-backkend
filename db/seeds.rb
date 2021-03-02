@@ -16,7 +16,6 @@ Category.find_by(
 ).sub_categories.collect{|sub_category| 
     SortReservedIcon.find_or_create_by(
         sub_category_id: sub_category.id, 
-        title: sub_category.title, 
-        position: SortReservedIcon.last ? SortReservedIcon.last.position + 1 : 1
+        title: sub_category.title
         )
     }
