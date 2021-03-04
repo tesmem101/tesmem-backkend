@@ -27,7 +27,7 @@ module RailsAdmin
   
               elsif request.put? # UPDATE
                 sanitize_params_for!(request.xhr? ? :modal : :update)  
-                SortReservedIcon.find_by(position: params[:sort_reserved_icon][:position]).update(position: @object.position)
+                SortReservedIcon.find_by(position: params[:sort_reserved_icon][:position]).update(position: @object.position) if @abstract_model.model_name.eql?("SortReservedIcon")
                 @object.set_attributes(params[@abstract_model.param_key])
                 @authorization_adapter && @authorization_adapter.authorize(:update, @abstract_model, @object)
                 changes = @object.changes
