@@ -24,17 +24,30 @@ RailsAdmin.config do |config|
   ## To disable Gravatar integration in Navigation Bar set to false
   # config.show_gravatar = true
 
+  config.model 'SortReservedIcon' do
+    update do
+      
+    end
+  end
+
   config.actions do
     dashboard                     # mandatory
     index                         # mandatory
     new do
-      except ['Design']
+      except ['Design', 'SortReservedIcon']
     end
-    export
-    bulk_delete
+    export do
+      except ['SortReservedIcon']
+    end
+    
+    bulk_delete do
+      except ['SortReservedIcon']
+    end
     show
     edit
-    delete
+    delete do
+      except ['SortReservedIcon']
+    end
     show_in_app
 
     ## With an audit adapter, you can add:

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210301055050) do
-
+ActiveRecord::Schema.define(version: 20210302050452) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -88,6 +87,14 @@ ActiveRecord::Schema.define(version: 20210301055050) do
     t.integer "version", default: 1
     t.string "height"
     t.string "width"
+  end
+
+  create_table "sort_reserved_icons", force: :cascade do |t|
+    t.integer "sub_category_id"
+    t.string "title"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "stock_tags", force: :cascade do |t|
