@@ -3,7 +3,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, #:registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, 
+         :validatable, :confirmable
 
   mount_uploader :profile, ImageUploader
   has_one :image, as: :image, dependent: :destroy
@@ -36,6 +37,10 @@ class User < ApplicationRecord
   def logout!(auth_token)
     user_token = UserToken.find_by_token(auth_token)
     user_token.nil? ? false : user_token.destroy
+  end
+
+  def email_confirmation_status!
+    self.confirmed_at ? true : false
   end
 
   def reset_password!

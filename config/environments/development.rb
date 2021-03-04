@@ -70,5 +70,8 @@ Rails.application.configure do
     enable_starttls_auto: true  
   }
 
+  # user_name:            'muhammad.arslan@appcrates.com',
+  # password:             'appcrates786',
+
   # -------------------------------------------------------------
 end
