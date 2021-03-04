@@ -22,7 +22,7 @@ module V1
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
 
         if cat_id && search
-          templates_ids = Category.find(cat_id).sub_categories.joins(:designers).joins("inner join designs on designs.id = designers.design_id ").where("lower(designs.title#{locale}) LIKE ?", "%#{search}%").select("designs.id")
+          templates_ids = Category.find(cat_id).sub_categories.joins(:designers).joins("inner join designs on designs.id = designers.design_id").joins("left join template_tags on template_tags.designer_id = designers.id").joins("left join tags on template_tags.tag_id = tags.id").where("lower(designs.title#{locale}) LIKE ? or lower(tags.name) LIKE ?", "%#{search}%", "%#{search}%").select("designs.id")
           templates = Design.where(id: templates_ids).collect{ |design| make_design_object(design) }
           render_success(templates.as_json)          
         elsif cat_id
