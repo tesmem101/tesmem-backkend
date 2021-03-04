@@ -18,7 +18,8 @@ class ConfirmationsController < Devise::ConfirmationsController
       set_flash_message(:notice, :confirmed) if is_navigational_format?
       sign_in(resource_name, resource)
       domain = request.port.blank? ? request.protocol + request.host : request.protocol + request.host_with_port   #"http://#{request.host}:#{request.port}"
-      respond_with_navigational(resource){ redirect_to domain }
+      redirect_to ENV['FRONTEND_URL']
+      # respond_with_navigational(resource){ redirect_to domain }
     else
       render json: {status: 422, mesage: 'Sorry! Something went wrong!', errors: resource.errors}
       # super
