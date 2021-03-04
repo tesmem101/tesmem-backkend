@@ -39,6 +39,10 @@ class User < ApplicationRecord
     user_token.nil? ? false : user_token.destroy
   end
 
+  def email_confirmation_status!
+    self.confirmed_at ? true : false
+  end
+
   def reset_password!
     # self.password = SecureRandom.hex(8)
     self.password = Array.new(8){[*"A".."Z", *"0".."9"].sample}.join

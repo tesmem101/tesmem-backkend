@@ -48,13 +48,15 @@ module V1
         email = params[:email]
         password = params[:password]
         user = User.where(email: email.downcase).first
-        if user.nil? || !user.valid_password?(password)
+        if user.nil? || !user.valid_password?(password)  
           render_error(RESPONSE_CODE[:unauthorized], I18n.t('errors.session.invalid'))
+        elsif !user.email_confirmation_status!
+          render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Email is not confirmed yet!')
+        else
+          user.login!
+          serialization = UserSerializer.new(user)
+          render_success(serialization.as_json)
         end
-
-        user.login!
-        serialization = UserSerializer.new(user)
-        render_success(serialization.as_json)
       end
 
       # ==================================
