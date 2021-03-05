@@ -27,6 +27,7 @@ module V1
         requires :image, type: String, desc: "Image"
         optional :is_trashed, type: Integer, desc: "Trash"
         optional :cat_id, type: Integer, desc: "Category Id"
+        optional :folder_id, type: Integer, desc: "Folder Id"
       end
       post :create do
         params[:image] = encode_image(params[:title], params[:image])
@@ -40,6 +41,9 @@ module V1
             category = Category.where(title: TITLES[:design]).first_or_create
             sub_category = SubCategory.where(title: DESIGNERS[:subCategory]).first_or_create({category_id:category.id})
             Designer.create(design_id: design.id, category_id: category.id, sub_category_id: sub_category.id, url: design.image)
+          end
+          if params[:folder_id]
+            Container.create(instance: design, folder_id: params[:folder_id])
           end
           serialization = DesignSerializer.new(design)
           render_success(serialization.as_json)

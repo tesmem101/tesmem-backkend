@@ -1,6 +1,8 @@
 class Design < ApplicationRecord
   include DesignAdmin
 
+  attr_accessor :folder_id
+
   belongs_to :user
   mount_uploader :image, ImageUploader
   has_many :images, as: :image, dependent: :destroy
