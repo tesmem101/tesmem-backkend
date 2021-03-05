@@ -26,11 +26,22 @@ module RailsAdmin
                 end
   
               elsif request.put? # UPDATE
-                sanitize_params_for!(request.xhr? ? :modal : :update)  
+                sanitize_params_for!(request.xhr? ? :modal : :update)                  
                 SortReservedIcon.find_by(position: params[:sort_reserved_icon][:position]).update(position: @object.position) if @abstract_model.model_name.eql?("SortReservedIcon")
                 @object.set_attributes(params[@abstract_model.param_key])
                 @authorization_adapter && @authorization_adapter.authorize(:update, @abstract_model, @object)
                 changes = @object.changes
+                if @abstract_model.model_name.eql?("FormattedText")
+                  if @object.approved && changes.present? && changes["approved"].present? && !changes["approved"][0]
+                    @object.approvedBy_id = current_user.id 
+                    @object.unapprovedBy_id = nil
+                  end
+
+                  if !@object.approved && changes.present? && changes["approved"].present? && changes["approved"][0]
+                    @object.unapprovedBy_id = current_user.id 
+                    @object.approvedBy_id = nil
+                  end
+                end
                 if @object.save
                   @auditing_adapter && @auditing_adapter.update_object(@object, @abstract_model, _current_user, changes)
                   respond_to do |format|

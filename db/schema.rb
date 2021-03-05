@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210303051308) do
+ActiveRecord::Schema.define(version: 20210305070721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,17 @@ ActiveRecord::Schema.define(version: 20210303051308) do
     t.bigint "parent_id"
     t.index ["parent_id"], name: "index_folders_on_parent_id"
     t.index ["user_id"], name: "index_folders_on_user_id"
+  end
+
+  create_table "formatted_texts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.json "style", default: {}
+    t.boolean "approved", default: false
+    t.integer "approvedBy_id"
+    t.integer "unapprovedBy_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_formatted_texts_on_user_id"
   end
 
   create_table "images", force: :cascade do |t|
@@ -197,6 +208,7 @@ ActiveRecord::Schema.define(version: 20210303051308) do
   end
 
   add_foreign_key "folders", "users"
+  add_foreign_key "formatted_texts", "users"
   add_foreign_key "stock_tags", "stocks"
   add_foreign_key "stock_tags", "tags"
   add_foreign_key "template_tags", "designers"

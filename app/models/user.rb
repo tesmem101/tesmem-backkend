@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :folders
   has_many :uploads
   has_many :images, as: :image
+  has_many :formatted_texts, dependent: :destroy
 
   enum role: [:user, :admin, :super_admin, :designer]
   enum identity_provider: [:app, :google, :facebook]
