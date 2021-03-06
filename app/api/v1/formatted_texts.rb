@@ -20,12 +20,8 @@ module V1
             post '/' do
                 user = authenticate_user
                 if user
-                   formatted_text = user.formatted_texts.create(style: params[:style])
-                   if formatted_text
-                    render_success(FormattedTextSerializer.new(formatted_text))
-                   else
-                    render_error(RESPONSE_CODE[:internal_server_error], message: "Sorry! Something went wrong. Formatted Text not created yet!")
-                   end
+                   params[:style][:elements].collect{|element| user.formatted_texts.create(style: element)} 
+                   render_success(nil, "Formatted Text are created")
                 end
             end
 
@@ -40,7 +36,7 @@ module V1
 
             get '/' do
                 authenticate_user
-                formatted_texts = serialize_collection(FormattedText.all, serializer: FormattedTextSerializer)
+                formatted_texts = FormattedText.all.collect {|text| text.style.merge!(formatted_text_id: text.id)}
                 render_success(formatted_texts, "All Formatted Texts")
             end
 
