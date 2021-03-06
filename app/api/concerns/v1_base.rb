@@ -55,8 +55,8 @@ module V1Base
         error!({meta: {code: code, message: message, debug_info: debug_info}}, code)
       end
 
-      def render_success(json, extra_meta = {})
-        {data: json, meta: {code: RESPONSE_CODE[:success], message: 'success'}.merge(extra_meta)}
+      def render_success(json, message = nil, extra_meta = {})
+        {data: json, meta: {code: RESPONSE_CODE[:success], message: message ? message : 'success'}.merge(extra_meta)}
       end
 
       def serialize_collection(model, serializer: ModelSerializer)

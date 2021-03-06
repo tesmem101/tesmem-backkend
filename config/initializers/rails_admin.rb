@@ -34,7 +34,7 @@ RailsAdmin.config do |config|
     dashboard                     # mandatory
     index                         # mandatory
     new do
-      except ['Design', 'SortReservedIcon']
+      except ['Design', 'SortReservedIcon', 'FormattedText']
     end
     export do
       except ['SortReservedIcon']

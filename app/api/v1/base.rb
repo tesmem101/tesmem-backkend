@@ -20,6 +20,7 @@ module V1
     mount V1::Icons
     mount V1::Unsplash
     mount V1::Triggers
+    mount V1::FormattedTexts
 
     add_swagger_documentation(
       api_version: 'v1',
