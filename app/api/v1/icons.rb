@@ -74,7 +74,7 @@ module V1
         search = params['search'].present? ? params['search'].downcase : nil
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
 
-        if true?(params['with_categories'])
+        if true?(params['with_categories']) && !params[:sub_category_id].present?
           category = Category.where(title: TITLES[:icon]).take
           searched_animations = []
           sorted_icons_reponse = []
@@ -82,11 +82,22 @@ module V1
           if category.present?
             searched_animations = category.sub_categories
               .search_keyword(locale, search).includes(:stocks)
-              .all.map { |sub_c| get_icons(sub_c) }
+              .all.map { |sub_c| get_icons(sub_c, params[:page], params[:per_page]) }
           end
           sorted_icons = SortReservedIcon.order(:position).map(&:title)
           sorted_icons.collect{|icon| searched_animations.collect{|animation| icon == animation[:name] ? sorted_icons_reponse.push(animation) : nil}}
           render_success(sorted_icons_reponse.as_json)
+
+        elsif !true?(params['with_categories']) && params[:sub_category_id].present?
+          subcategory = SubCategory.find(params[:sub_category_id])
+          if subcategory.present?
+            
+            stocks = get_icons(subcategory, params[:page], params[:per_page])
+             
+            # serialization = SubCategorySerializer.new(subcategory)
+            render_success(stocks.as_json)
+          end
+
         else
           icons_stock = Stock.icons_stock
           icons_stock = icons_stock.search_keyword(locale, search) if search
