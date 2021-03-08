@@ -85,7 +85,7 @@ module V1
         search = params['search'].present? ? params['search'].downcase : nil
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
 
-        if true?(params['with_categories'])
+        if true?(params['with_categories']) && !search
           category = Category.where(title: TITLES[:icon]).take
           searched_animations = []
           sorted_icons_reponse = []
@@ -99,7 +99,7 @@ module V1
           sorted_icons.collect{|icon| searched_animations.collect{|animation| icon == animation[:name] ? sorted_icons_reponse.push(animation) : nil}}
           render_success(sorted_icons_reponse.as_json)
 
-        elsif !true?(params['with_categories']) && params[:sub_category_id].present?
+        elsif !true?(params['with_categories']) && params[:sub_category_id].present? && !search
           subcategory = SubCategory.find(params[:sub_category_id])
           if subcategory.present? 
             icons = get_icons(subcategory, params[:page], params[:per_page])
