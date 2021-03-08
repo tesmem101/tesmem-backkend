@@ -20,8 +20,9 @@ module V1
             post '/' do
                 user = authenticate_user
                 if user
-                   params[:style][:elements].collect{|element| user.formatted_texts.create(style: element)} 
-                   render_success(nil, "Formatted Text are created")
+                    formatted_texts = params[:style][:elements].collect{|element| user.formatted_texts.create(style: element)} 
+                    formatted_texts = formatted_texts.collect {|text| text.style.merge!(formatted_text_id: text.id)}
+                    render_success(formatted_texts, "Formatted Texts are created")
                 end
             end
 
