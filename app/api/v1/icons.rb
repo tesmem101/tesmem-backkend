@@ -3,6 +3,7 @@ module V1
     include AuthenticateRequest
     include V1Base
     include FetchIcon
+    require 'will_paginate/array'
     version "v1", using: :path
 
     resource :icons do
@@ -64,7 +65,17 @@ module V1
       end
       desc 'Query String search by title',
            { consumes: ['application/x-www-form-urlencoded'],
-             http_codes: [{ code: 200, message: 'success' }] }
+             http_codes: [
+               { code: 200, message: 'success' },
+               { code: RESPONSE_CODE[:forbidden], message: I18n.t("errors.forbidden") },
+               { code: RESPONSE_CODE[:unprocessable_entity], message: "Validation error messages" },
+               { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") }
+              ] 
+          }
+      params do
+        requires :page, type: String, :desc => 'Page Number'
+        requires :per_page, type: String, :desc => 'Number of elements on each page'
+      end
       get '/' do
         if params['locale'].present?
           if params['locale'] != "ar"
@@ -74,7 +85,7 @@ module V1
         search = params['search'].present? ? params['search'].downcase : nil
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
 
-        if true?(params['with_categories']) && !params[:sub_category_id].present?
+        if true?(params['with_categories'])
           category = Category.where(title: TITLES[:icon]).take
           searched_animations = []
           sorted_icons_reponse = []
@@ -90,17 +101,14 @@ module V1
 
         elsif !true?(params['with_categories']) && params[:sub_category_id].present?
           subcategory = SubCategory.find(params[:sub_category_id])
-          if subcategory.present?
-            
-            stocks = get_icons(subcategory, params[:page], params[:per_page])
-             
-            # serialization = SubCategorySerializer.new(subcategory)
-            render_success(stocks.as_json)
+          if subcategory.present? 
+            icons = get_icons(subcategory, params[:page], params[:per_page])
+            render_success(icons.as_json)
           end
 
         else
           icons_stock = Stock.icons_stock
-          icons_stock = icons_stock.search_keyword(locale, search) if search
+          icons_stock = icons_stock.search_keyword(locale, search, params[:page], params[:per_page]) if search
           icons_stock = serialize_collection(icons_stock, serializer: StockListSerializer)
           render_success(icons_stock)
         end
