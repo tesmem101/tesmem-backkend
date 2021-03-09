@@ -18,4 +18,4 @@ Category.find_by(
         sub_category_id: sub_category.id, 
         title: sub_category.title
         )
-    }
+    }User.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?

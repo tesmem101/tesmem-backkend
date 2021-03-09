@@ -1,4 +1,4 @@
 class ApplicationApi < Grape::API
   prefix 'api'
-  mount V1::Base
+  mount V1::V1GrapeBase
 end
