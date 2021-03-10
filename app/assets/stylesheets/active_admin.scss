@@ -8,8 +8,18 @@
 // $sidebar-width: 242px;
 
 // Active Admin's got SASS!
-@import "active_admin/mixins";
-@import "active_admin/base";
+// @import "active_admin/mixins";
+// @import "active_admin/base";
+
+// The following variables override default ActiveMaterial values
+
+// $am-theme-primary: #00689f;
+
+#current_user {
+    display: none
+}
+
+@import "active_material";
 
 // Overriding any non-variable SASS must be done after the fact.
 // For example, to change the default status-tag color:

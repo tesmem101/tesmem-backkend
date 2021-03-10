@@ -39,6 +39,13 @@ gem 'unsplash'
 gem 'nokogiri'
 gem 'listen'
 
+gem 'bootstrap-sass', '~> 3.4.1'
+gem 'sassc-rails', '>= 2.1.0'
+gem 'jquery-rails'
+gem 'active_admin_theme'
+
+gem "active_material", github: "vigetlabs/active_material"
+
 gem 'rack-mini-profiler'#, require: false
 # # For memory profiling
 # gem 'memory_profiler'
