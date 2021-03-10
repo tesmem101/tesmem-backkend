@@ -19,6 +19,10 @@
     display: none
 }
 
+#logout {
+    float: right
+}
+
 @import "active_material";
 
 // Overriding any non-variable SASS must be done after the fact.
