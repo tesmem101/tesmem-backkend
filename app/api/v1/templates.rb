@@ -4,6 +4,7 @@ module V1
     include V1Base
     include FetchTemplate
     include FetchCategories
+    require 'will_paginate/array'
     version "v1", using: :path
 
     resource :templates do
@@ -11,6 +12,11 @@ module V1
       desc 'Query String search by Category Id and title',
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
+
+      params do
+        requires :page, type: String, :desc => 'Page Number'
+        requires :per_page, type: String, :desc => 'Number of elements on each page'
+      end
       get '/' do
         if params['locale'].present?
           if params['locale'] != "ar"
@@ -24,21 +30,17 @@ module V1
         if cat_id && search
           templates_ids = Category.find(cat_id).sub_categories.joins(:designers).joins("inner join designs on designs.id = designers.design_id").joins("left join template_tags on template_tags.designer_id = designers.id").joins("left join tags on template_tags.tag_id = tags.id").where("lower(designs.title#{locale}) LIKE ? or lower(tags.name) LIKE ?", "%#{search}%", "%#{search}%").select("designs.id")
           templates = Design.where(id: templates_ids).collect{ |design| make_design_object(design) }
-          render_success(templates.as_json)          
         elsif cat_id
           templates = Category.find(cat_id).sub_categories.search_keyword(locale, search).includes(:designers).all.map { |sub_c| get_template(sub_c) } # Previous One 
-          render_success(templates.as_json)
         else
           templates = all_categories.includes(:sub_categories).all
             .map { |cat| 
                 cat.sub_categories.search_keyword(locale, search)
                 .includes(:designers).all.map { |sub_c| get_template(sub_c, false) }
             }.flatten
-          render_success(templates.as_json)
         end
+        render_success(templates.paginate(page: params[:page], per_page: params[:per_page]).as_json)
       end
-
-
     end
   end
 end

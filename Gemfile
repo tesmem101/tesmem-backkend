@@ -37,6 +37,7 @@ gem 'figaro'
 gem 'unsplash'
 gem 'nokogiri'
 gem 'listen'
+gem 'will_paginate', '~> 3.1.0'
 
 gem 'rack-mini-profiler'#, require: false
 # # For memory profiling

@@ -2,7 +2,7 @@ class Stock < ApplicationRecord
   include CarrierWave::MiniMagick
   include Nokogiri
   include StockAdmin
-  
+  require 'will_paginate/array'
   enum stocktype: [:image, :svg]
 
   mount_uploader :image, StockUploader
@@ -162,11 +162,11 @@ class Stock < ApplicationRecord
   #   where("lower(stocks.title#{locale}) LIKE ?", "%#{keyword}%")
   # end
 
-  def self.search_keyword(locale = '', keyword)
+  def self.search_keyword(locale = '', keyword, page, per_page)
     includes(:tags)
     .left_outer_joins(:tags)
     .where("LOWER(stocks.title#{locale}) LIKE :keyword OR
            LOWER(tags.name#{locale}) LIKE :keyword", 
-           {:keyword => "%#{keyword.downcase}%"}).uniq if keyword.present?
+           {:keyword => "%#{keyword.downcase}%"}).uniq.paginate(page: page, per_page: per_page) if keyword.present?
   end
 end
