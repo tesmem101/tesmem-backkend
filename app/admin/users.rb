@@ -1,26 +1,56 @@
 ActiveAdmin.register User do
-  permit_params :email, :password, :password_confirmation
+  permit_params :first_name, :last_name, :email, :role, :profile
+
+  filter :first_name
+  filter :last_name
+  filter :email
+  filter :role
+  filter :created_at
 
   index do
-    selectable_column
-    id_column
+
+    if current_user.role.eql?('super_admin')
+      selectable_column
+    end
+
+    column :id
+    column :first_name
+    column :last_name
     column :email
-    column :current_sign_in_at
-    column :sign_in_count
-    column :created_at
+    column :role
+    column 'Profile Photo' do |user|
+      image_tag user.image.url, style: "max-width: 75px;" 
+    end
+    
     actions
   end
 
-  filter :email
-  filter :current_sign_in_at
-  filter :sign_in_count
-  filter :created_at
+  show do
+    attributes_table do
+      row :id
+      row :first_name
+      row :last_name
+      row :email
+      row :role
+      row 'Profile Photo' do |user|
+        image_tag user.image.url, style: "max-width: 75px;" 
+      end
+    end
+  end
 
   form do |f|
     f.inputs do
+      f.input :first_name
+      f.input :last_name
       f.input :email
-      f.input :password
-      f.input :password_confirmation
+      f.input :role
+
+      if f.object.image.url
+        f.input :profile, as: :file, hint: image_tag(f.object.image.url, width: '100px', height: '100px')
+      else
+        f.input :profile
+      end
+
     end
     f.actions
   end

@@ -23,6 +23,10 @@
     float: right
 }
 
+.index_table th, .panel_contents table th  {
+    color: #009688 !important
+}
+
 @import "active_material";
 
 // Overriding any non-variable SASS must be done after the fact.
