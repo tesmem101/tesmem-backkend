@@ -16,9 +16,9 @@ ActiveAdmin.register Category do
       category.title_ar
     end
     column :description
-    column :width
-    column :height
-    column :unit
+    # column :width
+    # column :height
+    # column :unit
     column 'Super Category' do |category|
       category.super_category
     end
