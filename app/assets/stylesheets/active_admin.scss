@@ -27,6 +27,14 @@
     color: #009688 !important
 }
 
+.index_table, .panel_contents table { // This css removes word-break property from all columns    
+    word-break: normal !important;
+}
+
+// .col-id { // This css removes word-break property from id column only
+//     word-break: normal !important;
+// }
+
 @import "active_material";
 
 // Overriding any non-variable SASS must be done after the fact.
