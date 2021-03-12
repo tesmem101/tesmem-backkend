@@ -71,6 +71,20 @@ module V1
                 render_success(formatted_text, "Formatted Text Deleted now!")
             end
 
+            desc 'Change Approved field status',
+            { consumes: ['application/x-www-form-urlencoded'],
+             http_codes: [
+              { code: 200, message: 'success' },
+              { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+              { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+              { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+            ] }
+
+            put 'change_approved_status/:id' do
+                FormattedText.find(params[:id]).update(approved: params[:approved])
+                render_success(nil, "Formatted Text Updated!")
+            end
+
         end
     end
 end
