@@ -52,13 +52,13 @@ module V1
       ] }
 
       params do
-        # requires :sub_category_id, type: String, :desc => 'Sub-Category Id' 
+        requires :sub_category_id, type: String, :desc => 'Sub-Category Id' 
         requires :page, type: String, :desc => 'Page Number'
         requires :per_page, type: String, :desc => 'Number of elements on each page'
       end
 
-      get 'sub_category/:id' do
-        subcategory = SubCategory.find(params[:id])
+      get 'sub_category/' do
+        subcategory = SubCategory.find(params[:sub_category_id])
         templates = get_template(subcategory, false)
         render_success(templates[:images].paginate(page: params[:page], per_page: params[:per_page])) #.paginate(page: params[:page], per_page: params[:per_page]).as_json)
       end
