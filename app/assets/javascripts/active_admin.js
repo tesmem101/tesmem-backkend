@@ -6,15 +6,15 @@ $(document).ready(function(){
     $( "#utility_nav" ).attr("id","tabs");
 
     $('input[name="approved"]').click(function (event) {
-        ajaxCall(event.target.value, event.target.checked)
+        ajaxCall(event)
     });
 
 
-    function ajaxCall(value, isChecked) {
+    function ajaxCall(event) {
         var request = $.ajax({
-            url: `/api/v1/formatted_texts/change_approved_status/${value}`,
+            url: `/api/v1/formatted_texts/change_approved_status/${event.target.value}`,
             type: "PUT",
-            data: {approved : isChecked}
+            data: {approved : event.target.checked, user_id: event.target.className}
           });
           
           request.done(function(response) {

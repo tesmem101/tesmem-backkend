@@ -81,8 +81,14 @@ module V1
             ] }
 
             put 'change_approved_status/:id' do
-                FormattedText.find(params[:id]).update(approved: params[:approved])
-                render_success(nil, "Formatted Text Updated!")
+                user_id = params[:user_id].split("_")[-1]
+                text = FormattedText.find(params[:id])
+                if params[:approved].eql?("true")
+                    text.update(approved: params[:approved], approvedBy_id: user_id, unapprovedBy_id: nil)                    
+                else
+                    text.update(approved: params[:approved], unapprovedBy_id: user_id, approvedBy_id: nil)   
+                end
+                render_success(user_id, "Formatted Text Updated!")
             end
 
         end
