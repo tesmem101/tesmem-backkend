@@ -1,6 +1,6 @@
 ActiveAdmin.register Category do
   permit_params :id, :title, :description, :cover, :title_ar, :width, :height, :unit, :super_category_id, :sub_category_id
-
+  config.batch_actions = false
   filter :title
   filter :title_ar
   filter :description

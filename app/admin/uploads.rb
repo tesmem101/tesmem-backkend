@@ -1,7 +1,7 @@
 ActiveAdmin.register Upload do
 
   permit_params :user_id, :image, :title, :is_trashed
-
+  config.batch_actions = false
   filter :user, collection: -> {
     User.all.map {|user| [user.email, user.id]}
   }

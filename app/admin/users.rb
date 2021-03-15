@@ -1,6 +1,6 @@
 ActiveAdmin.register User do
   permit_params :first_name, :last_name, :email, :role, :profile
-
+  config.batch_actions = false
   filter :first_name
   filter :last_name
   filter :email

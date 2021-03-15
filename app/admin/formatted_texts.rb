@@ -1,6 +1,7 @@
 ActiveAdmin.register FormattedText do
   permit_params :user_id, :style, :approved, :approvedBy_id, :unapprovedBy_id
   actions :all, :except => [:new, :destroy, :edit, :update]
+  config.batch_actions = false
   # filter :user, collection: -> {
   #   User.all.map {|user| [user.email, user.id]}
   # }
@@ -8,6 +9,7 @@ ActiveAdmin.register FormattedText do
   filter :approved
 
   index do
+    column :id
     column :user
     column 'Text' do |text|
       text.style["text"]

@@ -1,6 +1,6 @@
 ActiveAdmin.register SubCategory do
   permit_params :title, :description, :category_id, :title_ar
-
+  config.batch_actions = false
   filter :category
   filter :title
   filter :title_ar
