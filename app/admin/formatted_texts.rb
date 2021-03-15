@@ -2,9 +2,9 @@ ActiveAdmin.register FormattedText do
   permit_params :user_id, :style, :approved, :approvedBy_id, :unapprovedBy_id
   actions :all, :except => [:new, :destroy, :edit, :update]
   config.batch_actions = false
-  # filter :user, collection: -> {
-  #   User.all.map {|user| [user.email, user.id]}
-  # }
+  filter :user, collection: -> {
+    User.all.map {|user| [user.email, user.id]}
+  }
 
   filter :approved
 
