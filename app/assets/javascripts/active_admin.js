@@ -1,8 +1,11 @@
 //= require active_admin/base
 //= require active_material
+//= require active_admin/sortable
+
 
 $(document).ready(function(){
     $( ".menu-button" ).remove();
+    // $( ".resource_selection_cell, .resource_selection_toggle_panel, .right" ).remove(); // This line is for sortable-tree functionality
     $( "#utility_nav" ).attr("id","tabs");
 
     $('input[name="approved"]').click(function (event) {

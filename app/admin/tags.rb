@@ -5,6 +5,7 @@ ActiveAdmin.register Tag do
   filter :name_ar
 
   index do
+    column :id
     column :name
     column :name_ar 
     actions
