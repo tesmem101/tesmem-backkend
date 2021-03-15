@@ -3,6 +3,7 @@ ActiveAdmin.register Image do
   actions :all, except: [:new]
   filter :name
   filter :description
+  filter :image_type
   filter :url
   filter :version
   filter :width
