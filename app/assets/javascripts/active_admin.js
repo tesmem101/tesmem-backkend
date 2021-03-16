@@ -1,6 +1,9 @@
 //= require active_admin/base
 //= require active_material
 //= require active_admin/sortable
+//= require active_admin/searchable_select
+
+
 
 
 $(document).ready(function(){
@@ -29,4 +32,50 @@ $(document).ready(function(){
           });
     }
 
+    onInstanceChange = function (instanceType) {
+
+        if (instanceType == 'Design') {
+
+            $('#container_instance_id').find('option').remove().end()
+
+            var request = $.ajax({
+                url: '/api/v1/designs/titles/',
+                type: "GET"
+              });
+              
+              request.done(function(response) {
+                var design_titles = response.json.titles;
+                $.each(design_titles, function (i, item) {
+                    $('#container_instance_id').append($('<option>', { 
+                        value: item.id,
+                        text : item.title 
+                    }));
+                });
+              });
+
+
+        } else if (instanceType == 'Upload') {
+
+            $('#container_instance_id').find('option').remove().end()
+
+            var request = $.ajax({
+                url: '/api/v1/uploads/titles/',
+                type: "GET"
+              });
+              
+              request.done(function(response) {
+                var upload_titles = response.json.titles;
+                $.each(upload_titles, function (i, item) {
+                    $('#container_instance_id').append($('<option>', { 
+                        value: item.id,
+                        text : item.title 
+                    }));
+                });
+              });
+        } else {
+            $('#container_instance_id').find('option').remove().end()   
+        }
+    }
+
 });
+

@@ -45,6 +45,8 @@ gem 'jquery-rails'
 
 gem "active_material", github: "vigetlabs/active_material"
 gem "active_admin-sortable_tree", "~> 2.0.0"
+gem 'activeadmin-searchable_select'
+
 
 gem 'rack-mini-profiler'#, require: false
 # # For memory profiling

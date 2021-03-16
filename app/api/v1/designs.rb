@@ -9,6 +9,17 @@ module V1
 
     resource :designs do
 
+      desc "Get Design titles",
+      { consumes: ["application/x-www-form-urlencoded"],
+        http_codes: [{ code: 200, message: "success" }] }
+      
+        get :titles do
+        design_titles = Design.all.map{|design| design.title ? {title: design.title, id: design.id} : nil}.compact
+        render json: {
+          titles: design_titles
+        }
+      end
+
       desc "Create a design",
         { consumes: ["application/x-www-form-urlencoded"],
          http_codes: [

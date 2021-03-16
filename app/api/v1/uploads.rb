@@ -7,6 +7,17 @@ module V1
 
     resources :uploads do
 
+      desc "Get Upload titles",
+      { consumes: ["application/x-www-form-urlencoded"],
+        http_codes: [{ code: 200, message: "success" }] }
+      
+        get :titles do
+          upload_titles = Upload.all.map{|upload| upload.title ? {title: upload.title, id: upload.id} : nil}.compact
+        render json: {
+          titles: upload_titles
+        }
+      end
+
       desc 'Add image',
            { consumes: ['application/x-www-form-urlencoded'],
             http_codes: [
