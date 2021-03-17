@@ -1,4 +1,5 @@
 ActiveAdmin.register Image do
+  menu  priority: 9
   permit_params :name, :description, :image_id, :image_type, :url, :version, :height, :width
   actions :all, except: [:new]
   config.batch_actions = false

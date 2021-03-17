@@ -1,5 +1,5 @@
 ActiveAdmin.register Upload do
-
+  menu  priority: 8
   permit_params :user_id, :image, :title, :is_trashed
   config.batch_actions = false
   filter :user, collection: -> {

@@ -1,7 +1,5 @@
 ActiveAdmin.register Designer do
-
-  menu :label => "Templates"
-
+  menu :label => "Templates", priority: 5
   permit_params :design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids
   
   filter :design

@@ -1,4 +1,5 @@
 ActiveAdmin.register Design do
+  menu priority: 4
   permit_params :title, :description, :styles, :user_id, :image, :height, :width, :is_trashed, :cat_id
   
   actions :all, except: [:new]

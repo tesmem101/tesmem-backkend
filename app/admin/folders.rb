@@ -1,4 +1,5 @@
 ActiveAdmin.register Folder do
+  menu  priority: 6
   permit_params :name, :user_id, :parent_id
   config.batch_actions = false
 

@@ -1,4 +1,5 @@
 ActiveAdmin.register User do
+  menu priority: 1 # so it's on the very left
   permit_params :first_name, :last_name, :email, :role, :profile
   config.batch_actions = false
   filter :first_name

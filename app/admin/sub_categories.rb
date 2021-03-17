@@ -1,4 +1,5 @@
 ActiveAdmin.register SubCategory do
+  menu priority: 3
   permit_params :title, :description, :category_id, :title_ar
   config.batch_actions = false
   filter :category
