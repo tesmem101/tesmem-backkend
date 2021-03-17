@@ -16,7 +16,7 @@ ActiveAdmin.register Design do
     def update
       @design = Design.find(params[:id])
       if @design.update!(design_params)
-        update_image(@design) if params[:image]
+        update_image(@design) if params[:design][:image]
         flash[:notice] = "Design was successfully created!"
         redirect_to admin_design_path(@design)
       else

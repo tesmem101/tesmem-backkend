@@ -37,6 +37,37 @@ module V1
           render_success(templates.as_json)
         end
       end
+      desc 'Change Approved field status',
+      { consumes: ['application/x-www-form-urlencoded'],
+       http_codes: [
+        { code: 200, message: 'success' },
+        { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+        { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+        { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+      ] }
+
+      put 'change_approved_status/:id' do
+          user_id = params[:user_id].split("_")[-1]
+          template = Designer.find(params[:id])
+          template.update(approved: params[:approved])                    
+          render_success(user_id, "Template Updated!")
+      end
+
+      desc 'Change Private field status',
+      { consumes: ['application/x-www-form-urlencoded'],
+       http_codes: [
+        { code: 200, message: 'success' },
+        { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+        { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+        { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+      ] }
+
+      put 'change_private_status/:id' do
+          user_id = params[:user_id].split("_")[-1]
+          template = Designer.find(params[:id])
+          template.update(private: params[:approved])                    
+          render_success(user_id, "Template Updated!")
+      end
 
 
     end

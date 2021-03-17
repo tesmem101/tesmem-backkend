@@ -3,33 +3,50 @@
 //= require active_admin/sortable
 //= require active_admin/searchable_select
 
-
-
-
 $(document).ready(function(){
     $( ".menu-button" ).remove();
     // $( ".resource_selection_cell, .resource_selection_toggle_panel, .right" ).remove(); // This line is for sortable-tree functionality
     $( "#utility_nav" ).attr("id","tabs");
 
-    $('input[name="approved"]').click(function (event) {
+    $('input[name="approved_formatted_text"]').click(function (event) {
+        ajaxCall(event)
+    });
+
+    $('input[name="approved_template"]').click(function (event) {
+        ajaxCall(event)
+    });
+
+    $('input[name="private_template"]').click(function (event) {
         ajaxCall(event)
     });
 
 
     function ajaxCall(event) {
+        var model_name = null;
+        var end_point = null;
+        if (event.target.id == 'approved_template') {  
+            model_name = 'templates'
+            end_point = 'change_approved_status'
+        } else if (event.target.id == 'private_template') {
+            model_name = 'templates'
+            end_point = 'change_private_status'
+        } else if (event.target.id == 'approved_formatted_text') {
+            model_name = 'formatted_texts'
+            end_point = 'change_approved_status'
+        } 
         var request = $.ajax({
-            url: `/api/v1/formatted_texts/change_approved_status/${event.target.value}`,
+            url: `/api/v1/${model_name}/${end_point}/${event.target.value}`,
             type: "PUT",
             data: {approved : event.target.checked, user_id: event.target.className}
-          });
+        });
           
-          request.done(function(response) {
+        request.done(function(response) {
             console.log(response);
-          });
-          
-          request.fail(function(jqXHR,response) {
-              alert('Something went wrong')
-          });
+        });
+        
+        request.fail(function(jqXHR,response) {
+            alert('Something went wrong')
+        });
     }
 
     onInstanceChange = function (instanceType) {

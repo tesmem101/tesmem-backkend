@@ -17,8 +17,8 @@ ActiveAdmin.register FormattedText do
 
     column :approved do |text|
       text.approved.eql?(true) ? 
-      (check_box_tag 'approved', text.id, checked = true, class: "current_user_#{current_user.id}") : 
-      (check_box_tag 'approved', text.id, checked = false, class: "current_user_#{current_user.id}")
+      (check_box_tag 'approved_formatted_text', text.id, checked = true, class: "current_user_#{current_user.id}") : 
+      (check_box_tag 'approved_formatted_text', text.id, checked = false, class: "current_user_#{current_user.id}")
     end
     # column :approvedBy
     # column :unapprovedBy
