@@ -39,6 +39,14 @@ ActiveAdmin.register Container do
 
   end
 
+  index do
+    column :id
+    column :folder
+    column :instance
+    column :instance_type
+    actions
+  end
+
   form do |f|
     f.inputs do
       f.input :folder      

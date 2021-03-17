@@ -5,12 +5,7 @@ ActiveAdmin.register Stock do
   filter :title_ar
   filter :category
   filter :sub_category
-  # filter :stocktype, collection: -> {
-  #   ['image', 'svg'].all.map {|type| [type, 0]}
-  # }
-
   filter :stocktype, as: :select, collection: [['image', 0], ['svg', 1]]
-
   filter :tags
 
   controller do
