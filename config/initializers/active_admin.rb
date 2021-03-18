@@ -330,14 +330,13 @@ ActiveAdmin.setup do |config|
   class ActiveAdmin::Devise::SessionsController
     def create
       user = User.find_by_email(params[:user][:email])
-
       if !user.role.eql?('user')
         if user && user.valid_password?(params[:user][:password])
           self.resource = warden.authenticate!(auth_options)
           set_flash_message!(:notice, :signed_in)
           sign_in(resource_name, resource)
           yield resource if block_given?
-          respond_with resource, location: admin_root_path
+          respond_with resource, location: admin_users_path
         else
           redirect_to({action: :new}, alert: 'Invalid Email or password.')
         end        
@@ -346,4 +345,5 @@ ActiveAdmin.setup do |config|
       end
     end
   end
+
 end
