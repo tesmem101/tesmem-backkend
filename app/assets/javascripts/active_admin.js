@@ -4,9 +4,9 @@
 //= require active_admin/searchable_select
 
 $(document).ready(function(){
-    $( ".menu-button" ).remove();
+    // $( ".menu-button" ).remove();
     // $( ".resource_selection_cell, .resource_selection_toggle_panel, .right" ).remove(); // This line is for sortable-tree functionality
-    $( "#utility_nav" ).attr("id","tabs");
+    // $( "#utility_nav" ).attr("id","tabs");
 
     $('input[name="approved_formatted_text"]').click(function (event) {
         ajaxCall(event)

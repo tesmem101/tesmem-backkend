@@ -44,9 +44,18 @@ ActiveAdmin.register User do
       f.input :first_name
       f.input :last_name
       f.input :email
-      f.input :role
 
-      if f.object.image.url
+      if f.object.new_record?
+        f.input :password
+      end
+
+      if current_user.role.eql?('super_admin')
+        f.input :role, as: :select, collection: [['Super Admin', 'super_admin'], ['Admin', 'admin'], ['Designer', 'designer']], include_blank: false
+      elsif current_user.role.eql?('admin')
+        f.input :role, as: :select, collection: [['Designer', 'designer']], include_blank: false
+      end
+
+      if f.object.image.present?
         f.input :profile, as: :file, hint: image_tag(f.object.image.url, width: '100px', height: '100px')
       else
         f.input :profile

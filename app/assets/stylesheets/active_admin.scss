@@ -15,8 +15,8 @@
 
 // $am-theme-primary: #00689f;
 
-#current_user {
-    display: none
+#utility_nav > li { 
+    width: 220px !important;
 }
 
 #logout {
@@ -24,7 +24,7 @@
 }
 
 .index_table th, .panel_contents table th  {
-    color: #009688 !important
+    color: #009688 !important;
 }
 
 .index_table, .panel_contents table { // This css removes word-break property from all columns    

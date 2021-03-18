@@ -62,7 +62,7 @@ ActiveAdmin.setup do |config|
   # method in a before filter of all controller actions to
   # ensure that there is a user with proper rights. You can use
   # CanCanAdapter or make your own. Please refer to documentation.
-  # config.authorization_adapter = ActiveAdmin::CanCanAdapter
+  config.authorization_adapter = ActiveAdmin::CanCanAdapter
 
   # In case you prefer Pundit over other solutions you can here pass
   # the name of default policy class. This policy will be used in every
@@ -75,7 +75,7 @@ ActiveAdmin.setup do |config|
   # config.pundit_policy_namespace = :admin
 
   # You can customize your CanCan Ability class name here.
-  # config.cancan_ability_class = "Ability"
+  config.cancan_ability_class = "Ability"
 
   # You can specify a method to be called on unauthorized access.
   # This is necessary in order to prevent a redirect loop which happens
@@ -233,6 +233,7 @@ ActiveAdmin.setup do |config|
   #   config.namespace :admin do |admin|
   #     admin.build_menu :utility_navigation do |menu|
   #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
+  #       # menu.add  :label => proc { current_user.first_name }, :url => proc {  admin_user_path(current_user) } ,:id => 'current_user' # This is custome menu item 
   #       admin.add_logout_button_to_menu menu
   #     end
   #   end
@@ -325,4 +326,24 @@ ActiveAdmin.setup do |config|
   # You can inherit it with own class and inject it for all resources
   #
   # config.order_clause = MyOrderClause
+
+  class ActiveAdmin::Devise::SessionsController
+    def create
+      user = User.find_by_email(params[:user][:email])
+
+      if !user.role.eql?('user')
+        if user && user.valid_password?(params[:user][:password])
+          self.resource = warden.authenticate!(auth_options)
+          set_flash_message!(:notice, :signed_in)
+          sign_in(resource_name, resource)
+          yield resource if block_given?
+          respond_with resource, location: admin_root_path
+        else
+          redirect_to({action: :new}, alert: 'Invalid Email or password.')
+        end        
+      else
+        redirect_to({action: :new}, alert: 'Sorry! Permission Denied :( ')
+      end
+    end
+  end
 end
