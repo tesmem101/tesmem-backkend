@@ -36,7 +36,9 @@ module V1
           templates = all_categories.includes(:sub_categories).all
             .map { |cat| 
                 cat.sub_categories.search_keyword(locale, search)
-                .includes(:designers).all.map { |sub_c| get_template(sub_c, false) }
+                .joins(:designers)
+                .select("distinct sub_categories.*")
+                .all.map { |sub_c| get_template(sub_c, false) }
             }.flatten
         end
         render_success(templates.paginate(page: params[:page], per_page: params[:per_page]).as_json)
