@@ -33,7 +33,7 @@ workers ENV.fetch("WEB_CONCURRENCY") { 0 }
 
 worker_timeout 100
 
-stdout_redirect 'log/puma.log', 'log/puma_error.log', true
+stdout_redirect 'log/puma.log', 'log/puma_error.log', true if !Rails.env.development?
 
 preload_app!
 

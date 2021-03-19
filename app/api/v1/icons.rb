@@ -92,12 +92,14 @@ module V1
 
           if category.present?
             searched_animations = category.sub_categories
-              .search_keyword(locale, search).includes(:stocks)
+              .search_keyword(locale, search).joins(:stocks)
+              .select("distinct sub_categories.*")
+              .paginate(page: params[:page], per_page: params[:per_page])
               .all.map { |sub_c| get_icons(sub_c, params[:page], params[:per_page]) }
           end
-          sorted_icons = SortReservedIcon.order(:position).map(&:title)
-          sorted_icons.collect{|icon| searched_animations.collect{|animation| icon == animation[:name] ? sorted_icons_reponse.push(animation) : nil}}
-          render_success(sorted_icons_reponse.as_json)
+          # sorted_icons = SortReservedIcon.order(:position).map(&:title)
+          # sorted_icons.collect{|icon| searched_animations.collect{|animation| icon == animation[:name] ? sorted_icons_reponse.push(animation) : nil}}
+          render_success(searched_animations.as_json)
 
         elsif !true?(params['with_categories']) && params[:sub_category_id].present? && !search
           subcategory = SubCategory.find(params[:sub_category_id])
