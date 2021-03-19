@@ -91,11 +91,16 @@ module V1
           sorted_icons_reponse = []
 
           if category.present?
-            searched_animations = category.sub_categories
-              .search_keyword(locale, search).joins(:stocks)
+            searched_animations = SubCategory.select('subquery.*').from( 
+              category.sub_categories
+              .search_keyword(locale, search)
+              .joins(:stocks)
               .select("distinct sub_categories.*")
-              .paginate(page: params[:page], per_page: params[:per_page])
-              .all.map { |sub_c| get_icons(sub_c, params[:page], params[:per_page]) }
+            )
+            .joins( "INNER JOIN sort_reserved_icons ON sort_reserved_icons.sub_category_id = subquery.id" )
+            .order("sort_reserved_icons.position")
+            .paginate(page: params[:page], per_page: params[:per_page])
+            .all.map { |sub_c| get_icons(sub_c, params[:page], params[:per_page]) }
           end
           # sorted_icons = SortReservedIcon.order(:position).map(&:title)
           # sorted_icons.collect{|icon| searched_animations.collect{|animation| icon == animation[:name] ? sorted_icons_reponse.push(animation) : nil}}
