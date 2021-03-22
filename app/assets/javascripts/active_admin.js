@@ -35,7 +35,7 @@ $(document).ready(function(){
             end_point = 'change_approved_status'
         } 
         var request = $.ajax({
-            url: `/api/v1/${model_name}/${end_point}/${event.target.value}`,
+            url: "/api/v1/" + model_name + "/" + end_point + "/" + event.target.value,
             type: "PUT",
             data: {approved : event.target.checked, user_id: event.target.className}
         });
