@@ -100,7 +100,7 @@ module V1
             .joins( "INNER JOIN sort_reserved_icons ON sort_reserved_icons.sub_category_id = subquery.id" )
             .order("sort_reserved_icons.position")
             .paginate(page: params[:page], per_page: params[:per_page])
-            .all.map { |sub_c| get_icons(sub_c, params[:page], params[:per_page]) }
+            .all.map { |sub_c| get_icons(sub_c) }
           end
           # sorted_icons = SortReservedIcon.order(:position).map(&:title)
           # sorted_icons.collect{|icon| searched_animations.collect{|animation| icon == animation[:name] ? sorted_icons_reponse.push(animation) : nil}}

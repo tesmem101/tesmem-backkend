@@ -5,7 +5,7 @@ module FetchIcon
 
   included do
     helpers do
-      def get_icons(sub_c, page = 1, per_page = 10)
+      def get_icons(sub_c, page = 1, per_page = 6)
           return {
             id: sub_c.id, 
             name: sub_c.title, 
