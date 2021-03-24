@@ -93,6 +93,23 @@ module V1
         end
         render_success(breadcrumbs.as_json)
       end
+
+      desc 'Check if content exists in folder',
+      { consumes: ['application/x-www-form-urlencoded'],
+        http_codes: [{ code: 200, message: 'success' }] }
+      params do
+        requires :id, type: Integer, desc: 'Id'
+      end
+      get '/:id/is_content_exists' do
+        folder = authenticate_user.folders.find_by(id: params[:id])
+        if folder
+          is_content_exists = (folder.containers.exists? || folder.subfolders.exists?) ? true : false 
+          render_success({is_content_exist: is_content_exists}.as_json)         
+        else
+          render_error(RESPONSE_CODE[:unprocessable_entity], "Folder Does not exists against id #{params[:id]}")
+        end
+      end
+
     end
   end
 end

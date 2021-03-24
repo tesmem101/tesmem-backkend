@@ -4,6 +4,8 @@ class SubCategory < ApplicationRecord
   belongs_to :category
   has_many :stocks, dependent: :destroy
   has_many :designers, dependent: :destroy
+  has_many :sort_reserved_icons, dependent: :destroy
+
 
 
   def self.search_keyword(locale = '', keyword)

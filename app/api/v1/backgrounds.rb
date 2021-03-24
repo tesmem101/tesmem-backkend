@@ -35,13 +35,15 @@ module V1
       desc 'Query String search by title',
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
+
+      params do
+        requires :page, type: String, :desc => 'Page Number'
+        requires :per_page, type: Integer, :desc => 'Number of elements on each page'
+      end
       get '/' do
         search = params['search'].present? ? params['search'].downcase : 'background'
         unsplash_images = []
-        page_limit = 5
-        for page_number in 1..page_limit do
-          unsplash_images.concat get_unsplash_images(search, page_number, nil, 20, 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'regular') }
-        end
+        unsplash_images.concat get_unsplash_images(search, params[:page], nil, params[:per_page], 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'regular') }
         render_success(unsplash_images.as_json)
       end
     end

@@ -35,9 +35,13 @@ module V1
               { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
             ] }
 
+            params do
+                requires :page, type: String, :desc => 'Page Number'
+                requires :per_page, type: String, :desc => 'Number of elements on each page'
+            end
             get '/' do
                 authenticate_user
-                formatted_texts = FormattedText.all.collect {|text| text.style.merge!(formatted_text_id: text.id)}
+                formatted_texts = FormattedText.paginate(page: params[:page], per_page: params[:per_page]).collect {|text| text.style.merge!(formatted_text_id: text.id)}
                 render_success(formatted_texts, "All Formatted Texts")
             end
 
