@@ -2,10 +2,34 @@ ActiveAdmin.register SubCategory do
   menu priority: 3
   permit_params :title, :description, :category_id, :title_ar
   config.batch_actions = false
+
   filter :category
   filter :title
   filter :title_ar
   filter :description
+
+  # controller do
+  #   include ActionView::Helpers::TextHelper
+  #   def create
+  #     @sub_category = SubCategory.new(sub_category_params)
+  #     if @sub_category.save
+  #       flash[:notice] = "Sub Category was successfully created!"
+  #       redirect_to admin_sub_category_path(@sub_category)
+  #     else
+  #       flash[:alert] = ["#{pluralize(@sub_category.errors.count, "error")} prohibited this Sub Category from being saved! "]
+  #       @sub_category.errors.full_messages.each do |msg|
+  #         flash[:alert] << msg
+  #       end
+  #       redirect_to new_admin_sub_category_path
+  #     end
+  #   end
+
+  #   private
+
+  #   def sub_category_params
+  #     params.require(:sub_category).permit(:title, :description, :category_id, :title_ar)
+  #   end
+  # end
   
 
   index do
