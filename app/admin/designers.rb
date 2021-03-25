@@ -85,7 +85,7 @@ ActiveAdmin.register Designer do
       if Rails.env.development?
         image_tag "https://tesmem-production.s3.amazonaws.com#{designer.design.image.url}", style: "max-width : 75px;"
       else
-        link_to (image_tag designer.design.image.url, style: "max-width : 75px;"), "#{ENV['FRONTEND_URL']}/editor/Design/#{designer.design.id}"
+        link_to (image_tag designer.design.image.url, style: "max-width : 75px;"), "#{ENV['FRONTEND_URL']}editor/Design/#{designer.design.id}"
       end
     end
     column :tags
@@ -105,7 +105,7 @@ ActiveAdmin.register Designer do
         if Rails.env.development?
           image_tag "https://tesmem-production.s3.amazonaws.com#{designer.design.image.url}", style: "max-width : 75px;"
         else
-          link_to (image_tag designer.design.image.url, style: "max-width : 75px;"), "#{ENV['FRONTEND_URL']}/editor/Design/#{designer.design.id}"
+          link_to (image_tag designer.design.image.url, style: "max-width : 75px;"), "#{ENV['FRONTEND_URL']}editor/Design/#{designer.design.id}"
         end
       end
       row :tags
