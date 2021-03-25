@@ -78,12 +78,16 @@ ActiveAdmin.register Designer do
       (check_box_tag 'private_template', designer.id, checked = true, class: "current_user_#{current_user.id}") : 
       (check_box_tag 'private_template', designer.id, checked = false, class: "current_user_#{current_user.id}")
     end
-    column :url do |designer|
-      designer.url ? designer.url.truncate(30) : nil
-    end
-    # column 'Image' do |designer|
-    #   image_tag designer.url, style: "max-width: 75px;" if designer.url.present?
+    # column :url do |designer|
+    #   designer.url ? designer.url.truncate(30) : nil
     # end
+    column 'Image' do |designer|
+      if Rails.env.development?
+        image_tag "https://tesmem-production.s3.amazonaws.com#{designer.design.image.url}", style: "max-width : 75px;"
+      else
+        link_to (image_tag designer.design.image.url, style: "max-width : 75px;"), "#{ENV['FRONTEND_URL']}/editor/Design/#{designer.design.id}"
+      end
+    end
     column :tags
     actions
   end
@@ -96,10 +100,14 @@ ActiveAdmin.register Designer do
       row :sub_category
       row :approved
       row :private
-      row :url
-      # row 'Image' do |designer|
-      #   image_tag designer.url, style: "max-width: 75px;" if designer.url.present?
-      # end
+      # row :url
+      row 'Image' do |designer|
+        if Rails.env.development?
+          image_tag "https://tesmem-production.s3.amazonaws.com#{designer.design.image.url}", style: "max-width : 75px;"
+        else
+          link_to (image_tag designer.design.image.url, style: "max-width : 75px;"), "#{ENV['FRONTEND_URL']}/editor/Design/#{designer.design.id}"
+        end
+      end
       row :tags
     end
   end

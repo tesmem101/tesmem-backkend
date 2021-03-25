@@ -7,6 +7,6 @@ class SortReservedIcon < ApplicationRecord
     private
 
     def assign_position
-        self.position = SortReservedIcon.last ? SortReservedIcon.last.position + 1 : 1
+        self.position = SortReservedIcon.last ? SortReservedIcon.last.position + 1 : 0
     end
 end

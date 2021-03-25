@@ -44,7 +44,11 @@ ActiveAdmin.register Design do
     column :description
     column :user
     column :image do |design|
-      image_tag design.image.url, style: "max-width: 75px;" if design.image.present?
+      if Rails.env.development?
+        image_tag "https://tesmem-production.s3.amazonaws.com#{design.image.url}", style: "max-width: 75px;"
+      else
+        image_tag design.image.url, style: "max-width: 75px;" if design.image.present?
+      end
     end
     column :height
     column :width
@@ -63,7 +67,11 @@ ActiveAdmin.register Design do
       row :description
       row :user
       row :image do |design|
-        image_tag design.image.url, style: "max-width: 75px;" if design.image.present?
+        if Rails.env.development?
+          image_tag "https://tesmem-production.s3.amazonaws.com#{design.image.url}", style: "max-width: 75px;"
+        else
+          image_tag design.image.url, style: "max-width: 75px;" if design.image.present?
+        end
       end
       row :height
       row :width
