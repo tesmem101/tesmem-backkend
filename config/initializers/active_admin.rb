@@ -331,12 +331,17 @@ ActiveAdmin.setup do |config|
     def create
       user = User.find_by_email(params[:user][:email])
       if user && user.valid_password?(params[:user][:password])
-        if !user.role.eql?('user')
+        if !user.role.eql?('user') && !user.role.eql?('designer')
           self.resource = warden.authenticate!(auth_options)
           set_flash_message!(:notice, :signed_in)
           sign_in(resource_name, resource)
           yield resource if block_given?
-          respond_with resource, location: admin_users_path        
+          if user.role.eql?('lead_designer')
+            respond_with resource, location: admin_designers_path                    
+          else
+            respond_with resource, location: admin_users_path        
+          end
+
         else
           redirect_to({action: :new}, alert: 'Sorry! Permission Denied :( ')
         end

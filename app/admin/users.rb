@@ -50,9 +50,9 @@ ActiveAdmin.register User do
       end
 
       if current_user.role.eql?('super_admin')
-        f.input :role, as: :select, collection: [['Super Admin', 'super_admin'], ['Admin', 'admin'], ['Designer', 'designer']], include_blank: false
+        f.input :role, as: :select, collection: [['Super Admin', 'super_admin'], ['Admin', 'admin'], ['Designer', 'designer'], ['Lead Designer', 'lead_designer']], include_blank: false
       elsif current_user.role.eql?('admin')
-        f.input :role, as: :select, collection: [['Designer', 'designer']], include_blank: false
+        f.input :role, as: :select, collection: [['Designer', 'designer'], ['Lead Designer', 'lead_designer']], include_blank: false
       end
 
       if f.object.image.present?

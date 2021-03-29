@@ -7,9 +7,12 @@ class Ability
       can :manage, :all
     elsif user.role == 'admin'
       can :manage, :all    
-    elsif user.role == 'designer'
+    # elsif user.role == 'designer'
+    #   can :manage, :all
+    #   cannot [:new, :create, :update, :destroy], User 
+    elsif user.role == 'lead_designer'
       can :manage, :all
-      cannot [:new, :create, :update, :destroy], User 
+      cannot :manage, [User, Category, Container, Design, Folder, FormattedText, Image, SortReservedIcon, Upload]
     else
       can :read, :all
     end
