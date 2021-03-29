@@ -6,6 +6,12 @@ ActiveAdmin.register SortReservedIcon do
 
   filter :title
 
+  controller do
+    def scoped_collection
+      SortReservedIcon.sub_categories_which_has_stocks
+    end
+  end
+
   index :as => :sortable do
     label :title # item content
   end
