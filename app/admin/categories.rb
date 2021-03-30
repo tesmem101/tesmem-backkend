@@ -5,7 +5,7 @@ ActiveAdmin.register Category do
   filter :title
   filter :title_ar
   filter :description
-  filter :super_category
+  filter :super_category, as: :searchable_select
   filter :width
   filter :height
   filter :unit
@@ -76,8 +76,8 @@ ActiveAdmin.register Category do
         f.input :cover
       end
 
-      f.input :super_category
-      f.input :sub_categories
+      f.input :super_category, as: :searchable_select
+      # f.input :sub_categories
     end
     f.actions
   end

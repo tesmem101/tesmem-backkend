@@ -1,5 +1,6 @@
 ActiveAdmin.register Container do
   menu  priority: 7
+  menu false
   permit_params :folder_id, :instance_id, :instance_type
 
   filter :folder
