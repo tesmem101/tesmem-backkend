@@ -5,12 +5,12 @@ ActiveAdmin.register Designer do
   #   link_to('New Template', new_admin_designer_path)
   # end
   
-  filter :design
-  filter :category
-  filter :sub_category
+  filter :design, as: :searchable_select
+  filter :category, as: :searchable_select
+  filter :sub_category, as: :searchable_select
   filter :approved
   filter :private
-  filter :tags
+  filter :tags, as: :searchable_select
 
   controller do
     include ActionView::Helpers::TextHelper
@@ -118,12 +118,12 @@ ActiveAdmin.register Designer do
 
   form do |f|
     f.inputs do
-      f.input :design
-      f.input :category
-      f.input :sub_category
+      f.input :design, as: :searchable_select
+      f.input :category, as: :searchable_select
+      f.input :sub_category, as: :searchable_select
       f.input :approved
       f.input :private
-      f.input :tags
+      f.input :tags, as: :searchable_select
     end
     actions
   end
