@@ -1,6 +1,7 @@
 module V1
   class Sessions < Grape::API
     include AuthenticateRequest
+    include AuthenticateUser
     include V1Base
     version 'v1', using: :path
 
@@ -153,6 +154,16 @@ module V1
           render_error(RESPONSE_CODE[:unauthorized], I18n.t('errors.session.invalid_token'))
         end
       end
+
+      desc 'Sign Out', headers: HEADERS_DOCS
+      get :is_valid do
+        if authenticate_user
+          render_success('Access Granted')
+        else
+          render_error(RESPONSE_CODE[:unauthorized], 'Access Denied')
+        end
+      end
+      
     end
   end
 end

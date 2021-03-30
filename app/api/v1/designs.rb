@@ -41,6 +41,7 @@ module V1
         optional :folder_id, type: Integer, desc: "Folder Id"
       end
       post :create do
+        authenticate_user
         params[:image] = encode_image(params[:title], params[:image])
         design = Design.new(params)
         if design.save!
