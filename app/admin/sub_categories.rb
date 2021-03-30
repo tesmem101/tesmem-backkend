@@ -3,7 +3,7 @@ ActiveAdmin.register SubCategory do
   permit_params :title, :description, :category_id, :title_ar
   config.batch_actions = false
 
-  filter :category
+  filter :category, as: :searchable_select
   filter :title
   filter :title_ar
   filter :description
@@ -63,6 +63,16 @@ ActiveAdmin.register SubCategory do
         templates.collect{|template| template.title}.join(', ').truncate(50)
       end 
     end
+  end
+
+  form do |f|
+    f.inputs do 
+      f.input :category, as: :searchable_select
+      f.input :title
+      f.input :title_ar
+      f.input :description
+    end
+    f.actions
   end
 
   
