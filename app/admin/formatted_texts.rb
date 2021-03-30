@@ -4,7 +4,7 @@ ActiveAdmin.register FormattedText do
   config.batch_actions = false
   filter :user, collection: -> {
     User.all.map {|user| [user.email, user.id]}
-  }
+  }, as: :searchable_select
 
   filter :approved
 
@@ -39,7 +39,7 @@ ActiveAdmin.register FormattedText do
 
   form do |f|
     f.inputs do
-      f.input :user, :as => :select, :collection => User.all.map {|u| [u.email, u.id]}, :include_blank => false
+      f.input :user, :as => :select, :collection => User.all.map {|u| [u.email, u.id]}, as: :searchable_select
     end
     f.actions
   end
