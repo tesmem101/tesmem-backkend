@@ -3,10 +3,10 @@ ActiveAdmin.register Stock do
 
   filter :title
   filter :title_ar
-  filter :category
-  filter :sub_category
+  filter :category, as: :searchable_select
+  filter :sub_category, as: :searchable_select
   filter :stocktype, as: :select, collection: [['image', 0], ['svg', 1]]
-  filter :tags
+  filter :tags, as: :searchable_select
 
   controller do
     include ActionView::Helpers::TextHelper
@@ -110,8 +110,8 @@ ActiveAdmin.register Stock do
     f.inputs do
       f.input :title
       f.input :title_ar
-      f.input :category
-      f.input :sub_category
+      f.input :category, as: :searchable_select
+      f.input :sub_category, as: :searchable_select
 
       if f.object.image.url
         f.input :image, as: :file, hint: image_tag(f.object.image.url, width: '100px', height: '100px')
@@ -131,7 +131,7 @@ ActiveAdmin.register Stock do
         f.input :svg_thumb
       end
       f.input :stocktype
-      f.input :tags
+      f.input :tags, as: :searchable_select
     end
     actions
   end
