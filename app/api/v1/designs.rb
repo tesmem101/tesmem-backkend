@@ -104,8 +104,13 @@ module V1
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
       delete "/:id" do
-        Design.find(params[:id]).destroy
-        render_success("Design Deleted Successfully".as_json)
+        design = Design.find(params[:id]) 
+        if design.templates.present? && design.templates.where(approved: true).any?
+          render_error(RESPONSE_CODE[:unprocessable_entity], 'Design is selected as template, so you cannot delete this!')
+        else
+          design.destroy
+          render_success("Design Deleted Successfully".as_json)
+        end
       end
 
 

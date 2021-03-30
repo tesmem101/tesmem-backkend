@@ -44,20 +44,22 @@ module V1
         render_success(templates.paginate(page: params[:page], per_page: params[:per_page]).as_json)
       end
 
-      desc 'Get Templates  of subcategory',
-      { consumes: ['application/x-www-form-urlencoded'],
-       http_codes: [
-        { code: 200, message: 'success' },
-        { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
-        { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
-        { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
-      ] }
+      # desc 'Get Templates  of subcategory',
+      # { consumes: ['application/x-www-form-urlencoded'],
+      #  http_codes: [
+      #   { code: 200, message: 'success' },
+      #   { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+      #   { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+      #   { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+      # ] }
 
-      params do
-        requires :sub_category_id, type: String, :desc => 'Sub-Category Id' 
-        requires :page, type: String, :desc => 'Page Number'
-        requires :per_page, type: String, :desc => 'Number of elements on each page'
-      end
+      # params do
+      #   requires :sub_category_id, type: String, :desc => 'Sub-Category Id' 
+      #   requires :page, type: String, :desc => 'Page Number'
+      #   requires :per_page, type: String, :desc => 'Number of elements on each page'
+      # end
+
+      
       desc 'Change Approved field status',
       { consumes: ['application/x-www-form-urlencoded'],
        http_codes: [

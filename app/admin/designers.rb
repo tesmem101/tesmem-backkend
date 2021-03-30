@@ -28,9 +28,9 @@ ActiveAdmin.register Designer do
         flash[:notice] = "Template Created!"
         redirect_to admin_designer_path(@template)
       else
-        flash[:error] = ["#{pluralize(@template.errors.count, "error")} prohibited this template from being created!"]
-        @stock.errors.full_messages.each do |msg|
-          flash[:error] << msg
+        flash[:alert] = ["#{pluralize(@template.errors.count, "error")} prohibited this template from being created!  " ]
+        @template.errors.full_messages.each do |msg|
+          flash[:alert] << msg
         end
         redirect_to new_admin_designer_path                    
       end
@@ -48,9 +48,9 @@ ActiveAdmin.register Designer do
         flash[:notice] = "Template Updated!"
         redirect_to admin_designer_path(@template)
       else
-        flash[:error] = ["#{pluralize(@template.errors.count, "error")} prohibited this template from being updated!"]
-        @stock.errors.full_messages.each do |msg|
-          flash[:error] << msg
+        flash[:alert] = ["#{pluralize(@template.errors.count, "error")} prohibited this template from being updated!  "]
+        @template.errors.full_messages.each do |msg|
+          flash[:alert] << msg
         end
         redirect_to new_admin_designer_path
       end
@@ -85,6 +85,7 @@ ActiveAdmin.register Designer do
     #   designer.url ? designer.url.truncate(30) : nil
     # end
     column 'Image' do |designer|
+      # debugger
       if Rails.env.development?
         image_tag "https://tesmem-production.s3.amazonaws.com#{designer.design.image.url}", style: "max-width : 75px;"
       else
