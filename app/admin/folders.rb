@@ -7,7 +7,7 @@ ActiveAdmin.register Folder do
   filter :user, collection: -> {
     User.all.map {|user| [user.email, user.id]}
   }, as: :searchable_select
-  filter :parent, label: 'Parent Folder', as: :searchable_select
+  filter :parent_name, as: :string , label: 'Parent Folder'
 
   index do
     column :id

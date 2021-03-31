@@ -3,10 +3,10 @@ ActiveAdmin.register Stock do
 
   filter :title
   filter :title_ar
-  filter :category, as: :searchable_select
-  filter :sub_category, as: :searchable_select
+  filter :category_title, as: :string , label: 'Category'
+  filter :sub_category_title, as: :string , label: 'Sub Category'
   filter :stocktype, as: :select, collection: [['image', 0], ['svg', 1]]
-  filter :tags, as: :searchable_select
+  filter :tags_name, as: :string , label: 'Tags'
 
   controller do
     include ActionView::Helpers::TextHelper

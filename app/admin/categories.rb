@@ -5,7 +5,7 @@ ActiveAdmin.register Category do
   filter :title
   filter :title_ar
   filter :description
-  filter :super_category, as: :searchable_select
+  filter :super_category_title, as: :string , label: 'Super category'
   filter :width
   filter :height
   filter :unit
