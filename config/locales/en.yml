@@ -35,3 +35,12 @@ en:
     category:
       not_found:
           Reocrd not found
+
+en:
+  active_admin:
+    resources:
+      templates: # Registered resource
+        new_model: 'Create Template' # new action item
+        edit_model: 'Edit Template' # edit action item
+        delete_model: 'Delete Template' # delete action item
+

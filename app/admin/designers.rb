@@ -1,4 +1,4 @@
-ActiveAdmin.register Designer do
+ActiveAdmin.register Designer, as: "Templates" do
   menu :label => "Templates", priority: 5
   permit_params :design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids
   # action_item :new, only: :index do
@@ -67,7 +67,7 @@ ActiveAdmin.register Designer do
 
   end
 
-  index do
+  index  do
     column :id
     column :design
     column :category
@@ -98,7 +98,7 @@ ActiveAdmin.register Designer do
     actions
   end
 
-  show do
+  show :title => proc {|template| "Template # #{template.id}" } do
     attributes_table do
       row :id
       row :design
