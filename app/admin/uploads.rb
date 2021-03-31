@@ -78,7 +78,7 @@ ActiveAdmin.register Upload do
   form do |f|
     f.inputs do
       f.input :title
-      f.input :user, :as => :select, :collection => User.all.map {|u| [u.email, u.id]}, as: :searchable_select
+      f.input :user, :collection => User.all.map {|u| [u.email, u.id]}, as: :searchable_select
 
       if f.object.image.url
         f.input :image, as: :file, hint: image_tag(f.object.image.url, width: '100px', height: '100px')

@@ -5,12 +5,12 @@ ActiveAdmin.register Designer do
   #   link_to('New Template', new_admin_designer_path)
   # end
   
-  filter :design, as: :searchable_select
-  filter :category, as: :searchable_select
-  filter :sub_category, as: :searchable_select
+  filter :design_title, as: :string , label: 'Design'
+  # filter :category_title, as: :string , label: 'Category'
+  filter :sub_category_title, as: :string , label: 'Sub category'
   filter :approved
   filter :private
-  filter :tags, as: :searchable_select
+  filter :tags_name, as: :string , label: 'Tags'
 
   controller do
     include ActionView::Helpers::TextHelper
@@ -18,6 +18,7 @@ ActiveAdmin.register Designer do
 
     def create
       @template = Designer.new(template_params)
+      @template.category_id = Category.find_by(title: 'RESERVED_DESIGNS').id
       if @template.save
         if params[:designer][:tag_ids].present?
           tag_ids = params[:designer][:tag_ids].reject { |id| (id == "" || id == " ")}
@@ -40,6 +41,7 @@ ActiveAdmin.register Designer do
       @template = Designer.find(params[:id])
       if @template.update(template_params)
         if params[:designer][:tag_ids].present?
+          @template.tags.destroy_all
           tag_ids = params[:designer][:tag_ids].reject { |id| (id == "" || id == " ")}
           tag_ids.each do |tag_id|
             TemplateTag.create(designer_id: @template.id, tag_id: tag_id )
@@ -119,7 +121,7 @@ ActiveAdmin.register Designer do
   form do |f|
     f.inputs do
       f.input :design, as: :searchable_select
-      f.input :category, as: :searchable_select
+      # f.input :category, as: :searchable_select
       f.input :sub_category, as: :searchable_select
       f.input :approved
       f.input :private

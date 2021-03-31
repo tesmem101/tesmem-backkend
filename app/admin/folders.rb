@@ -33,8 +33,8 @@ ActiveAdmin.register Folder do
   form do |f|
     f.inputs do
       f.input :name
-      f.input :user, :as => :select, :collection => User.all.map {|u| [u.email, u.id]}, as: :searchable_select # , :include_blank => false
-      f.input :parent, label: 'Parent Folder',  :as => :select, :collection => Folder.all.map {|f| [f.name, f.id]}, as: :searchable_select
+      f.input :user, :collection => User.all.map {|u| [u.email, u.id]}, as: :searchable_select # , :include_blank => false
+      f.input :parent, label: 'Parent Folder', :collection => Folder.all.map {|f| [f.name, f.id]}, as: :searchable_select
     end
     f.actions
   end
