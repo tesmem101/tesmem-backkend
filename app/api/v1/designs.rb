@@ -83,15 +83,16 @@ module V1
         optional :cat_id, type: Integer, desc: "Category Id"
       end
       put "/:id" do
+        user = authenticate_user
         if params[:image]
           params[:image] = encode_image(params[:title], params[:image])
         end
         design = Design.find(params[:id])
         if design.update!(params)
           update_image(design) if params[:image]
-          File.delete(params[:image]) if File.exists? params[:image]
-          userId = params[:user_id]
-          user = User.find(userId)
+          File.delete(params[:image]) if params[:image] && File.exists?(params[:image]) 
+          # userId = params[:user_id]
+          # user = User.find(userId)
           if user.role == 'designer'
             Designer.where(design_id: params[:id]).update(url: design.image)
           end
