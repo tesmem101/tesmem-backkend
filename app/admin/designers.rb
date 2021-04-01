@@ -27,13 +27,13 @@ ActiveAdmin.register Designer, as: "Templates" do
           end
         end
         flash[:notice] = "Template Created!"
-        redirect_to admin_designer_path(@template)
+        redirect_to admin_template_path(@template)
       else
         flash[:alert] = ["#{pluralize(@template.errors.count, "error")} prohibited this template from being created!  " ]
         @template.errors.full_messages.each do |msg|
           flash[:alert] << msg
         end
-        redirect_to new_admin_designer_path                    
+        redirect_to new_admin_template_path                    
       end
     end
     
@@ -48,13 +48,13 @@ ActiveAdmin.register Designer, as: "Templates" do
           end
         end
         flash[:notice] = "Template Updated!"
-        redirect_to admin_designer_path(@template)
+        redirect_to admin_template_path(@template)
       else
         flash[:alert] = ["#{pluralize(@template.errors.count, "error")} prohibited this template from being updated!  "]
         @template.errors.full_messages.each do |msg|
           flash[:alert] << msg
         end
-        redirect_to new_admin_designer_path
+        redirect_to new_admin_template_path
       end
 
     end
