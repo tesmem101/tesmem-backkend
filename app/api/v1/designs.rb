@@ -72,7 +72,7 @@ module V1
           { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
         ] }
       params do
-        requires :title, type: String, desc: "Name"
+        optional :title, type: String, desc: "Name"
         optional :description, type: String, desc: "Description"
         optional :user_id, type: Integer, desc: "Creator"
         optional :styles, type: JSON, desc: "Styles"
