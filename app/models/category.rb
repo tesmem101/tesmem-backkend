@@ -17,7 +17,7 @@ class Category < ApplicationRecord
   private
 
   def can_destroy?
-    if self.sub_categories.any? || self.stocks.any? || self.designers.any?
+    if self.intermediate_categories.any? || self.sub_categories.any? || self.stocks.any? || self.designers.any?
       errors.add :base, message: 'You Do Not Have Permission To Perform This Action!'
       throw :abort
     end
