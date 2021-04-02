@@ -337,7 +337,7 @@ ActiveAdmin.setup do |config|
           sign_in(resource_name, resource)
           yield resource if block_given?
           if user.role.eql?('lead_designer')
-            respond_with resource, location: admin_designers_path                    
+            respond_with resource, location: admin_templates_path                    
           else
             respond_with resource, location: admin_users_path        
           end
