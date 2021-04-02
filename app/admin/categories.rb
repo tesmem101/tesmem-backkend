@@ -10,6 +10,17 @@ ActiveAdmin.register Category do
   filter :height
   filter :unit
 
+  controller do
+    def destroy
+      destroy! do |success, failure|
+        failure.html do
+          flash[:alert] = "The Deletion Failed Because " + resource.errors.full_messages[0][:message]
+          super
+        end
+      end
+    end
+  end
+
   index do
     column :id
     column :title

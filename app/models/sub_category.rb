@@ -9,6 +9,16 @@ class SubCategory < ApplicationRecord
   validates_uniqueness_of :title # , if: -> { category_id == 13 } # This is just for RESERVED_ICONS
   after_save :save_to_reserved_icons
 
+  before_destroy :can_destroy?, prepend: true
+
+  private
+
+  def can_destroy?
+    if self.stocks.any? || self.designers.any?
+      errors.add :base, message: 'You Do Not Have Permission To Perform This Action!'
+      throw :abort
+    end
+  end
 
   def save_to_reserved_icons
     if self.category.title.eql?('RESERVED_ICONS')

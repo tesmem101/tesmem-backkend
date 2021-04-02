@@ -8,28 +8,38 @@ ActiveAdmin.register SubCategory do
   filter :title_ar
   filter :description
 
-  # controller do
-  #   include ActionView::Helpers::TextHelper
-  #   def create
-  #     @sub_category = SubCategory.new(sub_category_params)
-  #     if @sub_category.save
-  #       flash[:notice] = "Sub Category was successfully created!"
-  #       redirect_to admin_sub_category_path(@sub_category)
-  #     else
-  #       flash[:alert] = ["#{pluralize(@sub_category.errors.count, "error")} prohibited this Sub Category from being saved! "]
-  #       @sub_category.errors.full_messages.each do |msg|
-  #         flash[:alert] << msg
-  #       end
-  #       redirect_to new_admin_sub_category_path
-  #     end
-  #   end
+  controller do
 
-  #   private
+    def destroy
+      destroy! do |success, failure|
+        failure.html do
+          flash[:alert] = "The Deletion Failed Because " + resource.errors.full_messages[0][:message]
+          super
+        end
+      end
+    end
+    
+    # include ActionView::Helpers::TextHelper
+    # def create
+    #   @sub_category = SubCategory.new(sub_category_params)
+    #   if @sub_category.save
+    #     flash[:notice] = "Sub Category was successfully created!"
+    #     redirect_to admin_sub_category_path(@sub_category)
+    #   else
+    #     flash[:alert] = ["#{pluralize(@sub_category.errors.count, "error")} prohibited this Sub Category from being saved! "]
+    #     @sub_category.errors.full_messages.each do |msg|
+    #       flash[:alert] << msg
+    #     end
+    #     redirect_to new_admin_sub_category_path
+    #   end
+    # end
 
-  #   def sub_category_params
-  #     params.require(:sub_category).permit(:title, :description, :category_id, :title_ar)
-  #   end
-  # end
+    # private
+
+    # def sub_category_params
+    #   params.require(:sub_category).permit(:title, :description, :category_id, :title_ar)
+    # end
+  end
   
 
   index do
