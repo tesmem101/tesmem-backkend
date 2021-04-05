@@ -1,0 +1,10 @@
+module CommonBehaviour
+    extend ActiveSupport::Concern
+    def only_deleted
+        where(is_deleted: true)
+    end
+
+    def without_deleted
+        where(is_deleted: false)
+    end
+end

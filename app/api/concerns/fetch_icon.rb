@@ -10,7 +10,7 @@ module FetchIcon
             id: sub_c.id, 
             name: sub_c.title, 
             name_ar: sub_c.title_ar,
-            images: serialize_collection(Kaminari.paginate_array(sub_c.stocks).page(page).per(per_page), serializer: StockListSerializer)
+            images: serialize_collection(Kaminari.paginate_array(sub_c.stocks.where.not(is_active: false)).page(page).per(per_page), serializer: StockListSerializer)
           }
       end
     end

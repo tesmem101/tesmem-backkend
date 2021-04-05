@@ -114,7 +114,7 @@ module V1
           end
 
         else
-          icons_stock = Stock.icons_stock
+          icons_stock = Stock.icons_stock.where.not(is_active: false)
           icons_stock = icons_stock.search_keyword(locale, search, params[:page], params[:per_page]) if search
           icons_stock = serialize_collection(icons_stock, serializer: StockListSerializer)
           render_success(icons_stock)

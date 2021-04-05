@@ -1,5 +1,5 @@
 ActiveAdmin.register Stock do
-  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids 
+  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active
 
   filter :title
   filter :title_ar
@@ -54,7 +54,7 @@ ActiveAdmin.register Stock do
     private
 
     def stock_params
-      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids)
+      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active)
     end
 
   end
@@ -79,6 +79,7 @@ ActiveAdmin.register Stock do
       stock.svg_thumb.present? ? image_tag(stock.svg_thumb.url, style: "max-width: 75px;") : nil
     end
     column :tags
+    column :is_active
     actions
   end
 
@@ -103,6 +104,7 @@ ActiveAdmin.register Stock do
         stock.svg_thumb.present? ? image_tag(stock.svg_thumb.url, style: "max-width: 75px;") : nil
       end
       row :tags
+      row :is_active
     end
   end
 
@@ -132,6 +134,7 @@ ActiveAdmin.register Stock do
       end
       f.input :stocktype
       f.input :tags, as: :searchable_select
+      f.input :is_active
     end
     actions
   end

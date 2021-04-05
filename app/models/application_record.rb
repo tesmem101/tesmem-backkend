@@ -1,3 +1,3 @@
-class ApplicationRecord < ActiveRecord::Base
+class ApplicationRecord < CommonBehaviour
   self.abstract_class = true
 end
