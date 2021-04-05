@@ -79,6 +79,7 @@ ActiveAdmin.register Stock do
       stock.svg_thumb.present? ? image_tag(stock.svg_thumb.url, style: "max-width: 75px;") : nil
     end
     column :tags
+    column :is_active
     actions
   end
 
@@ -103,6 +104,7 @@ ActiveAdmin.register Stock do
         stock.svg_thumb.present? ? image_tag(stock.svg_thumb.url, style: "max-width: 75px;") : nil
       end
       row :tags
+      row :is_active
     end
   end
 
@@ -132,6 +134,7 @@ ActiveAdmin.register Stock do
       end
       f.input :stocktype
       f.input :tags, as: :searchable_select
+      f.input :is_active
     end
     actions
   end
