@@ -1,5 +1,5 @@
 ActiveAdmin.register Stock do
-  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids 
+  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active
 
   filter :title
   filter :title_ar
@@ -54,7 +54,7 @@ ActiveAdmin.register Stock do
     private
 
     def stock_params
-      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids)
+      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active)
     end
 
   end

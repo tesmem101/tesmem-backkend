@@ -10,7 +10,7 @@ module FetchTemplate
             id: sub_c.id, 
             name: sub_c.title, 
             name_ar: sub_c.title_ar,
-            images: sub_c.designers.approved.includes(:design).all
+            images: sub_c.designers.where.not(approved: false, is_active: false).includes(:design).all
               .map { |designer|
               {
                 id: designer.design.id,
