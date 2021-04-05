@@ -1,6 +1,6 @@
 ActiveAdmin.register User do
   menu priority: 1 # so it's on the very left
-  permit_params :first_name, :last_name, :email, :role, :profile
+  permit_params :first_name, :last_name, :email, :role, :profile, :is_deleted
   config.batch_actions = false
   filter :first_name
   filter :last_name
@@ -22,7 +22,7 @@ ActiveAdmin.register User do
     column 'Profile Photo' do |user|
       image_tag user.image.url, style: "max-width: 75px;" 
     end
-    
+    column :is_deleted
     actions
   end
 
@@ -36,6 +36,7 @@ ActiveAdmin.register User do
       row 'Profile Photo' do |user|
         image_tag user.image.url, style: "max-width: 75px;" 
       end
+      row :is_deleted
     end
   end
 
@@ -60,7 +61,7 @@ ActiveAdmin.register User do
       else
         f.input :profile
       end
-
+      f.input :is_deleted
     end
     f.actions
   end

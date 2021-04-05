@@ -53,6 +53,8 @@ module V1
           render_error(RESPONSE_CODE[:unauthorized], I18n.t('errors.session.invalid'))
         elsif !user.email_confirmation_status!
           render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Email is not confirmed yet!')
+        elsif user.is_deleted?
+          render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
         else
           user.login!
           serialization = UserSerializer.new(user)
