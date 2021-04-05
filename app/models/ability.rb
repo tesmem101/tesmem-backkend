@@ -3,34 +3,21 @@ class Ability
 
   def initialize(user)
     user ||= User.new
-    if user.role == 'admin'
-      can :access, :rails_admin
-      can :manage, :dashboard
-      can :manage, Category
-      can :manage, SubCategory
-      can :manage, Stock
-      can :manage, Designer
-      can :manage, Tag
-      can :read, Design
-    end
-    if user.role == 'designer'
-      can :access, :rails_admin
-      can :manage, :dashboard
-      can :manage, Category
-      can :manage, SubCategory
-      can :manage, Stock
-      can :manage, Designer
-      can :manage, Tag
-      can :read, Design
-    end
     if user.role == 'super_admin'
       can :manage, :all
-      can :access, :rails_admin       # only allow admin users to access Rails Admin
-      can :manage, :dashboard         # allow access to dashboard
-    end
-    if user.role == 'user'
-      can :access, :rails_admin
-      can :manage, :dashboard
+      cannot [:destroy], User
+    elsif user.role == 'admin'
+      can :manage, :all
+      cannot [:destroy], User
+    # elsif user.role == 'designer'
+    #   can :manage, :all
+    #   cannot [:new, :create, :update, :destroy], User 
+    elsif user.role == 'lead_designer'
+      can :manage, :all
+      cannot :manage, [User, Category, Container, Design, Folder, FormattedText, Image, SortReservedIcon, Upload] 
+    else
+      can :read, :all
+      cannot [:new, :create, :update, :destroy], :all
     end
   end
 end

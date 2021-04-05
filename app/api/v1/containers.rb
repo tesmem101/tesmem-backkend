@@ -31,14 +31,20 @@ module V1
         user_folder = authenticate_user.folders.find(params[:folder_id])
         container = Container.find_or_initialize_by(instance_id: params[:instance_id])
 
-        serialization = nil
-        if container.update(folder_id: params[:folder_id])
-          serialization = ContainerSerializer.new(container)
+        unless container.folder_id == user_folder.id
+          serialization = nil
+          if container.update(folder_id: params[:folder_id])
+            serialization = ContainerSerializer.new(container)
+          else
+            new_container = Container.create(instance: instance, folder_id: params[:folder_id])
+            serialization = ContainerSerializer.new(new_container)
+          end
+          render_success(serialization.as_json)        
         else
-          new_container = Container.create(instance: instance, folder_id: params[:folder_id])
-          serialization = ContainerSerializer.new(new_container)
+          render_error(RESPONSE_CODE[:unprocessable_entity], 'Design is already in target folder')
         end
-        render_success(serialization.as_json)
+
+
       end
       desc 'Move Designs/Images to other folder',
            { consumes: ['application/x-www-form-urlencoded'],

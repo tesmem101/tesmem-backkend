@@ -75,6 +75,26 @@ module V1
                 render_success(formatted_text, "Formatted Text Deleted now!")
             end
 
+            desc 'Change Approved field status',
+            { consumes: ['application/x-www-form-urlencoded'],
+             http_codes: [
+              { code: 200, message: 'success' },
+              { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+              { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+              { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+            ] }
+
+            put 'change_approved_status/:id' do
+                user_id = params[:user_id].split("_")[-1]
+                text = FormattedText.find(params[:id])
+                if params[:approved].eql?("true")
+                    text.update(approved: params[:approved], approvedBy_id: user_id, unapprovedBy_id: nil)                    
+                else
+                    text.update(approved: params[:approved], unapprovedBy_id: user_id, approvedBy_id: nil)   
+                end
+                render_success(user_id, "Formatted Text Updated!")
+            end
+
         end
     end
 end

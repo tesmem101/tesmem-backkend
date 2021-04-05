@@ -28,7 +28,7 @@ module V1
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
 
         if cat_id && search
-          templates_ids = Category.find(cat_id).sub_categories.joins(:designers).joins("inner join designs on designs.id = designers.design_id").joins("left join template_tags on template_tags.designer_id = designers.id").joins("left join tags on template_tags.tag_id = tags.id").where("lower(designs.title#{locale}) LIKE ? or lower(tags.name) LIKE ?", "%#{search}%", "%#{search}%").select("designs.id")
+          templates_ids = Category.find(cat_id).sub_categories.joins(:designers).joins("inner join designs on designs.id = designers.design_id").joins("left join template_tags on template_tags.designer_id = designers.id").joins("left join tags on template_tags.tag_id = tags.id").where.not("designers.is_active = ? ", false).where("lower(designs.title#{locale}) LIKE ? or lower(tags.name) LIKE ?", "%#{search}%", "%#{search}%").select("designs.id")
           templates = Design.where(id: templates_ids).collect{ |design| make_design_object(design) }
         elsif cat_id
           templates = Category.find(cat_id).sub_categories.search_keyword(locale, search).joins(:designers).select("distinct sub_categories.*").all.map { |sub_c| get_template(sub_c) } # Previous One 
@@ -44,7 +44,23 @@ module V1
         render_success(templates.paginate(page: params[:page], per_page: params[:per_page]).as_json)
       end
 
-      desc 'Get Templates  of subcategory',
+      # desc 'Get Templates  of subcategory',
+      # { consumes: ['application/x-www-form-urlencoded'],
+      #  http_codes: [
+      #   { code: 200, message: 'success' },
+      #   { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+      #   { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+      #   { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+      # ] }
+
+      # params do
+      #   requires :sub_category_id, type: String, :desc => 'Sub-Category Id' 
+      #   requires :page, type: String, :desc => 'Page Number'
+      #   requires :per_page, type: String, :desc => 'Number of elements on each page'
+      # end
+
+      
+      desc 'Change Approved field status',
       { consumes: ['application/x-www-form-urlencoded'],
        http_codes: [
         { code: 200, message: 'success' },
@@ -53,10 +69,27 @@ module V1
         { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
       ] }
 
-      params do
-        requires :sub_category_id, type: String, :desc => 'Sub-Category Id' 
-        requires :page, type: String, :desc => 'Page Number'
-        requires :per_page, type: String, :desc => 'Number of elements on each page'
+      put 'change_approved_status/:id' do
+          user_id = params[:user_id].split("_")[-1]
+          template = Designer.find(params[:id])
+          template.update(approved: params[:approved])                    
+          render_success(user_id, "Template Updated!")
+      end
+
+      desc 'Change Private field status',
+      { consumes: ['application/x-www-form-urlencoded'],
+       http_codes: [
+        { code: 200, message: 'success' },
+        { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+        { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+        { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+      ] }
+
+      put 'change_private_status/:id' do
+          user_id = params[:user_id].split("_")[-1]
+          template = Designer.find(params[:id])
+          template.update(private: params[:approved])                    
+          render_success(user_id, "Template Updated!")
       end
 
       get 'sub_category/' do

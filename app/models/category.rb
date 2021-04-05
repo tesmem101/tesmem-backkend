@@ -12,6 +12,18 @@ class Category < ApplicationRecord
   has_one :image, as: :image, dependent: :destroy 
   after_save :add_cover_photo
 
+  before_destroy :can_destroy?, prepend: true
+
+  private
+
+  def can_destroy?
+    if self.intermediate_categories.any? || self.sub_categories.any? || self.stocks.any? || self.designers.any?
+      errors.add :base, message: 'You Do Not Have Permission To Perform This Action!'
+      throw :abort
+    end
+  end
+  
+
   def add_cover_photo
     if self.cover.present? && self.cover.thumb.url.present?
       current_image = Rails.env.development? ? "public#{self.cover.thumb.url}" : self.cover.thumb.url

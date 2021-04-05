@@ -9,6 +9,17 @@ module V1
 
     resource :designs do
 
+      desc "Get Design titles",
+      { consumes: ["application/x-www-form-urlencoded"],
+        http_codes: [{ code: 200, message: "success" }] }
+      
+        get :titles do
+        design_titles = Design.all.map{|design| design.title ? {title: design.title, id: design.id} : nil}.compact
+        render json: {
+          titles: design_titles
+        }
+      end
+
       desc "Create a design",
         { consumes: ["application/x-www-form-urlencoded"],
          http_codes: [
@@ -30,6 +41,7 @@ module V1
         optional :folder_id, type: Integer, desc: "Folder Id"
       end
       post :create do
+        authenticate_user
         params[:image] = encode_image(params[:title], params[:image])
         design = Design.new(params)
         if design.save!
@@ -60,7 +72,7 @@ module V1
           { code: RESPONSE_CODE[:not_found], message: I18n.t("errors.not_found") },
         ] }
       params do
-        requires :title, type: String, desc: "Name"
+        optional :title, type: String, desc: "Name"
         optional :description, type: String, desc: "Description"
         optional :user_id, type: Integer, desc: "Creator"
         optional :styles, type: JSON, desc: "Styles"
@@ -71,15 +83,16 @@ module V1
         optional :cat_id, type: Integer, desc: "Category Id"
       end
       put "/:id" do
+        user = authenticate_user
         if params[:image]
           params[:image] = encode_image(params[:title], params[:image])
         end
         design = Design.find(params[:id])
         if design.update!(params)
           update_image(design) if params[:image]
-          File.delete(params[:image]) if File.exists? params[:image]
-          userId = params[:user_id]
-          user = User.find(userId)
+          File.delete(params[:image]) if params[:image] && File.exists?(params[:image]) 
+          # userId = params[:user_id]
+          # user = User.find(userId)
           if user.role == 'designer'
             Designer.where(design_id: params[:id]).update(url: design.image)
           end
@@ -93,8 +106,13 @@ module V1
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
       delete "/:id" do
-        Design.find(params[:id]).destroy
-        render_success("Design Deleted Successfully".as_json)
+        design = Design.find(params[:id]) 
+        if design.templates.present? && design.templates.where(approved: true).any?
+          render_error(RESPONSE_CODE[:unprocessable_entity], 'Design is selected as template, so you cannot delete this!')
+        else
+          design.destroy
+          render_success("Design Deleted Successfully".as_json)
+        end
       end
 
 
