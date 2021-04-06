@@ -59,6 +59,20 @@ ActiveAdmin.register Designer, as: "Templates" do
 
     end
 
+    def destroy
+      @template = Designer.find(params[:id])
+      if @template.update(is_active: false)
+        flash[:notice] = "Template Inactive!"
+        redirect_to admin_template_path(@template)
+      else
+        flash[:alert] = ["#{pluralize(@template.errors.count, "error")} prohibited this template from being inactive!"]
+        @template.errors.full_messages.each do |msg|
+          flash[:alert] << msg
+        end
+        redirect_to admin_template_path(@template)
+      end
+    end
+
     private
 
     def template_params

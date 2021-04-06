@@ -111,9 +111,13 @@ module V1
           user.save
         end
 
-        user.login!
-        serialization = UserSerializer.new(user)
-        render_success(serialization.as_json)
+        if user.is_deleted?
+          render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
+        else
+          user.login!
+          serialization = UserSerializer.new(user)
+          render_success(serialization.as_json)
+        end
       end
 
       desc 'Sign in/up user via facebook',{
@@ -138,9 +142,13 @@ module V1
           user.save
         end
 
-        user.login!
-        serialization = UserSerializer.new(user)
-        render_success(serialization.as_json)
+        if user.is_deleted?
+          render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
+        else
+          user.login!
+          serialization = UserSerializer.new(user)
+          render_success(serialization.as_json)
+        end
       end
 
       desc 'Sign Out', headers: HEADERS_DOCS, http_codes: [
