@@ -51,6 +51,21 @@ ActiveAdmin.register Stock do
       end
     end
 
+
+    def destroy
+      @stock = Stock.find(params[:id])
+      if @stock.update(is_active: false)
+        flash[:notice] = "Stock Inactive!"
+        redirect_to admin_stock_path(@stock)
+      else
+        flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being inactive!"]
+        @stock.errors.full_messages.each do |msg|
+          flash[:alert] << msg
+        end
+        redirect_to admin_stock_path(@stock)
+      end
+    end
+
     private
 
     def stock_params
