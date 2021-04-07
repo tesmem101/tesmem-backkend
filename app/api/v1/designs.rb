@@ -132,9 +132,16 @@ module V1
              http_codes: [{ code: 200, message: "success" }] }
       before { authenticate_user }
       get "/:id" do
-        design = authenticate_user.designs.where(id: params[:id], is_trashed: 0)
+        user = authenticate_user
+
+        if user.role.eql?('lead_designer')
+          design = Design.where(id: params[:id], is_trashed: 0)          
+        else
+          design = user.designs.where(id: params[:id], is_trashed: 0)
+        end
         serialization = serialize_collection(design, serializer: DesignSerializer)
-        render_success(serialization.as_json)
+        render_success(serialization.as_json)          
+
       end
 
       desc "Show design which are in Designers",
