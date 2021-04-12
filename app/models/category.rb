@@ -18,7 +18,7 @@ class Category < ApplicationRecord
 
   def can_destroy?
     if self.intermediate_categories.any? || self.sub_categories.any? || self.stocks.any? || self.designers.any?
-      errors.add :base, message: 'You Do Not Have Permission To Perform This Action!'
+      errors.add :base, message: 'This Category Has Some Dependent Sub Categories. You Need to first Delete Dependent Data!' # 'You Do Not Have Permission To Perform This Action!'
       throw :abort
     end
   end
