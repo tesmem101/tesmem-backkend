@@ -8,6 +8,10 @@ ActiveAdmin.register Stock do
   filter :stocktype, as: :select, collection: [['image', 0], ['svg', 1]]
   filter :tags_name, as: :string , label: 'Tags'
 
+  action_item 'create_stock', only: :show do
+    link_to 'CREATE STOCK', new_admin_stock_path
+  end
+
   controller do
     include ActionView::Helpers::TextHelper
     def create

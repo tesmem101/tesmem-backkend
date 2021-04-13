@@ -4,6 +4,10 @@ ActiveAdmin.register Tag do
   filter :name
   filter :name_ar
 
+  action_item 'create_tag', only: :show do
+    link_to 'CREATE TAG', new_admin_stock_path
+  end
+
   index do
     column :id
     column :name
