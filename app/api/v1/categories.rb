@@ -37,8 +37,12 @@ module V1
       get '/' do
         search = params['search'].present? ? params['search'].downcase : nil
         category = all_categories().where("lower(title) LIKE ?", "%#{search}%")
-        serialization = serialize_collection(category, serializer: CategorySerializer)
-        render_success(serialization.as_json)
+        if params[:serialize].present? && params[:serialize].eql?('true') 
+          serialization = serialize_collection(category, serializer: CategorySerializer)
+          render_success(serialization.as_json)          
+        else
+          render_success(category.as_json)
+        end
       end
       
       desc 'Get Category by ID',
@@ -49,6 +53,18 @@ module V1
         if category.present?
           category = fetch_categories(category)
           render_success(category.as_json)
+        end
+      end
+
+      desc 'Get Sub-Categories of Single Category',
+      { consumes: ['application/x-www-form-urlencoded'],
+        http_codes: [{ code: 200, message: 'success' }] }
+      get '/:id/subcategories' do
+        category = all_categories().find(params[:id])
+        if category.present?
+          sub_categories = category.sub_categories
+          # serialization = serialize_collection(sub_categories, serializer: SubCategorySerializer)
+          render_success(sub_categories.as_json)
         end
       end
 
