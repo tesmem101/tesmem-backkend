@@ -5,7 +5,7 @@ ActiveAdmin.register Tag do
   filter :name_ar
 
   action_item 'create_tag', only: :show do
-    link_to 'CREATE TAG', new_admin_stock_path
+    link_to 'CREATE TAG', new_admin_tag_path
   end
 
   index do
