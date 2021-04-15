@@ -3,10 +3,46 @@
 //= require active_admin/sortable
 //= require active_admin/searchable_select
 
+
+function creatTag() {
+    var title = $('#title').val();
+    var title_ar = $('#title_ar').val();
+    var request = $.ajax({
+        url: "/admin/tags",
+        type: "POST",
+        data: {tag: {name: title, name_ar: title_ar}}
+    });
+
+    request.done(function(response) {
+        console.log(response)
+        // $('#title').val('');
+        // $('#title_ar').val('');
+        $(".alert").show();
+        setTimeout(function() {
+            $(".alert").hide();
+            $('#createTagModal').modal('toggle');
+          }, 1000);
+    })
+};
+
 $(document).ready(function(){
     // $( ".menu-button" ).remove();
     // $( ".resource_selection_cell, .resource_selection_toggle_panel, .right" ).remove(); // This line is for sortable-tree functionality
     // $( "#utility_nav" ).attr("id","tabs");
+
+    $('#createTagModal').on('hidden.bs.modal', function (e) {
+        $(this).find("input,textarea,select").val('').end();
+        $('#create_tag_btn').prop("disabled", true);
+      })
+    
+    $('#title').on('input', function(e) {
+        if (e.target.value) {
+            $('#create_tag_btn').prop("disabled", false); // Element(s) are now enabled.
+        } else {
+            $('#create_tag_btn').prop("disabled", true); // Element(s) are now disabled.
+        }
+    });
+    
 
     $('input[name="approved_formatted_text"]').click(function (event) {
         ajaxCall(event)
