@@ -70,6 +70,9 @@ ActiveAdmin.register Stock do
       end
     end
 
+    def create_tag
+    end
+
     private
 
     def stock_params
@@ -152,10 +155,18 @@ ActiveAdmin.register Stock do
         f.input :svg_thumb
       end
       f.input :stocktype
-      f.input :tags, as: :searchable_select
+      div style: 'display: block ruby;' do
+        f.input(:tags, as: :searchable_select, ajax: true)
+        div do
+          render 'create_tag'
+        end
+      end
       f.input :is_active
     end
     actions
+
   end
+
+
 
 end
