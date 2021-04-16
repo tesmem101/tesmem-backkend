@@ -22,7 +22,12 @@ class SubCategory < ApplicationRecord
 
   def save_to_reserved_icons
     if self.category.title.eql?('RESERVED_ICONS')
-      SortReservedIcon.find_or_create_by(sub_category_id: self.id, title: self.title)
+      s_r_i = SortReservedIcon.find_by(sub_category_id: self.id)
+      if s_r_i
+        s_r_i.update(title: self.title)
+      else
+        SortReservedIcon.create(sub_category_id: self.id, title: self.title)
+      end
     end
   end
 
