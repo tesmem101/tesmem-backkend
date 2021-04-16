@@ -16,6 +16,7 @@ ActiveAdmin.register Stock do
     include ActionView::Helpers::TextHelper
     def create
       @stock = Stock.new(stock_params)
+      @stock.category_id = Category.find_by(title: 'RESERVED_ICONS').id
       if @stock.save
         if params[:stock][:tag_ids].present?
           tag_ids = params[:stock][:tag_ids].reject { |id| (id == "" || id == " ")}
@@ -68,9 +69,6 @@ ActiveAdmin.register Stock do
         end
         redirect_to admin_stock_path(@stock)
       end
-    end
-
-    def create_tag
     end
 
     private
@@ -134,7 +132,7 @@ ActiveAdmin.register Stock do
     f.inputs do
       f.input :title
       f.input :title_ar
-      f.input :category, as: :searchable_select
+      # f.input :category, as: :searchable_select
       f.input :sub_category, as: :searchable_select
 
       if f.object.image.url
