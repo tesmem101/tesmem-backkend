@@ -133,8 +133,15 @@ ActiveAdmin.register Stock do
       f.input :title
       f.input :title_ar
       # f.input :category, as: :searchable_select
-      f.input :sub_category, as: :searchable_select
-
+      div style: 'display: block ruby;' do
+        div do
+          f.input(:sub_category, as: :searchable_select, ajax: true)          
+        end
+        div do
+          render :partial => 'admin/bootstrap_modals/sub_category'
+        end
+      end
+     
       if f.object.image.url
         f.input :image, as: :file, hint: image_tag(f.object.image.url, width: '100px', height: '100px')
       else
@@ -154,9 +161,11 @@ ActiveAdmin.register Stock do
       end
       f.input :stocktype
       div style: 'display: block ruby;' do
-        f.input(:tags, as: :searchable_select, ajax: true)
         div do
-          render 'create_tag'
+          f.input(:tags, as: :searchable_select, ajax: true)  
+        end
+        div do
+          render :partial => 'admin/bootstrap_modals/tag'
         end
       end
       f.input :is_active

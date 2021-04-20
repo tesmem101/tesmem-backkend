@@ -1,8 +1,5 @@
 ActiveAdmin.register Tag do
-
-  searchable_select_options(scope: Tag.all,
-                               text_attribute: :name)
-
+  searchable_select_options(scope: Tag.all, text_attribute: :name)
   permit_params :name, :name_ar
   config.batch_actions = false
   filter :name

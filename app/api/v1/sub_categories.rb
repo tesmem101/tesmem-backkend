@@ -17,6 +17,7 @@ module V1
            ] }
       params do
         requires :title, type: String, desc: 'Title'
+        optional :title_ar, type: String, desc: 'Title ar'
         optional :description, type: String, desc: 'Description'
         requires :category_id, type: Integer, desc: 'Category Id'
       end

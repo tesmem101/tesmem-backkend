@@ -14,13 +14,31 @@ function creatTag() {
     });
 
     request.done(function(response) {
-        console.log(response)
-        // $('#title').val('');
-        // $('#title_ar').val('');
         $(".alert").show();
         setTimeout(function() {
             $(".alert").hide();
             $('#createTagModal').modal('toggle');
+          }, 1000);
+    })
+};
+
+function creatSubCategory() {
+    var title = $('#sub_category_title').val();
+    var title_ar = $('#sub_category_title_ar').val();
+    var description = $('#sub_category_description').val();
+    var category_id = $("#stock_category_id").val();
+    var request = $.ajax({
+        url: "/api/v1/subcategories/create",
+        type: "POST",
+        data: {category_id: category_id, title: title, title_ar: title_ar, description: description}
+        // data: {sub_category: {category_id: category_id, title: title, title_ar: title_ar, description: description}}
+    });
+
+    request.done(function(response) {
+        $(".alert").show();
+        setTimeout(function() {
+            $(".alert").hide();
+            $('#createSubCategoryModal').modal('toggle');
           }, 1000);
     })
 };
@@ -33,13 +51,40 @@ $(document).ready(function(){
     $('#createTagModal').on('hidden.bs.modal', function (e) {
         $(this).find("input,textarea,select").val('').end();
         $('#create_tag_btn').prop("disabled", true);
+        $('.modal-backdrop').remove();
       })
-    
+
     $('#title').on('input', function(e) {
         if (e.target.value) {
             $('#create_tag_btn').prop("disabled", false); // Element(s) are now enabled.
         } else {
             $('#create_tag_btn').prop("disabled", true); // Element(s) are now disabled.
+        }
+    });
+
+    $('#createSubCategoryModal').on('hidden.bs.modal', function (e) {
+        $(this).find("input,textarea,select").val('').end();
+        $("#stock_category_id").select2({
+            placeholder: "Select a Category",
+            allowClear: true
+        });
+        $('#create_sub_category_btn').prop("disabled", true);
+        $('.modal-backdrop').remove();
+    });
+
+    $('#sub_category_title').on('input', function(e) {
+        if (e.target.value && $("#stock_category_id").val()) {
+            $('#create_sub_category_btn').prop("disabled", false); // Element(s) are now enabled.
+        } else {
+            $('#create_sub_category_btn').prop("disabled", true); // Element(s) are now disabled.
+        }
+    });
+
+    $('select').on('change', function(e) {
+        if ($('#sub_category_title').val() && e.target.value) {
+            $('#create_sub_category_btn').prop("disabled", false); // Element(s) are now enabled.
+        } else {
+            $('#create_sub_category_btn').prop("disabled", true); // Element(s) are now disabled.
         }
     });
     
