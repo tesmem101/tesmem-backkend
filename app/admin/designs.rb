@@ -4,6 +4,9 @@ ActiveAdmin.register Design do
   
   actions :all, except: [:new]
 
+  filter :user, collection: -> {
+    User.all.map {|user| [user.email, user.id]}
+  }, as: :searchable_select
   filter :title
   filter :description
   filter :height

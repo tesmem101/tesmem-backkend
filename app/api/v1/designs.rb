@@ -122,8 +122,11 @@ module V1
              http_codes: [{ code: 200, message: "success" }] }
       # before { authenticate_user }
       get "/" do
-        design = authenticate_user.designs.where(is_trashed: 0)
-        serialization = serialize_collection(design, serializer: DesignSerializer)
+        user = authenticate_user
+        folder_ids = user.folders.map(&:id)
+        container_designs_ids = Container.where(folder_id: folder_ids, instance_type: 'Design').map(&:instance_id)
+        designs = user.designs.where(is_trashed: 0).where.not(id: container_designs_ids)
+        serialization = serialize_collection(designs, serializer: DesignSerializer)
         serialization = serialization.collect {|design| design.attributes.except(:styles, :user).merge(user_id: authenticate_user.id)}
         render_success(serialization.as_json)
       end
