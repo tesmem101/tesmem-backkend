@@ -17,7 +17,6 @@ function creatTag() {
         $(".alert").show();
         setTimeout(function() {
             $(".alert").hide();
-            $('#createTagModal').modal('toggle');
           }, 1000);
     })
 };
@@ -38,7 +37,6 @@ function creatSubCategory() {
         $(".alert").show();
         setTimeout(function() {
             $(".alert").hide();
-            $('#createSubCategoryModal').modal('toggle');
           }, 1000);
     })
 };
@@ -51,7 +49,6 @@ $(document).ready(function(){
     $('#createTagModal').on('hidden.bs.modal', function (e) {
         $(this).find("input,textarea,select").val('').end();
         $('#create_tag_btn').prop("disabled", true);
-        // $('.modal-backdrop').remove();
       })
 
     $('#title').on('input', function(e) {
@@ -69,7 +66,6 @@ $(document).ready(function(){
             allowClear: true
         });
         $('#create_sub_category_btn').prop("disabled", true);
-        $('.modal-backdrop').remove();
     });
 
     $('#sub_category_title').on('input', function(e) {

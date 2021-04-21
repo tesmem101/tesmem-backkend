@@ -27,7 +27,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 
 <!-- Button trigger modal -->
-<button type="button" class="create_tag" data-bs-toggle="modal" data-bs-target="#createTagModal"> CREATE TAG </button>
+<button type="button" class="create_tag"  data-bs-toggle="modal" data-bs-target="#createTagModal"> CREATE TAG </button>
 
 <!-- Modal -->
 <%# tabindex="-1" %>
@@ -49,7 +49,7 @@
       </div>
     
       <div class="modal-footer">
-        <button onclick="creatTag()" type="button" class="btn btn-primary" id="create_tag_btn" disabled >CREATE</button>
+        <button onclick="creatTag()" type="button" class="btn btn-primary" id="create_tag_btn" data-bs-dismiss="modal" disabled >CREATE</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
       </div>
     </div>
