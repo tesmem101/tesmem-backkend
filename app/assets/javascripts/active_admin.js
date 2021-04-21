@@ -51,7 +51,7 @@ $(document).ready(function(){
     $('#createTagModal').on('hidden.bs.modal', function (e) {
         $(this).find("input,textarea,select").val('').end();
         $('#create_tag_btn').prop("disabled", true);
-        $('.modal-backdrop').remove();
+        // $('.modal-backdrop').remove();
       })
 
     $('#title').on('input', function(e) {
