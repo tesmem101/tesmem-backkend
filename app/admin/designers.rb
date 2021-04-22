@@ -138,10 +138,26 @@ ActiveAdmin.register Designer, as: "Templates" do
     f.inputs do
       f.input :design, as: :searchable_select
       # f.input :category, as: :searchable_select
-      f.input :sub_category, as: :searchable_select
+      # f.input :sub_category, as: :searchable_select
+      div style: 'display: block ruby;' do
+        div do
+          f.input(:sub_category, as: :searchable_select, ajax: true)          
+        end
+        div do
+          render :partial => 'admin/bootstrap_modals/sub_category'
+        end
+      end
       f.input :approved
       f.input :private
-      f.input :tags, as: :searchable_select
+      # f.input :tags, as: :searchable_select
+      div style: 'display: block ruby;' do
+        div do
+          f.input(:tags, as: :searchable_select, ajax: true)  
+        end
+        div do
+          render :partial => 'admin/bootstrap_modals/tag'
+        end
+      end
       f.input :is_active
     end
     actions
