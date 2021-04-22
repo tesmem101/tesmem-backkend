@@ -78,7 +78,15 @@ ActiveAdmin.register SubCategory do
 
   form do |f|
     f.inputs do 
-      f.input :category, as: :searchable_select
+      # f.input :category, as: :searchable_select
+      div style: 'display: block ruby;' do
+        div do
+          f.input(:category, as: :searchable_select, ajax: true)          
+        end
+        div do
+          render :partial => 'admin/bootstrap_modals/category'
+        end
+      end
       f.input :title
       f.input :title_ar
       f.input :description
