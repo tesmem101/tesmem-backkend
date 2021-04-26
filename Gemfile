@@ -40,6 +40,7 @@ gem 'unsplash'
 gem 'nokogiri'
 gem 'listen'
 gem 'will_paginate', '~> 3.1.0'
+gem 'google-cloud-translate'
 
 gem 'bootstrap-sass', '~> 3.4.1'
 gem 'sassc-rails', '>= 2.1.0'

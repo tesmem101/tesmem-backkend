@@ -3,6 +3,7 @@ module V1
       include AuthenticateRequest
       include V1Base
       include FetchUnsplash
+      require "google/cloud/translate/v2"
       version "v1", using: :path
       resource :unsplash do
         desc 'Get all unsplash images',
@@ -16,6 +17,11 @@ module V1
           if params[:page].present? && params[:per_page].present?
             search = params['search'].present? ? params['search'].downcase : nil
             unsplash_images = []
+            if params[:is_arabic].present? && params[:is_arabic].eql?('true')
+              translate = Google::Cloud::Translate::V2.new(project_id: ENV['GOOGLE_PROJECT_ID'], credentials: ENV['GOOGLE_SERVICE_KEY_ACCOUNT'])  
+              translation = translate.translate search, from: "ar", to: "en"
+              search = translation.text
+            end
             unsplash_images.concat get_unsplash_images(search, params[:page], nil, params[:per_page], 'latest').map { |photo| map_unsplash_images(photo.table, 'regular') }
             records = get_unsplash_response(unsplash_images)
             render_success(records.as_json)

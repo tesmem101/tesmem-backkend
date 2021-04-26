@@ -11,10 +11,10 @@ class User < ApplicationRecord
   after_save :move_profile_photo_to_image_table
 
   has_many :user_tokens, dependent: :destroy
-  has_many :designs
-  has_many :folders
-  has_many :uploads
-  has_many :images, as: :image
+  has_many :folders, dependent: :destroy
+  has_many :designs, dependent: :destroy
+  has_many :uploads, dependent: :destroy
+  has_many :images, as: :image, dependent: :destroy
   has_many :formatted_texts, dependent: :destroy
 
   enum role: [:user, :admin, :super_admin, :designer, :lead_designer]
