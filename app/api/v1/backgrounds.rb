@@ -43,6 +43,11 @@ module V1
       get '/' do
         search = params['search'].present? ? params['search'].downcase : 'background'
         unsplash_images = []
+        if params[:is_arabic].present? && params[:is_arabic].eql?('true')
+          translate = Google::Cloud::Translate::V2.new(project_id: ENV['GOOGLE_PROJECT_ID'], credentials: (JSON.parse ENV['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS']))  
+          translation = translate.translate search, from: "ar", to: "en"
+          search = translation.text
+        end
         unsplash_images.concat get_unsplash_images(search, params[:page], nil, params[:per_page], 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'regular') }
         render_success(unsplash_images.as_json)
       end

@@ -18,7 +18,7 @@ module V1
             search = params['search'].present? ? params['search'].downcase : nil
             unsplash_images = []
             if params[:is_arabic].present? && params[:is_arabic].eql?('true')
-              translate = Google::Cloud::Translate::V2.new(project_id: ENV['GOOGLE_PROJECT_ID'], credentials: ENV['GOOGLE_SERVICE_KEY_ACCOUNT'])  
+              translate = Google::Cloud::Translate::V2.new(project_id: ENV['GOOGLE_PROJECT_ID'], credentials: (JSON.parse ENV['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS']))  
               translation = translate.translate search, from: "ar", to: "en"
               search = translation.text
             end
