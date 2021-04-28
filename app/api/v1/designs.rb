@@ -49,7 +49,6 @@ module V1
           insert_image(design)
           userId = params[:user_id]
           user = User.find(userId)
-          debugger
           if user.role == 'designer' || user.role == 'lead_designer'
             category = Category.where(title: TITLES[:design]).first_or_create
             sub_category = SubCategory.where(title: DESIGNERS[:subCategory]).first_or_create({category_id:category.id})
