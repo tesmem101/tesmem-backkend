@@ -136,7 +136,7 @@ ActiveAdmin.register Designer, as: "Templates" do
 
   form do |f|
     f.inputs do
-      f.input :design, as: :searchable_select
+      f.input :design,collection: Design.all.map {|design| ["#{design.title} (#{design.user.email})", design.id]}, as: :searchable_select
       # f.input :category, as: :searchable_select
       # f.input :sub_category, as: :searchable_select
       div style: 'display: block ruby;' do

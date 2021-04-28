@@ -1,7 +1,7 @@
 ActiveAdmin.register Design do
   menu priority: 4
   permit_params :title, :description, :styles, :user_id, :image, :height, :width, :is_trashed, :cat_id
-  
+  config.batch_actions = false
   actions :all, except: [:new]
 
   filter :user, collection: -> {
@@ -13,10 +13,24 @@ ActiveAdmin.register Design do
   filter :width
   filter :is_trashed, as: :select, collection: [0, 1], include_blank: false
 
+  scope :all
+
+  scope :designer_designs do
+    Design.joins(:user).where("users.role = 3")
+  end
+
+  scope :lead_designer_designs do
+    Design.joins(:user).where("users.role = 4")
+  end
+
   controller do
     include ActionView::Helpers::TextHelper
     include ActiveAdmin::SaveImage # if methods needed inside controller
-    
+
+    def scoped_collection
+      Design.joins(:user).where("users.role in (3,4)") # 3 is the value of designer and 4 is the value of lead_designer
+    end
+
     def update
       @design = Design.find(params[:id])
       if @design.update!(design_params)
