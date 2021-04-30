@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210405090834) do
+ActiveRecord::Schema.define(version: 20210429095555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,17 @@ ActiveRecord::Schema.define(version: 20210405090834) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "sort_sub_categories", force: :cascade do |t|
+    t.bigint "category_id"
+    t.bigint "sub_category_id"
+    t.string "sub_category_title"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_sort_sub_categories_on_category_id"
+    t.index ["sub_category_id"], name: "index_sort_sub_categories_on_sub_category_id"
   end
 
   create_table "stock_tags", force: :cascade do |t|
@@ -215,6 +226,8 @@ ActiveRecord::Schema.define(version: 20210405090834) do
 
   add_foreign_key "folders", "users"
   add_foreign_key "formatted_texts", "users"
+  add_foreign_key "sort_sub_categories", "categories"
+  add_foreign_key "sort_sub_categories", "sub_categories"
   add_foreign_key "stock_tags", "stocks"
   add_foreign_key "stock_tags", "tags"
   add_foreign_key "template_tags", "designers"

@@ -28,20 +28,40 @@ module V1
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
 
         if cat_id && search
-          templates_ids = Category.find(cat_id).sub_categories.joins(:designers).joins("inner join designs on designs.id = designers.design_id").joins("left join template_tags on template_tags.designer_id = designers.id").joins("left join tags on template_tags.tag_id = tags.id").where.not("designers.is_active = ? ", false).where("lower(designs.title) LIKE ? or lower(tags.name) LIKE ? or lower(tags.name_ar) LIKE ? ", "%#{search}%", "%#{search}%", "%#{search}%").select("designs.id")
+          templates_ids = Category.find(cat_id)
+          .sub_categories
+          .joins(:designers)
+          .joins("inner join designs on designs.id = designers.design_id")
+          .joins("left join template_tags on template_tags.designer_id = designers.id")
+          .joins("left join tags on template_tags.tag_id = tags.id")
+          .where.not("designers.is_active = ? ", false)
+          .where("lower(designs.title) LIKE ? or lower(tags.name) LIKE ? or lower(tags.name_ar) LIKE ? ", "%#{search}%", "%#{search}%", "%#{search}%")
+          .select("designs.id")
+          .paginate(page: params[:page], per_page: params[:per_page])
           templates = Design.where(id: templates_ids).collect{ |design| make_design_object(design) }
         elsif cat_id
-          templates = Category.find(cat_id).sub_categories.search_keyword(locale, search).joins(:designers).select("distinct sub_categories.*").all.map { |sub_c| get_template(sub_c) } # Previous One 
+          templates = SubCategory.select('subquery.*').from(
+            Category.find(cat_id)
+            .sub_categories
+            .search_keyword(locale, search)
+            .joins(:designers)
+            .select("distinct sub_categories.*")
+          ) 
+          .joins( "INNER JOIN sort_sub_categories ON sort_sub_categories.sub_category_id = subquery.id" )
+          .order("sort_sub_categories.position")
+          .paginate(page: params[:page], per_page: params[:per_page])
+          .all.map { |sub_c| get_template(sub_c) } # Previous One 
         else
           templates = all_categories.includes(:sub_categories).all
             .map { |cat| 
-                cat.sub_categories.search_keyword(locale, search)
+                cat.sub_categories
+                .search_keyword(locale, search)
                 .joins(:designers)
                 .select("distinct sub_categories.*")
                 .all.map { |sub_c| get_template(sub_c, false) }
             }.flatten
         end
-        render_success(templates.paginate(page: params[:page], per_page: params[:per_page]).as_json)
+        render_success(templates.as_json)
       end
 
       # desc 'Get Templates  of subcategory',
