@@ -17,7 +17,7 @@ module V1
         requires :page, type: String, :desc => 'Page Number'
         requires :per_page, type: String, :desc => 'Number of elements on each page'
       end
-      get '/' do
+      get '/' do # This api only works when you will assign Positions to SubCategories using the api --> /api/v1/subcategories/assign_position"
         if params['locale'].present?
           if params['locale'] != "ar"
             render_error(RESPONSE_CODE[:not_found], I18n.t("errors.locale.not_found"))
