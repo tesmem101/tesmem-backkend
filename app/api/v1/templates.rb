@@ -52,14 +52,16 @@ module V1
           .paginate(page: params[:page], per_page: params[:per_page])
           .all.map { |sub_c| get_template(sub_c) } # Previous One 
         else
-          templates = all_categories.includes(:sub_categories).all
-            .map { |cat| 
-                cat.sub_categories
-                .search_keyword(locale, search)
-                .joins(:designers)
-                .select("distinct sub_categories.*")
-                .all.map { |sub_c| get_template(sub_c, false) }
-            }.flatten
+          templates = SubCategory.select('subquery.*').from(
+            all_categories
+            .joins(:sub_categories)
+            .joins("inner join designers on sub_categories.id = designers.sub_category_id ")
+            .where("designers.approved = 'true' and designers.is_active = 'true'")
+            .select("distinct sub_categories.*")
+          )
+          .paginate(page: params[:page], per_page: params[:per_page])
+          .all.map { |sub_c| get_template(sub_c, false) }
+
         end
         render_success(templates.as_json)
       end
