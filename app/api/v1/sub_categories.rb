@@ -81,6 +81,22 @@ module V1
         SubCategory.find(params[:id]).destroy
         render_success('SubCategory Deleted Successfully'.as_json)
       end
+
+      desc 'Assign position to SubCategorie for sorting',
+      { consumes: ['application/x-www-form-urlencoded'],
+        http_codes: [{ code: 200, message: 'success' }] }
+
+      post '/assign_position' do
+        SortSubCategory.destroy_all # First destroy all the previous data
+        position = 0
+        Category.all.each do |category| # Now assign positions
+          category.sub_categories.each_with_index do |sub_category, index|
+            SortSubCategory.create(category_id: category.id, sub_category_id: sub_category.id, sub_category_title: sub_category.title, position: index)
+          end
+        end
+        render_success('Positions are assigned to SubCategories'.as_json)
+      end
+
     end
   end
 end

@@ -27,9 +27,9 @@ ActiveAdmin.register Design do
     include ActionView::Helpers::TextHelper
     include ActiveAdmin::SaveImage # if methods needed inside controller
 
-    def scoped_collection
-      Design.joins(:user).where("users.role in (3,4)") # 3 is the value of designer and 4 is the value of lead_designer
-    end
+    # def scoped_collection
+    #   Design.joins(:user).where("users.role in (3,4)") # 3 is the value of designer and 4 is the value of lead_designer
+    # end
 
     def update
       @design = Design.find(params[:id])

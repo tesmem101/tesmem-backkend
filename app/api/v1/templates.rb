@@ -17,7 +17,7 @@ module V1
         requires :page, type: String, :desc => 'Page Number'
         requires :per_page, type: String, :desc => 'Number of elements on each page'
       end
-      get '/' do
+      get '/' do # This api only works when you will assign Positions to SubCategories using the api --> /api/v1/subcategories/assign_position"
         if params['locale'].present?
           if params['locale'] != "ar"
             render_error(RESPONSE_CODE[:not_found], I18n.t("errors.locale.not_found"))
@@ -28,20 +28,42 @@ module V1
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
 
         if cat_id && search
-          templates_ids = Category.find(cat_id).sub_categories.joins(:designers).joins("inner join designs on designs.id = designers.design_id").joins("left join template_tags on template_tags.designer_id = designers.id").joins("left join tags on template_tags.tag_id = tags.id").where.not("designers.is_active = ? ", false).where("lower(designs.title) LIKE ? or lower(tags.name) LIKE ? or lower(tags.name_ar) LIKE ? ", "%#{search}%", "%#{search}%", "%#{search}%").select("designs.id")
+          templates_ids = Category.find(cat_id)
+          .sub_categories
+          .joins(:designers)
+          .joins("inner join designs on designs.id = designers.design_id")
+          .joins("left join template_tags on template_tags.designer_id = designers.id")
+          .joins("left join tags on template_tags.tag_id = tags.id")
+          .where.not("designers.is_active = ? ", false)
+          .where("lower(designs.title) LIKE ? or lower(tags.name) LIKE ? or lower(tags.name_ar) LIKE ? ", "%#{search}%", "%#{search}%", "%#{search}%")
+          .select("designs.id")
+          .paginate(page: params[:page], per_page: params[:per_page])
           templates = Design.where(id: templates_ids).collect{ |design| make_design_object(design) }
         elsif cat_id
-          templates = Category.find(cat_id).sub_categories.search_keyword(locale, search).joins(:designers).select("distinct sub_categories.*").all.map { |sub_c| get_template(sub_c) } # Previous One 
+          templates = SubCategory.select('subquery.*').from(
+            Category.find(cat_id)
+            .sub_categories
+            .search_keyword(locale, search)
+            .joins(:designers)
+            .select("distinct sub_categories.*")
+          ) 
+          .joins( "INNER JOIN sort_sub_categories ON sort_sub_categories.sub_category_id = subquery.id" )
+          .order("sort_sub_categories.position")
+          .paginate(page: params[:page], per_page: params[:per_page])
+          .all.map { |sub_c| get_template(sub_c) } # Previous One 
         else
-          templates = all_categories.includes(:sub_categories).all
-            .map { |cat| 
-                cat.sub_categories.search_keyword(locale, search)
-                .joins(:designers)
-                .select("distinct sub_categories.*")
-                .all.map { |sub_c| get_template(sub_c, false) }
-            }.flatten
+          templates = SubCategory.select('subquery.*').from(
+            all_categories
+            .joins(:sub_categories)
+            .joins("inner join designers on sub_categories.id = designers.sub_category_id ")
+            .where("designers.approved = 'true' and designers.is_active = 'true'")
+            .select("distinct sub_categories.*")
+          )
+          .paginate(page: params[:page], per_page: params[:per_page])
+          .all.map { |sub_c| get_template(sub_c, false) }
+
         end
-        render_success(templates.paginate(page: params[:page], per_page: params[:per_page]).as_json)
+        render_success(templates.as_json)
       end
 
       # desc 'Get Templates  of subcategory',

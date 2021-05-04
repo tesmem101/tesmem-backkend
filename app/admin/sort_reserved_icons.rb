@@ -3,6 +3,7 @@ ActiveAdmin.register SortReservedIcon do
   sortable tree: false, sorting_attribute: :position
   actions :all, except: [:new, :create, :edit, :update, :show, :destroy]
   config.batch_actions = false
+  menu false
 
   filter :title
 

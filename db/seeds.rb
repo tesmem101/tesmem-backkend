@@ -8,14 +8,15 @@
 
 puts "Creating First User"
 User.find_or_create_by(email: "super.admin@tesmem.com", role: "super_admin") do |user|
-    user.password = "live@tesmem1"
+    user.password = "3XTh&qd&"
 end
-# Sort sub_categories of RESERVED_ICONS 
-Category.find_by(
-    title: 'RESERVED_ICONS'
-).sub_categories.collect{|sub_category| 
-    SortReservedIcon.find_or_create_by(
-        sub_category_id: sub_category.id, 
-        title: sub_category.title
-        )
-    }
+
+# # Sort sub_categories of RESERVED_ICONS 
+# Category.find_by(
+#     title: 'RESERVED_ICONS'
+# ).sub_categories.collect{|sub_category| 
+#     SortReservedIcon.find_or_create_by(
+#         sub_category_id: sub_category.id,
+#         title: sub_category.title
+#         )
+#     }
