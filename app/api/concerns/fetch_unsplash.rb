@@ -31,23 +31,23 @@ module FetchUnsplash
         return {
           id: photo.id, 
           title: photo.description, 
-          # url: photo.urls[size],
-          # thumb: photo.urls.thumb
-          image: {
-            url:photo.urls[size],
-            height: photo.height, 
-            width: photo.width,
-            thumb: photo.urls.thumb
-          },
-          artist: {
-            name: "By #{photo.user.name}",
-            url: photo.user.links.html
-          },
-          source: {
-            name: 'Photo via Unsplash',
-            url: photo.links.html,
-            download_Url: photo.links.download_location
-          }
+          url: photo.urls[size],
+          thumb: photo.urls.thumb
+          # image: {
+          #   url:photo.urls[size],
+          #   height: photo.height, 
+          #   width: photo.width,
+          #   thumb: photo.urls.thumb
+          # },
+          # artist: {
+          #   name: "By #{photo.user.name}",
+          #   url: photo.user.links.html
+          # },
+          # source: {
+          #   name: 'Photo via Unsplash',
+          #   url: photo.links.html,
+          #   download_Url: photo.links.download_location
+          # }
         }
     end
       def get_unsplash_response(unsplash_images)
