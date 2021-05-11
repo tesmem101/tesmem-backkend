@@ -26,6 +26,7 @@ module V1
         user = User.new(params)
         if user.save
           user.login!
+          user.visits.create!(login_type: 'regular')
           serialization = UserSerializer.new(user)
           render_success(serialization.as_json)
         else
@@ -57,6 +58,7 @@ module V1
           render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
         else
           user.login!
+          user.visits.create!(login_type: 'regular', remote_ip: request.ip.present? ? request.ip : nil)
           serialization = UserSerializer.new(user)
           render_success(serialization.as_json)
         end
@@ -115,6 +117,7 @@ module V1
           render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
         else
           user.login!
+          user.visits.create!(login_type: 'google', remote_ip: request.ip.present? ? request.ip : nil)
           serialization = UserSerializer.new(user)
           render_success(serialization.as_json)
         end
@@ -146,6 +149,7 @@ module V1
           render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
         else
           user.login!
+          user.visits.create!(login_type: 'facebook', remote_ip: request.ip.present? ? request.ip : nil)
           serialization = UserSerializer.new(user)
           render_success(serialization.as_json)
         end
