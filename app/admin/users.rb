@@ -17,6 +17,7 @@ ActiveAdmin.register User do
     column :id
     column :first_name
     column :last_name
+    column :location
     column :email
     column :role
     column 'Profile Photo' do |user|
@@ -31,6 +32,7 @@ ActiveAdmin.register User do
       row :id
       row :first_name
       row :last_name
+      row :location
       row :email
       row :role
       row 'Profile Photo' do |user|

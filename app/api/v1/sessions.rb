@@ -20,6 +20,7 @@ module V1
         requires :password_confirmation, type: String, desc: 'Password confirmation'
         requires :first_name, type: String, desc: 'user first name'
         optional :last_name, type: String, desc: 'user last name'
+        optional :location, type: String, desc: 'Location'
       end
 
       post :sign_up do
@@ -97,6 +98,7 @@ module V1
         requires :google_id, type: String, desc: 'Google Id'
         requires :first_name, type: String, desc: 'user first name'
         optional :last_name, type: String, desc: 'user last name'
+        optional :location, type: String, desc: 'Location'
       end
 
       post :google_sign_in do
@@ -130,6 +132,7 @@ module V1
       params do
         requires :email, type: String, desc: 'User email'
         requires :fb_id, type: String, desc: 'Facebook Id'
+        optional :location, type: String, desc: 'Location'
       end
 
       post :facebook_sign_in do

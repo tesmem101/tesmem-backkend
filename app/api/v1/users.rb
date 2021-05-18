@@ -19,6 +19,9 @@ module V1
       params do
         requires :id, type: String, desc: 'user id'
         optional :profile, type: File, desc: 'Profile photo'
+        optional :first_name, type: String, desc: 'First name'
+        optional :last_name, type: String, desc: 'Last name'
+        optional :location, type: String, desc: 'Location'
       end
       put '/:id' do
         if authenticate_user.email != User.find(params[:id]).email
