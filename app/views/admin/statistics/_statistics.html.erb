@@ -1,0 +1,25 @@
+<div class="panel_contents">
+  <h3><label> <strong>User</strong></label></h3>
+  <form class="filter_form" id="new_q" action="/admin/statistics" autocomplete="on" accept-charset="UTF-8" method="GET">
+    <div class="searchable_select input optional filter_form_field filter_searchable_select" id="q_user_input">
+        <select name="user_id" id="user_id" class="searchable-select-input select2-hidden-accessible">
+
+            <% if !selected_user %>
+                <option value="" selected>Any</option>
+            <% else %>
+                <option value="">Any</option>
+            <% end %>
+
+            <% User.all.each do |user| %>
+                <% if selected_user.eql?("#{user.id}") %>
+                    <option value=<%= user.id %> selected > <%= user.email %> </option>
+                <% else %>
+                    <option value=<%= user.id %> > <%= user.email %> </option>
+                <% end %>   
+            <% end %>
+
+        </select>
+    </div><br>
+    <input type="submit" value="Apply Filter">
+  </form>
+</div>
