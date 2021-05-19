@@ -73,6 +73,31 @@ module V1
         end
       end
 
+      desc 'Delete Account',
+      { consumes: [ 'application/x-www-form-urlencoded' ],
+        http_codes: [
+          { code: 200, message: 'success' },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
+      ]}
+
+      params do
+        requires :reason, type: String, desc: 'Reason for account deletion'
+      end
+
+      delete :delete_account do
+        user = authenticate_user
+        if user
+          email = user.email
+          user.destroy
+          DeletedAccount.create!(user_email: email, reason: params[:reason])
+          render_success(nil, 'Accunt is deleted now')
+        else
+          render_error(nil, 'User not found!')
+        end
+      end
+
       desc 'Update a User',
         { consumes: [ 'application/x-www-form-urlencoded' ],
           http_codes: [

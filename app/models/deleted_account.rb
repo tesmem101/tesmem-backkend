@@ -1,0 +1,2 @@
+class DeletedAccount < ApplicationRecord
+end

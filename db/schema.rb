@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210518130753) do
+ActiveRecord::Schema.define(version: 20210519111000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,13 @@ ActiveRecord::Schema.define(version: 20210518130753) do
     t.index ["folder_id"], name: "index_containers_on_folder_id"
     t.index ["instance_id"], name: "index_containers_on_instance_id"
     t.index ["instance_type"], name: "index_containers_on_instance_type"
+  end
+
+  create_table "deleted_accounts", force: :cascade do |t|
+    t.string "user_email"
+    t.string "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "designers", force: :cascade do |t|
