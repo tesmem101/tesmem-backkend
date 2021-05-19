@@ -54,6 +54,25 @@ module V1
         end
       end
 
+      desc 'Sign Out From All Devices',
+      { consumes: [ 'application/x-www-form-urlencoded' ],
+        http_codes: [
+          { code: 200, message: 'success' },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
+      ]}
+      before { authenticate_user }
+      delete '/:id/sign_out_from_devices' do
+        user = User.find(params[:id])
+        if user
+          user.user_tokens.destroy_all
+          render_success(nil, 'All Sessions are expired now')
+        else
+          render_error(nil, 'User not found!')
+        end
+      end
+
       desc 'Update a User',
         { consumes: [ 'application/x-www-form-urlencoded' ],
           http_codes: [
