@@ -29,6 +29,31 @@ module V1
         end
       end
 
+      desc 'Change Password',
+      { consumes: [ 'application/x-www-form-urlencoded' ],
+        http_codes: [
+          { code: 200, message: 'success' },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
+      ]}
+      params do
+        requires :old_password, type: String, desc: 'Old Password'
+        requires :password, type: String, desc: 'New Password'
+        requires :password_confirmation, type: String, desc: 'New Confirm Password'
+      end
+      put :change_password do
+        user = authenticate_user
+        if user.valid_password?(params[:old_password])
+          user.password = params[:password]
+          user.password_confirmation = params[:password_confirmation]
+          user.save!
+          render_success(nil, 'Password Changed')
+        else
+          render_error(nil, 'Sorry! Password does not change because your Old Passsword was not correct')
+        end
+      end
+
       desc 'Update a User',
         { consumes: [ 'application/x-www-form-urlencoded' ],
           http_codes: [
