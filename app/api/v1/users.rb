@@ -8,6 +8,27 @@ module V1
 
     resource :users do
 
+
+      desc 'Verify Email',
+      { consumes: [ 'application/x-www-form-urlencoded' ],
+        http_codes: [
+          { code: 200, message: 'success' },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
+      ]}
+      post :verify_email do
+        user = authenticate_user
+        if user
+          unless user.confirmed_at
+            user.resend_confirmation_instructions
+            render_success(nil, "An email verification link has been sent to your email. Please check your email and complete the sign up process.")
+          else
+            render_error(nil, 'Email is already confirmed.')
+          end
+        end
+      end
+
       desc 'Update a User',
         { consumes: [ 'application/x-www-form-urlencoded' ],
           http_codes: [
