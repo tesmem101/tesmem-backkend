@@ -17,6 +17,7 @@ module V1
           { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
           { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
       ]}
+
       post :verify_email do
         user = authenticate_user
         if user
@@ -42,6 +43,7 @@ module V1
         requires :password, type: String, desc: 'New Password'
         requires :password_confirmation, type: String, desc: 'New Confirm Password'
       end
+
       put :change_password do
         user = authenticate_user
         if user.valid_password?(params[:old_password])
@@ -89,10 +91,14 @@ module V1
       delete :delete_account do
         user = authenticate_user
         if user
-          email = user.email
-          user.destroy
-          DeletedAccount.create!(user_email: email, reason: params[:reason])
-          render_success(nil, 'Accunt is deleted now')
+          if !(['admin', 'super_admin', 'designer', 'lead_designer'].include?(user.role))
+            email = user.email
+            user.destroy
+            DeletedAccount.create!(user_email: email, reason: params[:reason])
+            render_success(nil, 'Accunt is deleted now')
+          else
+            render_error(nil, 'You cannot delete the account!')
+          end
         else
           render_error(nil, 'User not found!')
         end
@@ -135,12 +141,13 @@ module V1
             { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
             { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
         ]}
-      before { authenticate_admin }
+      # before { authenticate_admin }
       params do
         requires :email, type: String, desc: 'Email'
         requires :role, type: String, desc: 'Role'
       end
       put '/update/role/:id' do
+        authenticate_admin
         user = User.where(id: params[:id], email: params[:email])
         if(user.length() > 0)
           if user.first.update(role: params[:role])
