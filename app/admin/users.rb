@@ -48,9 +48,13 @@ ActiveAdmin.register User do
       f.input :last_name
       f.input :email
 
-      if f.object.new_record?
+      if current_user.role.eql?('super_admin')
         f.input :password
+      else
+        f.input :password if f.object.new_record?
       end
+
+
 
       if f.object.new_record?
         if current_user.role.eql?('super_admin')

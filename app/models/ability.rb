@@ -14,7 +14,7 @@ class Ability
     #   cannot [:new, :create, :update, :destroy], User 
     elsif user.role == 'lead_designer'
       can :manage, :all
-      cannot :manage, [User, Category, SubCategory, Container, Design, Folder, FormattedText, Image, SortReservedIcon, Upload, Stock, Tag] 
+      cannot :manage, [User, Container, Design, Folder, FormattedText, Image, SortReservedIcon, Upload] 
     else
       can :read, :all
       cannot [:new, :create, :update, :destroy], :all
