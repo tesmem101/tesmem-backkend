@@ -14,10 +14,11 @@ module V1
                ] 
             }
             params do
-                requires :file, type: File, desc: 'Font File'
+                requires :file, type: String, desc: 'Custom Font File'
+                requires :name, type: String, desc: 'Custom Font File Name'
             end
             post do
-                custom_font = authenticate_user.custom_fonts.create!(name: params[:file][:filename], file: params[:file])
+                custom_font = authenticate_user.custom_fonts.create!(name: params[:name], file: params[:file])
                 if custom_font
                     render_success(CustomFontSerializer.new(custom_font), 'Custom Font Created/Uploaded')
                 else

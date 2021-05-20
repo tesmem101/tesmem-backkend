@@ -50,6 +50,9 @@ gem "active_material", github: "vigetlabs/active_material"
 gem "active_admin-sortable_tree", "~> 2.0.0"
 gem 'activeadmin-searchable_select'
 
+gem "rest-client"
+gem 'carrierwave-base64'
+
 
 gem 'rack-mini-profiler'#, require: false
 # # For memory profiling
@@ -68,7 +71,6 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'solargraph'
-  gem "rest-client"
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
