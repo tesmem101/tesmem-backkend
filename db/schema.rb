@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210519111000) do
+ActiveRecord::Schema.define(version: 20210520063900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,15 @@ ActiveRecord::Schema.define(version: 20210519111000) do
     t.index ["folder_id"], name: "index_containers_on_folder_id"
     t.index ["instance_id"], name: "index_containers_on_instance_id"
     t.index ["instance_type"], name: "index_containers_on_instance_type"
+  end
+
+  create_table "custom_fonts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name"
+    t.string "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_custom_fonts_on_user_id"
   end
 
   create_table "deleted_accounts", force: :cascade do |t|
@@ -241,6 +250,7 @@ ActiveRecord::Schema.define(version: 20210519111000) do
     t.index ["user_id"], name: "index_visits_on_user_id"
   end
 
+  add_foreign_key "custom_fonts", "users"
   add_foreign_key "folders", "users"
   add_foreign_key "formatted_texts", "users"
   add_foreign_key "sort_sub_categories", "categories"
