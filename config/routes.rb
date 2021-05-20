@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   end
   # mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount ApplicationApi, at: '/'
+  get 'parse_url', to: 'home#parse_url'
 end
