@@ -24,6 +24,21 @@ module V1
                     render_error(nil, 'Something Went Wrong :( ')
                 end
             end
+
+            desc 'Get All Custom Fonts of Current User',
+            { consumes: ['application/x-www-form-urlencoded'],
+                http_codes: [
+                 { code: 200, message: 'success' },
+                 { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+                 { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+                 { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+               ] 
+            }
+            get do
+                custom_fonts = serialize_collection(authenticate_user.custom_fonts, serializer: CustomFontSerializer)
+                render_success(custom_fonts, 'All Custom Fonts of Current User')
+            end
+
         end
     end
 end
