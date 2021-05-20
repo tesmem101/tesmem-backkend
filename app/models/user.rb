@@ -17,6 +17,8 @@ class User < ApplicationRecord
   has_many :images, as: :image, dependent: :destroy
   has_many :formatted_texts, dependent: :destroy
 
+  has_many :custom_fonts, dependent: :destroy
+  
   enum role: [:user, :admin, :super_admin, :designer, :lead_designer]
   enum identity_provider: [:app, :google, :facebook]
 
