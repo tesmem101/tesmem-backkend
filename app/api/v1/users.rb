@@ -8,6 +8,41 @@ module V1
 
     resource :users do
 
+      desc 'Check Username',
+      { consumes: [ 'application/x-www-form-urlencoded' ],
+        http_codes: [
+          { code: 200, message: 'success' },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
+      ]}
+      get :check_username do
+        username = params[:username]
+        user = User.find_by_username(username)
+        if user.present?
+          render_success({is_available: false})
+        else
+          render_success({is_available: true})
+        end
+      end
+
+      desc 'Check Email',
+      { consumes: [ 'application/x-www-form-urlencoded' ],
+        http_codes: [
+          { code: 200, message: 'success' },
+          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
+      ]}
+      get :check_email do
+        email = params[:email]
+        user_email = User.find_by_email(email)
+        if user_email.present?
+          render_success({is_available: false})
+        else
+          render_success({is_available: true})
+        end
+      end
 
       desc 'Verify Email',
       { consumes: [ 'application/x-www-form-urlencoded' ],
