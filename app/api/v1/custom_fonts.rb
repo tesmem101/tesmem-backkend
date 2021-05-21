@@ -40,6 +40,20 @@ module V1
                 render_success(custom_fonts, 'All Custom Fonts of Current User')
             end
 
+            desc 'Delete Custom Font of Current User',
+            { consumes: ['application/x-www-form-urlencoded'],
+                http_codes: [
+                 { code: 200, message: 'success' },
+                 { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
+                 { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
+                 { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') },
+               ] 
+            }
+            delete '/:id' do
+                authenticate_user.custom_fonts.find(params[:id]).destroy
+                render_success(nil, 'Custom Font Deleted')
+            end
+
         end
     end
 end
