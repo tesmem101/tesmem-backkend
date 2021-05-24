@@ -119,7 +119,6 @@ module V1
       desc "Get Designs",
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
-      # before { authenticate_user }
       get "/" do
         user = authenticate_user
         folder_ids = user.folders.map(&:id)
@@ -133,7 +132,6 @@ module V1
       desc "Show design",
            { consumes: ["application/x-www-form-urlencoded"],
              http_codes: [{ code: 200, message: "success" }] }
-      before { authenticate_user }
       get "/:id" do
         user = authenticate_user
 
