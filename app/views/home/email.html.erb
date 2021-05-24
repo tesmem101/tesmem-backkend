@@ -10,23 +10,33 @@
             font-family: 'Neo Sans Arabic';
             src: url('/assets/NeoSansArabic.ttf');
         }
+
+        @font-face {
+            font-family: 'Neo Sans Std Regular';
+            src: url('/assets/NeoSansStdRegular.otf');
+        }
+
+        
     </style>
 </head>
 <body style="background-color: #CACACA;font-size: 1rem; display: flex;align-items: center;min-height: 100vh;">
     <center style="width: 35rem; margin:  0 auto;">
-        <img src="/assets/email_logo.png" style="height: 2rem; margin-bottom: 5rem;"/>
+        <%= image_tag attachments.inline['logo.png'].url, style: "width: 130px;" %>
+        <%# <img src="/assets/email_logo.png" style="height: 2rem; margin-bottom: 5rem;"/> %>
         <div style="text-align: right;padding:0 2rem ;font-family:Neo Sans Arabic">
-            <p style="margin-bottom: 1.5rem;">tesmem كلمة مرور حسابك على</p>
-            <p style="margin-bottom: 1.5rem;"> نلاحظ أنك لست قادراً على إنشاء تصميمات رائعة. لا تقلق، نهتم بذلك</p>
-            <p style="margin-bottom: 1.5rem;">tesmem يرجى النقر على الزر لمتابعة استخدام حساب </p>
+            <p style="margin-bottom: 1.5rem;">لقد أوشكت على الإنتهاء!</p>
+            <p style="margin-bottom: 1.5rem;"> يرجى تأكيد عنوان بريدك الإلكتروني من خلال النقر على الرابط أدناه</p>
+            <p style="margin-bottom: 1.5rem;">نحن نُقدِّر انضمامك الينا </p>
         </div>
-        <div style="margin-top: 2.5rem; background-color: #D0DCE2; padding: 2rem 3rem;text-align: left;">
-            <p>Your tesmem password</p>
-            <p>We see that you are unable to create beautiful designs. Worry not, We have got you covered</p>
-            <p>Please click on the button to continue using the tesmem account</p>
+        
+        <div style="margin-top: 2.5rem; background-color: #D0DCE2; padding: 2rem 3rem;text-align: left;font-family:Neo Sans Std Regular">
+            <p>You’re almost done!</p>
+            <p>Please confirm your email address by clicking the link below</p>
+            <p>We appreciate you joining us.</p>
         </div>
         <button style="width: 100%;height:2.6rem;margin-top: 1rem;color: #fff;border:none; background: linear-gradient(104.08deg, #5A4CCE 13.11%, #2B7EFB 123.2%);">
-            Change password</button>
+            <%= link_to 'Link', confirmation_url(@resource, confirmation_token: @token), :style=>"color: #fff;text-decoration:none;" %> </button>
+            
             <div style="width:25%; margin:4rem auto;display: flex;align-items: center;justify-content: space-around;">
                   <img src="/assets/facebook.svg"/>
                   <img src="/assets/insta.svg"/>
