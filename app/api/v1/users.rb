@@ -8,16 +8,29 @@ module V1
 
     resource :users do
 
+      desc 'Check Username'
+      get :check_username do
+        username = params[:username]
+        user = User.find_by_username(username)
+        if user.present?
+          render_success({is_available: false})
+        else
+          render_success({is_available: true})
+        end
+      end
 
-      desc 'Verify Email',
-      { consumes: [ 'application/x-www-form-urlencoded' ],
-        http_codes: [
-          { code: 200, message: 'success' },
-          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
-          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
-          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
-      ]}
+      desc 'Check Email'
+      get :check_email do
+        email = params[:email]
+        user_email = User.find_by_email(email)
+        if user_email.present?
+          render_success({is_available: false})
+        else
+          render_success({is_available: true})
+        end
+      end
 
+      desc 'Verify Email'
       post :verify_email do
         user = authenticate_user
         if user
@@ -30,14 +43,7 @@ module V1
         end
       end
 
-      desc 'Change Password',
-      { consumes: [ 'application/x-www-form-urlencoded' ],
-        http_codes: [
-          { code: 200, message: 'success' },
-          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
-          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
-          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
-      ]}
+      desc 'Change Password'
       params do
         requires :old_password, type: String, desc: 'Old Password'
         requires :password, type: String, desc: 'New Password'
@@ -47,23 +53,20 @@ module V1
       put :change_password do
         user = authenticate_user
         if user.valid_password?(params[:old_password])
-          user.password = params[:password]
-          user.password_confirmation = params[:password_confirmation]
-          user.save!
-          render_success(nil, 'Password Changed')
+          unless params[:password] == params[:old_password]
+            user.password = params[:password]
+            user.password_confirmation = params[:password_confirmation]
+            user.save!
+            render_success(nil, 'Password Changed')
+          else
+            render_error(nil, 'Hey! You Cannot set old password as a new password')
+          end
         else
           render_error(nil, 'Sorry! Password does not change because your Old Passsword was not correct')
         end
       end
 
-      desc 'Sign Out From All Devices',
-      { consumes: [ 'application/x-www-form-urlencoded' ],
-        http_codes: [
-          { code: 200, message: 'success' },
-          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
-          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
-          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
-      ]}
+      desc 'Sign Out From All Devices'
       before { authenticate_user }
       delete '/:id/sign_out_from_devices' do
         user = User.find(params[:id])
@@ -75,15 +78,7 @@ module V1
         end
       end
 
-      desc 'Delete Account',
-      { consumes: [ 'application/x-www-form-urlencoded' ],
-        http_codes: [
-          { code: 200, message: 'success' },
-          { code: RESPONSE_CODE[:forbidden], message: I18n.t('errors.forbidden') },
-          { code: RESPONSE_CODE[:unprocessable_entity], message: 'Validation error messages' },
-          { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
-      ]}
-
+      desc 'Delete Account'
       params do
         requires :reason, type: String, desc: 'Reason for account deletion'
       end

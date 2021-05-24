@@ -1,6 +1,6 @@
 ActiveAdmin.register User do
   menu priority: 1 # so it's on the very left
-  permit_params :first_name, :last_name, :email, :role, :profile, :is_deleted, :password
+  permit_params :first_name, :last_name, :email, :username, :role, :profile, :is_deleted, :password
   config.batch_actions = false
   filter :first_name
   filter :last_name
@@ -17,6 +17,7 @@ ActiveAdmin.register User do
     column :id
     column :first_name
     column :last_name
+    column :username
     column :location
     column :email
     column :role
@@ -32,6 +33,7 @@ ActiveAdmin.register User do
       row :id
       row :first_name
       row :last_name
+      row :username
       row :location
       row :email
       row :role
@@ -46,6 +48,7 @@ ActiveAdmin.register User do
     f.inputs do
       f.input :first_name
       f.input :last_name
+      f.input :username
       f.input :email
 
       if current_user.role.eql?('super_admin')
@@ -53,8 +56,6 @@ ActiveAdmin.register User do
       else
         f.input :password if f.object.new_record?
       end
-
-
 
       if f.object.new_record?
         if current_user.role.eql?('super_admin')
