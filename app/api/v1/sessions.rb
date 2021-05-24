@@ -15,6 +15,7 @@ module V1
             { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
         ]}
       params do
+        requires :username, type: String, desc: 'Username'
         requires :email, type: String, desc: 'Email'
         requires :password, type: String, desc: 'Password'
         requires :password_confirmation, type: String, desc: 'Password confirmation'
@@ -34,22 +35,21 @@ module V1
         end
       end
 
-      desc 'Sign in user',{
-        consumes: [ 'application/x-www-form-urlencoded' ],
-        http_codes: [
-          { code: 200, message: 'success'},
-          { code: RESPONSE_CODE[:unauthorized], message: I18n.t('errors.session.invalid') }
-        ]
-      }
+      desc 'Sign in user'
       params do
-        requires :email, type: String, desc: 'User email'
+        requires :email, type: String, desc: 'User email' # username can also comes in this param depends on login_through param 
         requires :password, type: String, desc: 'User Password'
+        optional :login_through, type: String, desc: 'Login Through'
       end
 
       post :sign_in do
         email = params[:email]
         password = params[:password]
-        user = User.where(email: email.downcase).first
+        if !params[:login_through] || params[:login_through].eql?('email')
+          user = User.where(email: email.downcase).first
+        elsif params[:login_through].eql?('username')
+          user = User.where(username: email.downcase).first
+        end
         if user.nil? || !user.valid_password?(password)  
           render_error(RESPONSE_CODE[:unauthorized], I18n.t('errors.session.invalid'))
         elsif !user.email_confirmation_status!
