@@ -6,5 +6,8 @@ class HomeController < ApplicationController
     result = RestClient.get(params[:url])
     render json: result
   end
+
+  def email
+  end
   
 end

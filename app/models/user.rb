@@ -25,8 +25,8 @@ class User < ApplicationRecord
   # validates_presence_of :email, uniqueness: true, case_sensitive: false
 
   before_save do
-    self.email = email.downcase
-    self.username = username.downcase
+    self.email = email ? email.downcase : nil
+    self.username = username ?  username.downcase : nil
   end
 
   def self.by_auth_token(token)
