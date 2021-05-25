@@ -295,6 +295,10 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
+    launchy (2.5.0)
+      addressable (~> 2.7)
+    letter_opener (1.7.0)
+      launchy (~> 2.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -564,6 +568,7 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   kaminari
+  letter_opener
   listen
   mini_magick
   nokogiri
