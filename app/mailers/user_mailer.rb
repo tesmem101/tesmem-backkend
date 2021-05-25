@@ -3,4 +3,11 @@ class UserMailer < ApplicationMailer
     @user = user
     mail to: user.email, subject: "Your Tesmem's New Password"
   end
+
+  def forgot_password(user, link)
+    @user = user
+    @link = link
+    mail to: @user.email, subject: "Your Tesmem's New Password"
+  end
+
 end
