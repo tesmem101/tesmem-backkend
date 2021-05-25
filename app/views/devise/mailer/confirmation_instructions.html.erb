@@ -21,7 +21,7 @@
 </head>
 <body style="font-size: 1rem; display: flex;align-items: center;min-height: 100vh;">
     <center style="width: 35rem; margin:  0 auto;margin-top: 50px">
-        <%= image_tag "#{ENV['HOST_URL']}/assets/email_logo.png", style: "width: 130px;" %>
+        <%= image_tag "#{ENV['HOST_URL']}/images/email_logo.png", style: "width: 130px;" %>
         <div style="text-align: right;padding:0 2rem ;font-family:Neo Sans Arabic">
             <p style="margin-bottom: 1.5rem;">لقد أوشكت على الإنتهاء!</p>
             <p style="margin-bottom: 1.5rem;"> يرجى تأكيد عنوان بريدك الإلكتروني من خلال النقر على الرابط أدناه</p>
@@ -37,11 +37,11 @@
             <%= link_to 'Link', confirmation_url(@resource, confirmation_token: @token), :style=>"color: #fff;text-decoration:none;" %> </button>
             
             <div style="margin: 4rem auto;">
-                <%= image_tag "#{ENV['HOST_URL']}/assets/facebook.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
-                <%= image_tag "#{ENV['HOST_URL']}/assets/insta.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
-                <%= image_tag "#{ENV['HOST_URL']}/assets/twitter.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
-                <%= image_tag "#{ENV['HOST_URL']}/assets/snap.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
-                <%= image_tag "#{ENV['HOST_URL']}/assets/tinder.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
+                <%= image_tag "#{ENV['HOST_URL']}/images/facebook.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
+                <%= image_tag "#{ENV['HOST_URL']}/images/insta.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
+                <%= image_tag "#{ENV['HOST_URL']}/images/twitter.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
+                <%= image_tag "#{ENV['HOST_URL']}/images/snap.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
+                <%= image_tag "#{ENV['HOST_URL']}/images/tinder.png", style: "flex: 1; width: 15px; margin: 0 10px" %>
             </div>
 
 
