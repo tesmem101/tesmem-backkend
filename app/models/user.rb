@@ -24,6 +24,8 @@ class User < ApplicationRecord
 
   # validates_presence_of :email, uniqueness: true, case_sensitive: false
 
+  attr_accessor :want_to_change_password
+
   before_save do
     self.email = email ? email.downcase : nil
     self.username = username ?  username.downcase : nil

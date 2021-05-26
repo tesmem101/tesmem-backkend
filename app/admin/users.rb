@@ -8,6 +8,18 @@ ActiveAdmin.register User do
   filter :role
   filter :created_at
 
+
+  controller do
+    def update
+      if !params[:user][:want_to_change_password].eql?('1')
+        params[:user].delete("password")
+        params[:user].delete("password_confirmation")
+      end
+      super
+    end
+  end
+
+
   index do
 
     if current_user.role.eql?('super_admin')
@@ -52,6 +64,7 @@ ActiveAdmin.register User do
       f.input :email
 
       if current_user.role.eql?('super_admin')
+        f.input :want_to_change_password, as: :boolean
         f.input :password
       else
         f.input :password if f.object.new_record?
