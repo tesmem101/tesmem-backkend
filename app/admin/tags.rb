@@ -9,6 +9,15 @@ ActiveAdmin.register Tag do
     link_to 'CREATE TAG', new_admin_tag_path
   end
 
+  controller do
+    def create
+      translate = Google::Cloud::Translate::V2.new(project_id: ENV['GOOGLE_PROJECT_ID'], credentials: (JSON.parse ENV['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS']))  
+      translation = translate.translate params[:tag][:name], from: "en", to: "ar"
+      params[:tag][:name_ar] = translation.text
+      super
+    end
+  end
+
   index do
     column :id
     column :name
