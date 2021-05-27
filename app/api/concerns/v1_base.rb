@@ -39,6 +39,10 @@ module V1Base
         }
       end
 
+      def googleCloudTranslation
+        Google::Cloud::Translate::V2.new(project_id: ENV['GOOGLE_PROJECT_ID'], credentials: (JSON.parse ENV['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS']))
+      end
+
       def logger
         Rails.logger
       end

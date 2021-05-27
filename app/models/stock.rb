@@ -163,12 +163,22 @@ class Stock < ApplicationRecord
   # end
 
   def self.search_keyword(locale = '', keyword, page, per_page)
+    # keyword = 'Orange', 'yellow'
+    # keyword = "Orange", "yellow"
+    # keyword = "%fra%", "%cancer%"
+
+    # debugger
     includes(:tags)
     .left_outer_joins(:tags)
-    .where("LOWER(stocks.title) LIKE :keyword OR
-            LOWER(stocks.title_ar) LIKE :keyword OR
-            LOWER(tags.name) LIKE :keyword OR
-           LOWER(tags.name_ar) LIKE :keyword", 
-           {:keyword => "%#{keyword.downcase}%"}).uniq.paginate(page: page, per_page: per_page) if keyword.present?
+    .where("LOWER(stocks.title) like any (array[:keyword]) OR
+            LOWER(stocks.title_ar) like any (array[:keyword]) OR
+            LOWER(tags.name) like any (array[:keyword]) OR
+            LOWER(tags.name_ar) like any (array[:keyword])", 
+            {:keyword => keyword}).uniq.paginate(page: page, per_page: per_page) if keyword.present?
+    # .where("LOWER(stocks.title) LIKE :keyword OR
+    #         LOWER(stocks.title_ar) LIKE :keyword OR
+    #         LOWER(tags.name) LIKE :keyword OR
+    #        LOWER(tags.name_ar) LIKE :keyword", 
+    #        {:keyword => "%#{keyword.downcase}%"}).uniq.paginate(page: page, per_page: per_page) if keyword.present?
   end
 end

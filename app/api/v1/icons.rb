@@ -111,7 +111,15 @@ module V1
             render_success(icons.as_json)
           end
 
-        else
+        else  
+          if params[:is_arabic].present? && params[:is_arabic].eql?('true')
+            detection = googleCloudTranslation.detect search # Detect Language
+            translated_word = googleCloudTranslation.translate search, from: detection.language, to: "en"
+            search = "%#{search}%", "%#{translated_word.text}%"
+          else
+            search = "%#{search}%"
+          end          
+
           icons_stock = Stock.icons_stock.where.not(is_active: false)
           icons_stock = icons_stock.search_keyword(locale, search, params[:page], params[:per_page]) if search
           icons_stock = serialize_collection(icons_stock, serializer: StockListSerializer)
