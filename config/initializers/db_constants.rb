@@ -2,7 +2,7 @@ TITLES = {
     photo: "RESERVED_PHOTOS",
     background: "RESERVED_BACKGROUNDS",
     animation: "RESERVED_ANIMATIONS",
-    icon: "RESERVED_ICONS",
+    stock: "RESERVED_STOCKS",
     design: "RESERVED_DESIGNS"
 }.freeze
 

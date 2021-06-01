@@ -1,11 +1,11 @@
 ActiveAdmin.register Stock do
-  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path 
+  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path 
 
   filter :title
   filter :title_ar
   filter :category_title, as: :string , label: 'Category'
   filter :sub_category_title, as: :string , label: 'Sub Category'
-  filter :stocktype, as: :select, collection: [['image', 0], ['svg', 1]]
+  filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
   filter :tags_name, as: :string , label: 'Tags'
 
   action_item 'create_stock', only: :show do
@@ -16,7 +16,7 @@ ActiveAdmin.register Stock do
     include ActionView::Helpers::TextHelper
     def create
       @stock = Stock.new(stock_params)
-      @stock.category_id = Category.find_by(title: 'RESERVED_ICONS').id
+      @stock.category_id = Category.find_by(title: TITLES[:stock]).id # TITLES object is in db_constants file
       if @stock.save
         if params[:stock][:tag_ids].present?
           tag_ids = params[:stock][:tag_ids].reject { |id| (id == "" || id == " ")}
@@ -74,7 +74,7 @@ ActiveAdmin.register Stock do
     private
 
     def stock_params
-      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path)
+      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path)
     end
 
   end
@@ -95,7 +95,7 @@ ActiveAdmin.register Stock do
     column :svg do |stock|
       stock.svg.present? ? image_tag(stock.svg.url, style: "max-width: 75px;") : nil
     end
-    column :svg_thumb do |stock|
+    column 'Thumb' do |stock|
       stock.svg_thumb.present? ? image_tag(stock.svg_thumb.url, style: "max-width: 75px;") : nil
     end
     column :tags
@@ -123,7 +123,7 @@ ActiveAdmin.register Stock do
       row :svg do |stock|
         stock.svg.present? ? image_tag(stock.svg.url, style: "max-width: 75px;") : nil
       end
-      row :svg_thumb do |stock|
+      row 'Thumb' do |stock|
         stock.svg_thumb.present? ? image_tag(stock.svg_thumb.url, style: "max-width: 75px;") : nil
       end
       row :tags
@@ -148,25 +148,25 @@ ActiveAdmin.register Stock do
       end
      
       f.input :clip_path, input_html: { disabled: 'disabled' }
-
+      f.input :stocktype
       if f.object.image.url
-        f.input :image, as: :file, hint: image_tag(f.object.image.url, width: '100px', height: '100px')
+        f.input :image, as: :file, label: 'Frame', hint: image_tag(f.object.image.url, width: '100px', height: '100px')
       else
-        f.input :image
+        f.input :image, label: 'Frame'
       end
 
       if f.object.svg.url
-        f.input :svg, as: :file, hint: image_tag(f.object.svg.url, width: '100px', height: '100px')
+        f.input :svg, as: :file, hint: image_tag(f.object.svg.url, width: '100px', height: '100px'), input_html: { disabled: 'disabled' }
       else
-        f.input :svg
+        f.input :svg, input_html: { disabled: 'disabled' }
       end
 
       if f.object.svg_thumb.url
-        f.input :svg_thumb, as: :file, hint: image_tag(f.object.svg_thumb.url, width: '100px', height: '100px')
+        f.input :svg_thumb, as: :file, label: 'Thumb', hint: image_tag(f.object.svg_thumb.url, width: '100px', height: '100px')
       else
-        f.input :svg_thumb
+        f.input :svg_thumb, label: 'Thumb'
       end
-      f.input :stocktype
+
       div style: 'display: block ruby;' do
         div do
           f.input(:tags, as: :searchable_select, ajax: true)  

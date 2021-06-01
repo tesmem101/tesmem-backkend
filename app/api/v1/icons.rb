@@ -21,7 +21,7 @@ module V1
         optional :description, type: String, desc: 'Description'
       end
       post "subcategories/create" do
-        category = Category.where(title: TITLES[:icon]).first_or_create
+        category = Category.where(title: TITLES[:stock]).first_or_create
         params['category_id'] = category.id
         subcategory = SubCategory.new(params)
         if subcategory.save!
@@ -45,7 +45,7 @@ module V1
         requires :sub_category_id, type: Integer, :desc => 'sub category id'
       end
       post :create do
-        category = Category.where(title: TITLES[:icon]).first
+        category = Category.where(title: TITLES[:stock]).first
         params['category_id'] = category.id
         stock = Stock.new(params)
         if stock.save!
@@ -59,7 +59,7 @@ module V1
            { consumes: ['application/x-www-form-urlencoded'],
              http_codes: [{ code: 200, message: 'success' }] }
       get '/subcategories/all' do
-        sub_categories = Category.where(title: TITLES[:icon]).includes(:sub_categories).map(&:sub_categories).flatten
+        sub_categories = Category.where(title: TITLES[:stock]).includes(:sub_categories).map(&:sub_categories).flatten
         serialization = serialize_collection(sub_categories, serializer: SubCategorySerializer)
         render_success(serialization.as_json)
       end
@@ -86,7 +86,7 @@ module V1
         locale = params['locale'].present? ? "_#{params['locale']}" : ""
 
         if true?(params['with_categories']) && !search
-          category = Category.where(title: TITLES[:icon]).take
+          category = Category.where(title: TITLES[:stock]).take
           searched_animations = []
           sorted_icons_reponse = []
 

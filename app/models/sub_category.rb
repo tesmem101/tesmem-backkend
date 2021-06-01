@@ -23,16 +23,16 @@ class SubCategory < ApplicationRecord
     end
   end
 
-  def save_to_reserved_icons
-    if self.category.title.eql?('RESERVED_ICONS')
-      s_r_i = SortReservedIcon.find_by(sub_category_id: self.id)
-      if s_r_i
-        s_r_i.update(title: self.title)
-      else
-        SortReservedIcon.create(sub_category_id: self.id, title: self.title)
-      end
-    end
-  end
+  # def save_to_reserved_icons
+  #   if self.category.title.eql?(TITLES[:stock]) # TITLES object is in db_constants file
+  #     s_r_i = SortReservedIcon.find_by(sub_category_id: self.id)
+  #     if s_r_i
+  #       s_r_i.update(title: self.title)
+  #     else
+  #       SortReservedIcon.create(sub_category_id: self.id, title: self.title)
+  #     end
+  #   end
+  # end
 
   def save_to_sort_sub_categories
     s_sub_c = SortSubCategory.find_by(category_id: self.category.id, sub_category_id: self.id)

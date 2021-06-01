@@ -6,7 +6,7 @@ ActiveAdmin.register SortSubCategory do
 
   # filter :sub_category_title  
   filter :category, collection: -> {
-    Category.where.not(super_category_id: nil).or(Category.where(title: TITLES[:icon])).all.map {|cat| [cat.title, cat.id]}
+    Category.where.not(super_category_id: nil).or(Category.where(title: TITLES[:stock])).all.map {|cat| [cat.title, cat.id]}
   }, as: :searchable_select
 
   before_action :only => [:index] do
@@ -20,7 +20,7 @@ ActiveAdmin.register SortSubCategory do
     def scoped_collection
       if params[:q].present? && params[:q][:category_id_eq].present? && params[:q][:category_id_eq].eql?('13')
         SortSubCategory.where(
-          sub_category_id: Category.find_by(title: TITLES[:icon])
+          sub_category_id: Category.find_by(title: TITLES[:stock])
           .sub_categories
           .joins(:stocks)
           .select("distinct sub_categories.id")
