@@ -74,7 +74,7 @@ ActiveAdmin.register Stock do
     private
 
     def stock_params
-      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active)
+      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path)
     end
 
   end
@@ -115,6 +115,7 @@ ActiveAdmin.register Stock do
       end
       row :category
       row :sub_category
+      row :clip_path
       row :stocktype
       row :image do |stock|
         stock.image.present? ? image_tag(stock.image.url, style: "max-width: 75px;") : nil
@@ -127,6 +128,8 @@ ActiveAdmin.register Stock do
       end
       row :tags
       row :is_active
+      row :pro
+      row :price
     end
   end
 

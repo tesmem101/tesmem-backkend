@@ -58,6 +58,8 @@ ActiveAdmin.register Category do
       row :width
       row :height
       row :unit
+      row :min_seconds
+      row :max_seconds
       row 'Super Category' do |category|
         category.super_category
       end

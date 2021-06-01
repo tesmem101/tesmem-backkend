@@ -76,7 +76,7 @@ ActiveAdmin.register Designer, as: "Templates" do
     private
 
     def template_params
-      params.require(:designer).permit(:design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids, :is_active)
+      params.require(:designer).permit(:design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids, :is_active, :pro, :price)
     end
 
   end
@@ -133,6 +133,8 @@ ActiveAdmin.register Designer, as: "Templates" do
       end
       row :tags
       row :is_active
+      row :pro
+      row :price
     end
   end
 
