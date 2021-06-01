@@ -8,7 +8,7 @@ function hideModel() {
     $(".alert").show();
     setTimeout(function() {
         $(".alert").hide();
-        }, 1000);
+    }, 1000);
 }
 
 function creatTag() {
@@ -17,7 +17,7 @@ function creatTag() {
     var request = $.ajax({
         url: "/admin/tags",
         type: "POST",
-        data: {tag: {name: title, name_ar: title_ar}}
+        data: { tag: { name: title, name_ar: title_ar } }
     });
     request.done(function(response) {
         hideModel();
@@ -33,7 +33,7 @@ function creatSubCategory() {
     var request = $.ajax({
         url: "/api/v1/subcategories/create",
         type: "POST",
-        data: {category_id: category_id, title: title, title_ar: title_ar, description: description}
+        data: { category_id: category_id, title: title, title_ar: title_ar, description: description }
     });
     request.done(function(response) {
         hideModel();
@@ -53,18 +53,18 @@ function creatCategory() {
     var super_category_id = $("#super_category_id").val();
 
     var formdata = new FormData();
-    formdata.append("category[title]",title);
-    formdata.append("category[title_ar]",title_ar);
-    formdata.append("category[description]",description);
-    formdata.append("category[width]",width);
-    formdata.append("category[height]",height);
-    formdata.append("category[unit]",unit);
-    formdata.append("category[cover]",cover);
-    formdata.append("category[super_category_id]",super_category_id);
+    formdata.append("category[title]", title);
+    formdata.append("category[title_ar]", title_ar);
+    formdata.append("category[description]", description);
+    formdata.append("category[width]", width);
+    formdata.append("category[height]", height);
+    formdata.append("category[unit]", unit);
+    formdata.append("category[cover]", cover);
+    formdata.append("category[super_category_id]", super_category_id);
     var request = $.ajax({
         url: "/admin/categories",
         type: "POST",
-        data:formdata,
+        data: formdata,
         contentType: false,
         processData: false
     });
@@ -73,15 +73,15 @@ function creatCategory() {
     });
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
     // $( ".menu-button" ).remove();
     // $( ".resource_selection_cell, .resource_selection_toggle_panel, .right" ).remove(); // This line is for sortable-tree functionality
     // $( "#utility_nav" ).attr("id","tabs");
 
-    $('#createTagModal, #createCategoryModal').on('hidden.bs.modal', function (e) {
+    $('#createTagModal, #createCategoryModal').on('hidden.bs.modal', function(e) {
         $(this).find("input,textarea,select,file").val('').end();
         $('#create_tag_btn, #create_category_btn').prop("disabled", true);
-      })
+    })
 
     $('#title, #category_title').on('input', function(e) {
         console.log('sdfklsdklh');
@@ -92,7 +92,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#createSubCategoryModal').on('hidden.bs.modal', function (e) {
+    $('#createSubCategoryModal').on('hidden.bs.modal', function(e) {
         $(this).find("input,textarea,select").val('').end();
         $("#stock_category_id").select2({
             placeholder: "Select a Category",
@@ -116,17 +116,27 @@ $(document).ready(function(){
             $('#create_sub_category_btn').prop("disabled", true); // Element(s) are now disabled.
         }
     });
-    
 
-    $('input[name="approved_formatted_text"]').click(function (event) {
+    $('.stock_sub_category_searchable_select_path').on('change', function(e) {
+        var selectted_text = $(".stock_sub_category_searchable_select_path option:selected").text();
+        if (selectted_text == 'frames') {
+            // $('#stock_clip_path').removeAttr("disabled")
+            $('#stock_clip_path').prop("disabled", false); // Element(s) are now enabled.
+        } else {
+            $('#stock_clip_path').prop("disabled", true); // Element(s) are now enabled.
+        }
+    });
+
+
+    $('input[name="approved_formatted_text"]').click(function(event) {
         ajaxCall(event)
     });
 
-    $('input[name="approved_template"]').click(function (event) {
+    $('input[name="approved_template"]').click(function(event) {
         ajaxCall(event)
     });
 
-    $('input[name="private_template"]').click(function (event) {
+    $('input[name="private_template"]').click(function(event) {
         ajaxCall(event)
     });
 
@@ -134,7 +144,7 @@ $(document).ready(function(){
     function ajaxCall(event) {
         var model_name = null;
         var end_point = null;
-        if (event.target.id == 'approved_template') {  
+        if (event.target.id == 'approved_template') {
             model_name = 'templates'
             end_point = 'change_approved_status'
         } else if (event.target.id == 'private_template') {
@@ -143,23 +153,23 @@ $(document).ready(function(){
         } else if (event.target.id == 'approved_formatted_text') {
             model_name = 'formatted_texts'
             end_point = 'change_approved_status'
-        } 
+        }
         var request = $.ajax({
             url: "/api/v1/" + model_name + "/" + end_point + "/" + event.target.value,
             type: "PUT",
-            data: {approved : event.target.checked, user_id: event.target.className}
+            data: { approved: event.target.checked, user_id: event.target.className }
         });
-          
+
         request.done(function(response) {
             console.log(response);
         });
-        
-        request.fail(function(jqXHR,response) {
+
+        request.fail(function(jqXHR, response) {
             alert('Something went wrong')
         });
     }
 
-    onInstanceChange = function (instanceType) {
+    onInstanceChange = function(instanceType) {
 
         if (instanceType == 'Design') {
 
@@ -168,17 +178,17 @@ $(document).ready(function(){
             var request = $.ajax({
                 url: '/api/v1/designs/titles/',
                 type: "GET"
-              });
-              
-              request.done(function(response) {
+            });
+
+            request.done(function(response) {
                 var design_titles = response.json.titles;
-                $.each(design_titles, function (i, item) {
-                    $('#container_instance_id').append($('<option>', { 
+                $.each(design_titles, function(i, item) {
+                    $('#container_instance_id').append($('<option>', {
                         value: item.id,
-                        text : item.title 
+                        text: item.title
                     }));
                 });
-              });
+            });
 
 
         } else if (instanceType == 'Upload') {
@@ -188,21 +198,20 @@ $(document).ready(function(){
             var request = $.ajax({
                 url: '/api/v1/uploads/titles/',
                 type: "GET"
-              });
-              
-              request.done(function(response) {
+            });
+
+            request.done(function(response) {
                 var upload_titles = response.json.titles;
-                $.each(upload_titles, function (i, item) {
-                    $('#container_instance_id').append($('<option>', { 
+                $.each(upload_titles, function(i, item) {
+                    $('#container_instance_id').append($('<option>', {
                         value: item.id,
-                        text : item.title 
+                        text: item.title
                     }));
                 });
-              });
+            });
         } else {
-            $('#container_instance_id').find('option').remove().end()   
+            $('#container_instance_id').find('option').remove().end()
         }
     }
 
 });
-

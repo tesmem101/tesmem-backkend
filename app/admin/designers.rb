@@ -1,6 +1,6 @@
 ActiveAdmin.register Designer, as: "Templates" do
   menu :label => "Templates", priority: 5
-  permit_params :design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids, :is_active
+  permit_params :design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids, :is_active, :pro, :price
   # action_item :new, only: :index do
   #   link_to('New Template', new_admin_designer_path)
   # end
@@ -110,6 +110,8 @@ ActiveAdmin.register Designer, as: "Templates" do
     end
     column :tags
     column :is_active
+    column :pro
+    column :price
     actions
   end
 
@@ -159,6 +161,8 @@ ActiveAdmin.register Designer, as: "Templates" do
         end
       end
       f.input :is_active
+      f.input :pro
+      f.input :price
     end
     actions
   end

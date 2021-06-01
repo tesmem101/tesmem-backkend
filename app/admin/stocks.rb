@@ -1,5 +1,5 @@
 ActiveAdmin.register Stock do
-  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active
+  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path 
 
   filter :title
   filter :title_ar
@@ -100,6 +100,8 @@ ActiveAdmin.register Stock do
     end
     column :tags
     column :is_active
+    column :pro
+    column :price
     actions
   end
 
@@ -134,7 +136,7 @@ ActiveAdmin.register Stock do
       f.input :title_ar
       # f.input :category, as: :searchable_select
       div style: 'display: block ruby;' do
-        div do
+        div class: 'stock_sub_category_searchable_select_path' do
           f.input(:sub_category, as: :searchable_select, ajax: true)          
         end
         div do
@@ -142,6 +144,8 @@ ActiveAdmin.register Stock do
         end
       end
      
+      f.input :clip_path, input_html: { disabled: 'disabled' }
+
       if f.object.image.url
         f.input :image, as: :file, hint: image_tag(f.object.image.url, width: '100px', height: '100px')
       else
@@ -169,6 +173,8 @@ ActiveAdmin.register Stock do
         end
       end
       f.input :is_active
+      f.input :pro
+      f.input :price
     end
     actions
 

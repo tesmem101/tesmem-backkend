@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210521073429) do
+ActiveRecord::Schema.define(version: 20210531074509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 20210521073429) do
     t.string "width"
     t.string "height"
     t.string "unit"
+    t.integer "min_seconds"
+    t.integer "max_seconds"
     t.index ["super_category_id"], name: "index_categories_on_super_category_id"
     t.index ["title"], name: "index_categories_on_title"
   end
@@ -68,6 +70,8 @@ ActiveRecord::Schema.define(version: 20210521073429) do
     t.string "url"
     t.boolean "is_deleted", default: false
     t.boolean "is_active", default: true
+    t.boolean "pro"
+    t.float "price"
   end
 
   create_table "designs", force: :cascade do |t|
@@ -164,6 +168,9 @@ ActiveRecord::Schema.define(version: 20210521073429) do
     t.string "svg_thumb"
     t.boolean "is_deleted", default: false
     t.boolean "is_active", default: true
+    t.string "clip_path"
+    t.boolean "pro"
+    t.float "price"
   end
 
   create_table "sub_categories", force: :cascade do |t|

@@ -1,7 +1,7 @@
 ActiveAdmin.register Category do
   searchable_select_options(scope: Category.all, text_attribute: :title)
   menu priority: 2
-  permit_params :id, :title, :description, :cover, :title_ar, :width, :height, :unit, :super_category_id, :sub_category_id
+  permit_params :id, :title, :description, :cover, :title_ar, :width, :height, :unit, :min_seconds, :max_seconds, :super_category_id, :sub_category_id
   config.batch_actions = false
   filter :title
   filter :title_ar
@@ -81,6 +81,8 @@ ActiveAdmin.register Category do
       f.input :width
       f.input :height
       f.input :unit
+      f.input :min_seconds
+      f.input :max_seconds
 
       if f.object.image
         f.input :cover, as: :file, hint: image_tag(f.object.image.url, width: '100px', height: '100px')
