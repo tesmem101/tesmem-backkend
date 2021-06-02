@@ -3,7 +3,7 @@ class Stock < ApplicationRecord
   include Nokogiri
   include StockAdmin
   require 'will_paginate/array'
-  enum stocktype: [:image, :svg]
+  enum stocktype: [:frame, :svg]
 
   mount_uploader :image, StockUploader
   mount_uploader :svg, SvgUploader
@@ -14,7 +14,7 @@ class Stock < ApplicationRecord
   has_many :stock_tags, dependent: :destroy
   has_many :tags, through: :stock_tags
 
-  scope :icons_stock, -> { joins(:category).where(categories: {title: TITLES[:icon]}) }
+  scope :icons_stock, -> { joins(:category).where(categories: {title: TITLES[:stock]}) }
 
   accepts_nested_attributes_for :stock_tags, :allow_destroy => true
 

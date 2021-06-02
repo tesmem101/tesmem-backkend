@@ -120,12 +120,25 @@ $(document).ready(function() {
     $('.stock_sub_category_searchable_select_path').on('change', function(e) {
         var selectted_text = $(".stock_sub_category_searchable_select_path option:selected").text();
         if (selectted_text == 'frames') {
-            // $('#stock_clip_path').removeAttr("disabled")
             $('#stock_clip_path').prop("disabled", false); // Element(s) are now enabled.
         } else {
-            $('#stock_clip_path').prop("disabled", true); // Element(s) are now enabled.
+            $('#stock_clip_path').prop("disabled", true); // Element(s) are now disabled.
         }
     });
+
+    $('#stock_stocktype_input').on('change', function(e) {
+        var selectted_text = $("#stock_stocktype_input option:selected").text();
+        console.log(selectted_text);
+        if (selectted_text == 'Svg') {
+            $('#stock_svg').prop("disabled", false); // Element(s) are now enabled.
+            $('#stock_image').prop("disabled", true); // Element(s) are now disabled.
+
+        } else {
+            $('#stock_svg').prop("disabled", true); // Element(s) are now disabled.
+            $('#stock_image').prop("disabled", false); // Element(s) are now enabled.
+        }
+    });
+
 
 
     $('input[name="approved_formatted_text"]').click(function(event) {
