@@ -6,7 +6,7 @@ ActiveAdmin.register Stock, as: "Frame" do
   filter :title_ar
   filter :category_title, as: :string , label: 'Category'
   filter :sub_category_title, as: :string , label: 'Sub Category'
-  filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
+  # filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
   filter :tags_name, as: :string , label: 'Tags'
 
   action_item 'create_stock', only: :show do
@@ -24,22 +24,22 @@ ActiveAdmin.register Stock, as: "Frame" do
       @stock = Stock.new(stock_params)
       @stock.category_id = Category.find_by(title: TITLES[:stock]).id # TITLES object is in db_constants file
       @stock.stocktype = "frame"
-      if @stock.save
-        if params[:stock][:tag_ids].present?
-          tag_ids = params[:stock][:tag_ids].reject { |id| (id == "" || id == " ")}
-          tag_ids.each do |tag_id|
-            StockTag.create(stock_id: @stock.id, tag_id: tag_id )
-          end
-        end
-        flash[:notice] = "Stock Created!"
-        redirect_to admin_frame_path(@stock)
-      else
-        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being created!"]
-        @stock.errors.full_messages.each do |msg|
-          flash[:error] << msg
-        end
-        redirect_to new_admin_frame_path
-      end
+      # if @stock.save
+      #   if params[:stock][:tag_ids].present?
+      #     tag_ids = params[:stock][:tag_ids].reject { |id| (id == "" || id == " ")}
+      #     tag_ids.each do |tag_id|
+      #       StockTag.create(stock_id: @stock.id, tag_id: tag_id )
+      #     end
+      #   end
+      #   flash[:notice] = "Stock Created!"
+      #   redirect_to admin_frame_path(@stock)
+      # else
+      #   flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being created!"]
+      #   @stock.errors.full_messages.each do |msg|
+      #     flash[:error] << msg
+      #   end
+      #   redirect_to new_admin_frame_path
+      # end
     end
 
     def update
@@ -53,13 +53,13 @@ ActiveAdmin.register Stock, as: "Frame" do
           end
         end
         flash[:notice] = "Stock Updated!"
-        redirect_to admin_stock_path(@stock)
+        redirect_to admin_frame_path(@stock)
       else
         flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being updated!"]
         @stock.errors.full_messages.each do |msg|
           flash[:error] << msg
         end
-        redirect_to edit_admin_stock_path
+        redirect_to edit_admin_frame_path
       end
     end
 
@@ -68,13 +68,13 @@ ActiveAdmin.register Stock, as: "Frame" do
       @stock = Stock.find(params[:id])
       if @stock.update(is_active: false)
         flash[:notice] = "Stock Inactive!"
-        redirect_to admin_stock_path(@stock)
+        redirect_to admin_frame_path(@stock)
       else
         flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being inactive!"]
         @stock.errors.full_messages.each do |msg|
           flash[:alert] << msg
         end
-        redirect_to admin_stock_path(@stock)
+        redirect_to admin_frame_path(@stock)
       end
     end
 
@@ -147,7 +147,13 @@ ActiveAdmin.register Stock, as: "Frame" do
       # f.input :category, as: :searchable_select
       div style: 'display: block ruby;' do
         div class: 'stock_sub_category_searchable_select_path' do
-          f.input(:sub_category, as: :searchable_select, ajax: true)          
+          f.input(:sub_category, 
+            as: :searchable_select, 
+            ajax: {
+              params: {
+                type: 'frame'
+              }
+            })          
         end
         div do
           render :partial => 'admin/bootstrap_modals/sub_category'

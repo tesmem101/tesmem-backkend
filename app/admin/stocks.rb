@@ -1,6 +1,6 @@
 ActiveAdmin.register Stock do
   permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path 
-
+  actions :all, except: [:new, :edit, :update, :destroy]
   filter :title
   filter :title_ar
   filter :category_title, as: :string , label: 'Category'
@@ -8,9 +8,9 @@ ActiveAdmin.register Stock do
   filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
   filter :tags_name, as: :string , label: 'Tags'
 
-  action_item 'create_stock', only: :show do
-    link_to 'CREATE STOCK', new_admin_stock_path
-  end
+  # action_item 'create_stock', only: :show do
+  #   link_to 'CREATE STOCK', new_admin_stock_path
+  # end
 
   controller do
     include ActionView::Helpers::TextHelper
@@ -57,19 +57,19 @@ ActiveAdmin.register Stock do
     end
 
 
-    def destroy
-      @stock = Stock.find(params[:id])
-      if @stock.update(is_active: false)
-        flash[:notice] = "Stock Inactive!"
-        redirect_to admin_stock_path(@stock)
-      else
-        flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being inactive!"]
-        @stock.errors.full_messages.each do |msg|
-          flash[:alert] << msg
-        end
-        redirect_to admin_stock_path(@stock)
-      end
-    end
+    # def destroy
+    #   @stock = Stock.find(params[:id])
+    #   if @stock.update(is_active: false)
+    #     flash[:notice] = "Stock Inactive!"
+    #     redirect_to admin_stock_path(@stock)
+    #   else
+    #     flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being inactive!"]
+    #     @stock.errors.full_messages.each do |msg|
+    #       flash[:alert] << msg
+    #     end
+    #     redirect_to admin_stock_path(@stock)
+    #   end
+    # end
 
     private
 
@@ -140,7 +140,10 @@ ActiveAdmin.register Stock do
       # f.input :category, as: :searchable_select
       div style: 'display: block ruby;' do
         div class: 'stock_sub_category_searchable_select_path' do
-          f.input(:sub_category, as: :searchable_select, ajax: true)          
+          f.input(:sub_category, 
+            as: :searchable_select, 
+            ajax: true
+          )          
         end
         div do
           render :partial => 'admin/bootstrap_modals/sub_category'

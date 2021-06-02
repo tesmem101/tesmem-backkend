@@ -6,7 +6,7 @@ ActiveAdmin.register Stock, as: "SVG" do
   filter :title_ar
   filter :category_title, as: :string , label: 'Category'
   filter :sub_category_title, as: :string , label: 'Sub Category'
-  filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
+  # filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
   filter :tags_name, as: :string , label: 'Tags'
 
   action_item 'create_stock', only: :show do
@@ -53,13 +53,13 @@ ActiveAdmin.register Stock, as: "SVG" do
           end
         end
         flash[:notice] = "Stock Updated!"
-        redirect_to admin_stock_path(@stock)
+        redirect_to admin_svg_path(@stock)
       else
         flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being updated!"]
         @stock.errors.full_messages.each do |msg|
           flash[:error] << msg
         end
-        redirect_to edit_admin_stock_path
+        redirect_to edit_admin_svg_path
       end
     end
 
@@ -68,13 +68,13 @@ ActiveAdmin.register Stock, as: "SVG" do
       @stock = Stock.find(params[:id])
       if @stock.update(is_active: false)
         flash[:notice] = "Stock Inactive!"
-        redirect_to admin_stock_path(@stock)
+        redirect_to admin_svg_path(@stock)
       else
         flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being inactive!"]
         @stock.errors.full_messages.each do |msg|
           flash[:alert] << msg
         end
-        redirect_to admin_stock_path(@stock)
+        redirect_to admin_svg_path(@stock)
       end
     end
 
@@ -147,7 +147,13 @@ ActiveAdmin.register Stock, as: "SVG" do
       # f.input :category, as: :searchable_select
       div style: 'display: block ruby;' do
         div class: 'stock_sub_category_searchable_select_path' do
-          f.input(:sub_category, as: :searchable_select, ajax: true)          
+          f.input(:sub_category, 
+            as: :searchable_select, 
+            ajax: {
+              params: {
+                type: 'svg'
+              }
+            })          
         end
         div do
           render :partial => 'admin/bootstrap_modals/sub_category'
