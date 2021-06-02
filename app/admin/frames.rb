@@ -1,38 +1,45 @@
-ActiveAdmin.register Stock do
+ActiveAdmin.register Stock, as: "Frame" do
+  menu parent: :stocks
   permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path 
-  actions :all, except: [:new, :edit, :update, :destroy]
+
   filter :title
   filter :title_ar
   filter :category_title, as: :string , label: 'Category'
   filter :sub_category_title, as: :string , label: 'Sub Category'
-  filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
+  # filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
   filter :tags_name, as: :string , label: 'Tags'
 
-  # action_item 'create_stock', only: :show do
-  #   link_to 'CREATE STOCK', new_admin_stock_path
-  # end
+  action_item 'create_stock', only: :show do
+    link_to 'CREATE STOCK', new_admin_stock_path
+  end
 
   controller do
     include ActionView::Helpers::TextHelper
+
+    def scoped_collection
+      Stock.where(stocktype: "frame")
+    end
+
     def create
       @stock = Stock.new(stock_params)
       @stock.category_id = Category.find_by(title: TITLES[:stock]).id # TITLES object is in db_constants file
-      if @stock.save
-        if params[:stock][:tag_ids].present?
-          tag_ids = params[:stock][:tag_ids].reject { |id| (id == "" || id == " ")}
-          tag_ids.each do |tag_id|
-            StockTag.create(stock_id: @stock.id, tag_id: tag_id )
-          end
-        end
-        flash[:notice] = "Stock Created!"
-        redirect_to admin_stock_path(@stock)
-      else
-        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being created!"]
-        @stock.errors.full_messages.each do |msg|
-          flash[:error] << msg
-        end
-        redirect_to new_admin_stock_path
-      end
+      @stock.stocktype = "frame"
+      # if @stock.save
+      #   if params[:stock][:tag_ids].present?
+      #     tag_ids = params[:stock][:tag_ids].reject { |id| (id == "" || id == " ")}
+      #     tag_ids.each do |tag_id|
+      #       StockTag.create(stock_id: @stock.id, tag_id: tag_id )
+      #     end
+      #   end
+      #   flash[:notice] = "Stock Created!"
+      #   redirect_to admin_frame_path(@stock)
+      # else
+      #   flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being created!"]
+      #   @stock.errors.full_messages.each do |msg|
+      #     flash[:error] << msg
+      #   end
+      #   redirect_to new_admin_frame_path
+      # end
     end
 
     def update
@@ -46,30 +53,30 @@ ActiveAdmin.register Stock do
           end
         end
         flash[:notice] = "Stock Updated!"
-        redirect_to admin_stock_path(@stock)
+        redirect_to admin_frame_path(@stock)
       else
         flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being updated!"]
         @stock.errors.full_messages.each do |msg|
           flash[:error] << msg
         end
-        redirect_to edit_admin_stock_path
+        redirect_to edit_admin_frame_path
       end
     end
 
 
-    # def destroy
-    #   @stock = Stock.find(params[:id])
-    #   if @stock.update(is_active: false)
-    #     flash[:notice] = "Stock Inactive!"
-    #     redirect_to admin_stock_path(@stock)
-    #   else
-    #     flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being inactive!"]
-    #     @stock.errors.full_messages.each do |msg|
-    #       flash[:alert] << msg
-    #     end
-    #     redirect_to admin_stock_path(@stock)
-    #   end
-    # end
+    def destroy
+      @stock = Stock.find(params[:id])
+      if @stock.update(is_active: false)
+        flash[:notice] = "Stock Inactive!"
+        redirect_to admin_frame_path(@stock)
+      else
+        flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being inactive!"]
+        @stock.errors.full_messages.each do |msg|
+          flash[:alert] << msg
+        end
+        redirect_to admin_frame_path(@stock)
+      end
+    end
 
     private
 
@@ -142,8 +149,11 @@ ActiveAdmin.register Stock do
         div class: 'stock_sub_category_searchable_select_path' do
           f.input(:sub_category, 
             as: :searchable_select, 
-            ajax: true
-          )          
+            ajax: {
+              params: {
+                type: 'frame'
+              }
+            })          
         end
         div do
           render :partial => 'admin/bootstrap_modals/sub_category'
@@ -151,18 +161,18 @@ ActiveAdmin.register Stock do
       end
      
       f.input :clip_path, input_html: { disabled: 'disabled' }
-      f.input :stocktype
+      # f.input :stocktype
       if f.object.image.url
         f.input :image, as: :file, label: 'Frame', hint: image_tag(f.object.image.url, width: '100px', height: '100px')
       else
         f.input :image, label: 'Frame'
       end
 
-      if f.object.svg.url
-        f.input :svg, as: :file, hint: image_tag(f.object.svg.url, width: '100px', height: '100px'), input_html: { disabled: 'disabled' }
-      else
-        f.input :svg, input_html: { disabled: 'disabled' }
-      end
+      # if f.object.svg.url
+      #   f.input :svg, as: :file, hint: image_tag(f.object.svg.url, width: '100px', height: '100px'), input_html: { disabled: 'disabled' }
+      # else
+      #   f.input :svg, input_html: { disabled: 'disabled' }
+      # end
 
       if f.object.svg_thumb.url
         f.input :svg_thumb, as: :file, label: 'Thumb', hint: image_tag(f.object.svg_thumb.url, width: '100px', height: '100px')
