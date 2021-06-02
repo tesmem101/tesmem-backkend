@@ -100,8 +100,8 @@ ActiveAdmin.register Stock do
     end
     column :tags
     column :is_active
-    column :pro
-    column :price
+    # column :pro
+    # column :price
     actions
   end
 
