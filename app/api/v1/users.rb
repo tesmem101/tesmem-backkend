@@ -45,25 +45,29 @@ module V1
 
       desc 'Change Password'
       params do
-        requires :old_password, type: String, desc: 'Old Password'
+        # requires :old_password, type: String, desc: 'Old Password'
         requires :password, type: String, desc: 'New Password'
-        requires :password_confirmation, type: String, desc: 'New Confirm Password'
+        # requires :password_confirmation, type: String, desc: 'New Confirm Password'
       end
 
       put :change_password do
         user = authenticate_user
-        if user.valid_password?(params[:old_password])
-          unless params[:password] == params[:old_password]
-            user.password = params[:password]
-            user.password_confirmation = params[:password_confirmation]
-            user.save!
-            render_success(nil, 'Password Changed')
-          else
-            render_error(nil, 'Hey! You Cannot set old password as a new password')
-          end
-        else
-          render_error(nil, 'Sorry! Password does not change because your Old Passsword was not correct')
-        end
+        user.password = params[:password]
+        user.password_confirmation = params[:password]
+        user.save!
+        render_success(nil, 'Password Changed')
+        # if user.valid_password?(params[:old_password])
+        #   unless params[:password] == params[:old_password]
+        #     user.password = params[:password]
+        #     user.password_confirmation = params[:password_confirmation]
+        #     user.save!
+        #     render_success(nil, 'Password Changed')
+        #   else
+        #     render_error(nil, 'Hey! You Cannot set old password as a new password')
+        #   end
+        # else
+        #   render_error(nil, 'Sorry! Password does not change because your Old Passsword was not correct')
+        # end
       end
 
       desc 'Sign Out From All Devices'
