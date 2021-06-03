@@ -9,8 +9,8 @@ ActiveAdmin.register Stock, as: "SVG" do
   # filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
   filter :tags_name, as: :string , label: 'Tags'
 
-  action_item 'create_stock', only: :show do
-    link_to 'CREATE STOCK', new_admin_stock_path
+  action_item 'create_svg', only: :show do
+    link_to 'CREATE SVG', new_admin_svg_path
   end
 
   controller do
@@ -31,10 +31,10 @@ ActiveAdmin.register Stock, as: "SVG" do
             StockTag.create(stock_id: @stock.id, tag_id: tag_id )
           end
         end
-        flash[:notice] = "Stock Created!"
+        flash[:notice] = "SVG Created!"
         redirect_to admin_svg_path(@stock)
       else
-        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being created!"]
+        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this svg from being created!"]
         @stock.errors.full_messages.each do |msg|
           flash[:error] << msg
         end
@@ -52,10 +52,10 @@ ActiveAdmin.register Stock, as: "SVG" do
             StockTag.create(stock_id: @stock.id, tag_id: tag_id)
           end
         end
-        flash[:notice] = "Stock Updated!"
+        flash[:notice] = "SVG Updated!"
         redirect_to admin_svg_path(@stock)
       else
-        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being updated!"]
+        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this svg from being updated!"]
         @stock.errors.full_messages.each do |msg|
           flash[:error] << msg
         end
@@ -67,10 +67,10 @@ ActiveAdmin.register Stock, as: "SVG" do
     def destroy
       @stock = Stock.find(params[:id])
       if @stock.update(is_active: false)
-        flash[:notice] = "Stock Inactive!"
+        flash[:notice] = "SVG Inactive!"
         redirect_to admin_svg_path(@stock)
       else
-        flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this stock from being inactive!"]
+        flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this svg from being inactive!"]
         @stock.errors.full_messages.each do |msg|
           flash[:alert] << msg
         end
@@ -160,7 +160,7 @@ ActiveAdmin.register Stock, as: "SVG" do
         end
       end
      
-      f.input :clip_path, input_html: { disabled: 'disabled' }
+      # f.input :clip_path, input_html: { disabled: 'disabled' }
       # f.input :stocktype
       # if f.object.image.url
       #   f.input :image, as: :file, label: 'Frame', hint: image_tag(f.object.image.url, width: '100px', height: '100px')
@@ -169,9 +169,9 @@ ActiveAdmin.register Stock, as: "SVG" do
       # end
 
       if f.object.svg.url
-        f.input :svg, as: :file, hint: image_tag(f.object.svg.url, width: '100px', height: '100px')
+        f.input :svg, as: :file, hint: image_tag(f.object.svg.url, width: '100px', height: '100px'), input_html: { accept: ".svg", onchange: "validateSvgType()" }
       else
-        f.input :svg
+        f.input :svg, input_html: { accept: ".svg", onchange: "validateSvgType()" }
       end
 
       if f.object.svg_thumb.url

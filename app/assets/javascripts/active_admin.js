@@ -4,6 +4,41 @@
 //= require active_admin/searchable_select
 
 
+
+function validatePngType() {
+    return isFileValid("png", "stock_image")
+}
+
+function validateSvgType() {
+    return isFileValid("svg", "stock_svg")
+}
+
+function isFileValid(type, elementId) {
+    var fileName, fileType = getFileName(elementId)
+    if (fileName == "") {
+        alert("Browse to upload a valid File with png extension");
+        removeInvalidFile(elementId);
+        return false;
+    } else if (fileType.toLowerCase() == type) {
+        return true;
+    } else {
+        alert("File with " + fileType + " is invalid. Upload a validfile with png extensions");
+        removeInvalidFile(elementId);
+        return false;
+    }
+}
+
+function removeInvalidFile(elementId) {
+    document.getElementById(elementId).value = "";
+}
+
+function getFileName(fileId) {
+    var fileName = document.getElementById(fileId).value
+    var splittedFileName = fileName.split(".")
+    var fileType = splittedFileName[splittedFileName.length - 1]
+    return fileName, fileType;
+}
+
 function hideModel() {
     $(".alert").show();
     setTimeout(function() {

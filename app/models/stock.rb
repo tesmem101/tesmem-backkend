@@ -3,7 +3,7 @@ class Stock < ApplicationRecord
   include Nokogiri
   include StockAdmin
   require 'will_paginate/array'
-  enum stocktype: [:frame, :svg]
+  enum stocktype: [:frame, :svg, :png]
 
   mount_uploader :image, StockUploader
   mount_uploader :svg, SvgUploader
@@ -158,16 +158,7 @@ class Stock < ApplicationRecord
     end
   end
 
-  # def self.search_keyword(locale = '', keyword)
-  #   where("lower(stocks.title#{locale}) LIKE ?", "%#{keyword}%")
-  # end
-
   def self.search_keyword(locale = '', keyword, page, per_page)
-    # keyword = 'Orange', 'yellow'
-    # keyword = "Orange", "yellow"
-    # keyword = "%fra%", "%cancer%"
-
-    # debugger
     includes(:tags)
     .left_outer_joins(:tags)
     .where("LOWER(stocks.title) like any (array[:keyword]) OR
@@ -175,10 +166,6 @@ class Stock < ApplicationRecord
             LOWER(tags.name) like any (array[:keyword]) OR
             LOWER(tags.name_ar) like any (array[:keyword])", 
             {:keyword => keyword}).uniq.paginate(page: page, per_page: per_page) if keyword.present?
-    # .where("LOWER(stocks.title) LIKE :keyword OR
-    #         LOWER(stocks.title_ar) LIKE :keyword OR
-    #         LOWER(tags.name) LIKE :keyword OR
-    #        LOWER(tags.name_ar) LIKE :keyword", 
-    #        {:keyword => "%#{keyword.downcase}%"}).uniq.paginate(page: page, per_page: per_page) if keyword.present?
   end
+  
 end
