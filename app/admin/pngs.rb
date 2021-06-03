@@ -1,4 +1,4 @@
-ActiveAdmin.register Stock, as: "Frame" do
+ActiveAdmin.register Stock, as: "Png" do
   menu parent: :stocks
   permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path 
 
@@ -9,21 +9,21 @@ ActiveAdmin.register Stock, as: "Frame" do
   # filter :stocktype, as: :select, collection: [['frame', 0], ['svg', 1]]
   filter :tags_name, as: :string , label: 'Tags'
 
-  action_item 'create_frame', only: :show do
-    link_to 'CREATE FRAME', new_admin_frame_path
+  action_item 'create_png', only: :show do
+    link_to 'CREATE png', new_admin_png_path
   end
 
   controller do
     include ActionView::Helpers::TextHelper
 
     def scoped_collection
-      Stock.where(stocktype: "frame")
+      Stock.where(stocktype: "png")
     end
 
     def create
       @stock = Stock.new(stock_params)
       @stock.category_id = Category.find_by(title: TITLES[:stock]).id # TITLES object is in db_constants file
-      @stock.stocktype = "frame"
+      @stock.stocktype = "png"
       if @stock.save
         if params[:stock][:tag_ids].present?
           tag_ids = params[:stock][:tag_ids].reject { |id| (id == "" || id == " ")}
@@ -31,14 +31,14 @@ ActiveAdmin.register Stock, as: "Frame" do
             StockTag.create(stock_id: @stock.id, tag_id: tag_id )
           end
         end
-        flash[:notice] = "FRAME Created!"
-        redirect_to admin_frame_path(@stock)
+        flash[:notice] = "PNG Created!"
+        redirect_to admin_png_path(@stock)
       else
-        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this frame from being created!"]
+        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this png from being created!"]
         @stock.errors.full_messages.each do |msg|
           flash[:error] << msg
         end
-        redirect_to new_admin_frame_path
+        redirect_to new_admin_png_path
       end
     end
 
@@ -52,14 +52,14 @@ ActiveAdmin.register Stock, as: "Frame" do
             StockTag.create(stock_id: @stock.id, tag_id: tag_id)
           end
         end
-        flash[:notice] = "FRAME Updated!"
-        redirect_to admin_frame_path(@stock)
+        flash[:notice] = "PNG Updated!"
+        redirect_to admin_png_path(@stock)
       else
-        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this frame from being updated!"]
+        flash[:error] = ["#{pluralize(@stock.errors.count, "error")} prohibited this png from being updated!"]
         @stock.errors.full_messages.each do |msg|
           flash[:error] << msg
         end
-        redirect_to edit_admin_frame_path
+        redirect_to edit_admin_png_path
       end
     end
 
@@ -67,14 +67,14 @@ ActiveAdmin.register Stock, as: "Frame" do
     def destroy
       @stock = Stock.find(params[:id])
       if @stock.update(is_active: false)
-        flash[:notice] = "FRAME Inactive!"
-        redirect_to admin_frame_path(@stock)
+        flash[:notice] = "PNG Inactive!"
+        redirect_to admin_png_path(@stock)
       else
-        flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this frame from being inactive!"]
+        flash[:alert] = ["#{pluralize(@stock.errors.count, "error")} prohibited this png from being inactive!"]
         @stock.errors.full_messages.each do |msg|
           flash[:alert] << msg
         end
-        redirect_to admin_frame_path(@stock)
+        redirect_to admin_png_path(@stock)
       end
     end
 
@@ -99,9 +99,9 @@ ActiveAdmin.register Stock, as: "Frame" do
     column :image do |stock|
       stock.image.present? ? image_tag(stock.image.url, style: "max-width: 75px;") : nil
     end
-    column :svg do |stock|
-      stock.svg.present? ? image_tag(stock.svg.url, style: "max-width: 75px;") : nil
-    end
+    # column :svg do |stock|
+    #   stock.svg.present? ? image_tag(stock.svg.url, style: "max-width: 75px;") : nil
+    # end
     column 'Thumb' do |stock|
       stock.svg_thumb.present? ? image_tag(stock.svg_thumb.url, style: "max-width: 75px;") : nil
     end
@@ -127,9 +127,9 @@ ActiveAdmin.register Stock, as: "Frame" do
       row :image do |stock|
         stock.image.present? ? image_tag(stock.image.url, style: "max-width: 75px;") : nil
       end
-      row :svg do |stock|
-        stock.svg.present? ? image_tag(stock.svg.url, style: "max-width: 75px;") : nil
-      end
+      # row :svg do |stock|
+      #   stock.svg.present? ? image_tag(stock.svg.url, style: "max-width: 75px;") : nil
+      # end
       row 'Thumb' do |stock|
         stock.svg_thumb.present? ? image_tag(stock.svg_thumb.url, style: "max-width: 75px;") : nil
       end
@@ -151,7 +151,7 @@ ActiveAdmin.register Stock, as: "Frame" do
             as: :searchable_select, 
             ajax: {
               params: {
-                type: 'frame'
+                type: 'png'
               }
             })          
         end
@@ -160,14 +160,14 @@ ActiveAdmin.register Stock, as: "Frame" do
         end
       end
      
-      f.input :clip_path, input_html: { disabled: 'disabled' }
+      # f.input :clip_path, input_html: { disabled: 'disabled' }
       # f.input :stocktype
       if f.object.image.url
-        f.input :image, as: :file, label: 'Frame', hint: image_tag(f.object.image.url, width: '100px', height: '100px')
+        f.input :image, as: :file, label: 'Png', hint: image_tag(f.object.image.url, width: '100px', height: '100px'), input_html: { accept: ".png", onchange: "validatePngType()" }
       else
-        f.input :image, label: 'Frame'
+        f.input :image, label: 'Png', input_html: { accept: ".png", onchange: "validatePngType()" }
       end
-
+      
       # if f.object.svg.url
       #   f.input :svg, as: :file, hint: image_tag(f.object.svg.url, width: '100px', height: '100px'), input_html: { disabled: 'disabled' }
       # else
