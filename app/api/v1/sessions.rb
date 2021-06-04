@@ -108,7 +108,8 @@ module V1
         last_name = params[:last_name]
         user = User.where(email: email.downcase).first
         if user.nil?
-          user = User.new(first_name: first_name, last_name: last_name, email: email.downcase, password: SecureRandom.hex(50), password_confirmation: 'password', identity_provider: 'google')
+          password = SecureRandom.hex(50)
+          user = User.new(first_name: first_name, last_name: last_name, email: email.downcase, password: password, password_confirmation: password, identity_provider: 'google')
           user.skip_confirmation!
           user.save
         end
@@ -140,7 +141,8 @@ module V1
         fb_id = params[:fb_id]
         user = User.where(email: email.downcase).first
         if user.nil?
-          user = User.new(email: email.downcase, password: SecureRandom.hex(50), password_confirmation: 'password')
+          password = SecureRandom.hex(50)
+          user = User.new(email: email.downcase, password: password, password_confirmation: password, identity_provider: 'facebook')
           user.skip_confirmation!
           user.save
         end
