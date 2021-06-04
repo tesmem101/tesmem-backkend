@@ -26,6 +26,8 @@ module V1
 
       post :sign_up do
         user = User.new(params)
+        user.username = user.email.split('@')[0] unless user.username
+        user.last_sign_in_type = 'regular'
         if user.save
           user.login!
           serialization = UserSerializer.new(user)
@@ -57,6 +59,7 @@ module V1
         elsif user.is_deleted?
           render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
         else
+          user.update_columns(last_sign_in_type: 'regular')
           user.login!
           serialization = UserSerializer.new(user)
           render_success(serialization.as_json)
@@ -94,6 +97,7 @@ module V1
         ]
       }
       params do
+        optional :username, type: String, desc: 'Username'
         requires :email, type: String, desc: 'User email'
         requires :google_id, type: String, desc: 'Google Id'
         requires :first_name, type: String, desc: 'user first name'
@@ -102,13 +106,14 @@ module V1
       end
 
       post :google_sign_in do
+        username = params[:username]
         email = params[:email]
         google_id = params[:google_id]
         first_name = params[:first_name]
         last_name = params[:last_name]
-        user = User.where(email: email.downcase).first
+        user = username ? User.where(username: username.downcase).first : User.where(email: email.downcase).first  # find user with username instead email 
         if user.nil?
-          user = User.new(first_name: first_name, last_name: last_name, email: email.downcase, password: SecureRandom.hex(50), password_confirmation: 'password', identity_provider: 'google')
+          user = User.new(first_name: first_name, last_name: last_name, username: username, email: email.downcase, password: SecureRandom.hex(50), password_confirmation: SecureRandom.hex(50), identity_provider: 'google')
           user.skip_confirmation!
           user.save
         end
@@ -116,6 +121,7 @@ module V1
         if user.is_deleted?
           render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
         else
+          user.update_columns(last_sign_in_type: 'google')
           user.login!
           serialization = UserSerializer.new(user)
           render_success(serialization.as_json)
@@ -130,17 +136,19 @@ module V1
         ]
       }
       params do
+        optional :username, type: String, desc: 'Username'
         requires :email, type: String, desc: 'User email'
         requires :fb_id, type: String, desc: 'Facebook Id'
         optional :location, type: String, desc: 'Location'
       end
 
       post :facebook_sign_in do
+        username = params[:username]
         email = params[:email]
         fb_id = params[:fb_id]
-        user = User.where(email: email.downcase).first
+        user = username ? User.where(username: username.downcase).first : User.where(email: email.downcase).first  # find user with username instead email 
         if user.nil?
-          user = User.new(email: email.downcase, password: SecureRandom.hex(50), password_confirmation: 'password')
+          user = User.new(username: username, email: email.downcase, password: SecureRandom.hex(50), password_confirmation: SecureRandom.hex(50), identity_provider: 'facebook')
           user.skip_confirmation!
           user.save
         end
@@ -148,6 +156,7 @@ module V1
         if user.is_deleted?
           render_error(RESPONSE_CODE[:unprocessable_entity], 'Sorry! Your Account is Suspended by Tesmem!')
         else
+          user.update_columns(last_sign_in_type: 'facebook')
           user.login!
           serialization = UserSerializer.new(user)
           render_success(serialization.as_json)
