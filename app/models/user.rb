@@ -79,7 +79,7 @@ class User < ApplicationRecord
 
   def move_profile_photo_to_image_table
     if self.profile.blank?
-      current_image = "https://tesmem-staging.s3.us-east-2.amazonaws.com/uploads/dummy/user.png"
+      current_image = "https://tesmem-production.s3.amazonaws.com/uploads/dummy/user.png"
       img = MiniMagick::Image::open(current_image)
       height = img[:height].to_s
       width = img[:width].to_s
