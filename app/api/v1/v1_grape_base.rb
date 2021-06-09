@@ -23,6 +23,7 @@ module V1
     mount V1::FormattedTexts
     mount V1::CustomFonts
     mount V1::Passwords
+    mount V1::Pexels
 
     add_swagger_documentation(
       api_version: 'v1',
