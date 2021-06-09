@@ -16,13 +16,13 @@ module V1
         get '/' do
           if params[:page].present? && params[:per_page].present?
             search = params['search'].present? ? params['search'].downcase : nil
-            unsplash_images = []
             if params[:is_arabic].present? && params[:is_arabic].eql?('true')
               detection = googleCloudTranslation.detect search # Detect Language
               translation = googleCloudTranslation.translate search, from: detection.language, to: "en"
               search = translation.text
             end
 
+            unsplash_images = []
             begin
               unsplash_images.concat get_unsplash_images(search, params[:page], nil, params[:per_page], 'latest').map { |photo| map_unsplash_images(photo.table, 'regular') }
               records = get_unsplash_response(unsplash_images)
