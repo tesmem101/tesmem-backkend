@@ -49,8 +49,14 @@ module V1
           translation = translate.translate search, from: detection.language, to: "en"
           search = translation.text
         end
-        unsplash_images.concat get_unsplash_images(search, params[:page], nil, params[:per_page], 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'regular') }
-        render_success(unsplash_images.as_json)
+
+        begin
+          unsplash_images.concat get_unsplash_images(search, params[:page], nil, params[:per_page], 'latest').map { |photo| map_unsplash_backgrounds(photo.table, 'regular') }
+          render_success(unsplash_images.as_json)
+        rescue => exception
+          render_error(RESPONSE_CODE[:internal_server_error], exception.message, exception)
+        end
+
       end
     end
   end
