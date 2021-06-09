@@ -22,9 +22,15 @@ module V1
               translation = googleCloudTranslation.translate search, from: detection.language, to: "en"
               search = translation.text
             end
-            unsplash_images.concat get_unsplash_images(search, params[:page], nil, params[:per_page], 'latest').map { |photo| map_unsplash_images(photo.table, 'regular') }
-            records = get_unsplash_response(unsplash_images)
-            render_success(records.as_json)
+
+            begin
+              unsplash_images.concat get_unsplash_images(search, params[:page], nil, params[:per_page], 'latest').map { |photo| map_unsplash_images(photo.table, 'regular') }
+              records = get_unsplash_response(unsplash_images)
+              render_success(records.as_json)              
+            rescue => exception
+              render_error(RESPONSE_CODE[:internal_server_error], exception.message, exception)
+            end
+
           else
             render_error(RESPONSE_CODE[:bad_request], 'Sorry! You should pass page and per_page params!')
           end
