@@ -1,1 +1,1 @@
-Pexel = Pexels::Client.new(ENV["Pexel_ACCESS_KEY"])
+Pexel = Pexels::Client.new(ENV["PEXEL_ACCESS_KEY"])
