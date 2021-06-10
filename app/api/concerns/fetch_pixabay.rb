@@ -11,7 +11,8 @@ module FetchPixabay
                 image: {
                     url:photo['imageURL'],
                     height: photo['imageHeight'], 
-                    width: photo['imageWidth']
+                    width: photo['imageWidth'],
+                    thumb: photo['webformatURL']
                 },
                 artist: {
                     name: "By #{photo['user']}",
