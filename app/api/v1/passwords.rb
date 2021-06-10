@@ -17,7 +17,7 @@ module V1
           if user.present?
             user.generate_password_token! #generate pass token
             link = params[:link] ? "#{params[:link]}?token=#{user.reset_password_token}" : "#{ENV['HOST_URL']}?token=#{user.reset_password_token}" 
-            UserMailer.forgot_password(user, link).deliver
+            UserMailer.forgot_password(user, link).deliver_later
             render_success(nil, 'Email has been sent to your provided email.')
           else
             render_error(nil, 'Email address not found. Please check and try again.')
