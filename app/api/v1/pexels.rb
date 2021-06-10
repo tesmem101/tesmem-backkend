@@ -2,8 +2,8 @@ module V1
     class Pexels < Grape::API
         include V1Base
         include FetchPexel
-        require 'pexels'
-        require "google/cloud/translate/v2"
+        # require 'pexels'
+        # require "google/cloud/translate/v2"
         version "v1", using: :path
         resource :pexels do
 
@@ -12,7 +12,6 @@ module V1
                 
                 if params[:page].present? && params[:per_page].present?
                     search = params['search'].present? ? params['search'].downcase : nil
-                    pexel_images = []
                     if params[:is_arabic].present? && params[:is_arabic].eql?('true')
                       detection = googleCloudTranslation.detect search # Detect Language
                       translation = googleCloudTranslation.translate search, from: detection.language, to: "en"
