@@ -17,9 +17,10 @@ module FetchPexel
             return {
                 id: photo.id, 
                 image: {
-                    url:photo.src['original'],
+                    url:photo.src['large2x'],
                     height: photo.height, 
-                    width: photo.width
+                    width: photo.width,
+                    thumb: photo.src['tiny']
                 },
                 artist: {
                     name: "By #{photo.user.name}",
