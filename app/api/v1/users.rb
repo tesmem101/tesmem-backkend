@@ -8,6 +8,22 @@ module V1
 
     resource :users do
 
+      desc 'Help email'
+      params do
+        requires :title, type: String, desc: 'Title of Email'
+        requires :body, type: String, desc: 'Body of Email'
+      end
+      post :help_email do
+
+        user = authenticate_user
+        title = params[:title]
+        body = params[:body]
+        UserMailer.help(title, body, user).deliver_later
+        Email.create(from: 'noreply@tesmem.com', to: 'dev@tesmem.com', title: title, body: body, sent_at: Time.now, email_type: 'help')
+        render_success(nil, 'Thanks! we will respond back to you by email.')
+
+      end
+      
       desc 'Check Username'
       get :check_username do
         username = params[:username]

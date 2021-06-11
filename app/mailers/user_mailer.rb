@@ -10,4 +10,11 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "Reset your Tesmem's password"
   end
 
+  def help(title, body, user)
+    @title = title
+    @body = body
+    @user = user
+    mail to: 'dev@tesmem.com', subject: @title
+  end
+
 end
