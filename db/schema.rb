@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210611074943) do
+ActiveRecord::Schema.define(version: 20210611095157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,15 @@ ActiveRecord::Schema.define(version: 20210611074943) do
     t.integer "email_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.bigint "user_id"
+    t.boolean "happy"
+    t.string "feedback"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
   create_table "folders", force: :cascade do |t|
@@ -271,6 +280,7 @@ ActiveRecord::Schema.define(version: 20210611074943) do
   end
 
   add_foreign_key "custom_fonts", "users"
+  add_foreign_key "feedbacks", "users"
   add_foreign_key "folders", "users"
   add_foreign_key "formatted_texts", "users"
   add_foreign_key "sort_sub_categories", "categories"
