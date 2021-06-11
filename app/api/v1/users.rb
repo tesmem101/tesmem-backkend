@@ -16,7 +16,10 @@ module V1
       post :help_email do
 
         user = authenticate_user
-        UserMailer.help(params[:title], params[:body], user).deliver_later
+        title = params[:title]
+        body = params[:body]
+        UserMailer.help(title, body, user).deliver_later
+        Email.create(from: 'noreply@tesmem.com', to: 'dev@tesmem.com', title: title, body: body, sent_at: Time.now, email_type: 'help')
         render_success(nil, 'Thanks! we will respond back to you by email.')
 
       end

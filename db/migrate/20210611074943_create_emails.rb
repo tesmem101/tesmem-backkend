@@ -6,7 +6,7 @@ class CreateEmails < ActiveRecord::Migration[5.1]
       t.string :title
       t.string :body
       t.timestamp :sent_at
-      t.integer :type
+      t.integer :email_type
 
       t.timestamps
     end
