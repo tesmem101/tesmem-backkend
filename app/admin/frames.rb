@@ -23,6 +23,7 @@ ActiveAdmin.register Stock, as: "Frame" do
     def create
       @stock = Stock.new(stock_params)
       @stock.category_id = Category.find_by(title: TITLES[:stock]).id # TITLES object is in db_constants file
+      @stock.sub_category_id = SubCategory.find_by(title: "frames").id
       @stock.stocktype = "frame"
       if @stock.save
         if params[:stock][:tag_ids].present?
@@ -164,20 +165,20 @@ ActiveAdmin.register Stock, as: "Frame" do
       f.input :title
       f.input :title_ar
       # f.input :category, as: :searchable_select
-      div style: 'display: block ruby;' do
-        div class: 'stock_sub_category_searchable_select_path' do
-          f.input(:sub_category, 
-            as: :searchable_select, 
-            ajax: {
-              params: {
-                type: 'frame'
-              }
-            })          
-        end
-        div do
-          render :partial => 'admin/bootstrap_modals/sub_category'
-        end
-      end
+      # div style: 'display: block ruby;' do
+      #   div class: 'stock_sub_category_searchable_select_path' do
+      #     f.input(:sub_category, 
+      #       as: :searchable_select, 
+      #       ajax: {
+      #         params: {
+      #           type: 'frame'
+      #         }
+      #       })          
+      #   end
+      #   div do
+      #     render :partial => 'admin/bootstrap_modals/sub_category'
+      #   end
+      # end
 
       f.input :clip_path
       f.input :stock_height, label: 'Frame height'
