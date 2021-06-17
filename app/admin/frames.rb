@@ -1,6 +1,6 @@
 ActiveAdmin.register Stock, as: "Frame" do
   menu parent: :stocks
-  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path 
+  permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path, :stock_height, :stock_width
 
   filter :title
   filter :title_ar
@@ -81,7 +81,7 @@ ActiveAdmin.register Stock, as: "Frame" do
     private
 
     def stock_params
-      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path)
+      params.require(:stock).permit(:title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path, :stock_height, :stock_width)
     end
 
   end
@@ -96,6 +96,17 @@ ActiveAdmin.register Stock, as: "Frame" do
     column :category
     column :sub_category
     column :stocktype
+    column :clip_path
+
+    column "Frame height" do |stock|
+      stock.stock_height
+    end
+
+    column "Frame width" do |stock|
+      stock.stock_width
+    end
+
+    
     column :image do |stock|
       stock.image.present? ? image_tag(stock.image.url, style: "max-width: 75px;") : nil
     end
@@ -124,6 +135,14 @@ ActiveAdmin.register Stock, as: "Frame" do
       row :sub_category
       row :clip_path
       row :stocktype
+      row :clip_path
+      row "Frame height" do |stock|
+        stock.stock_height
+      end
+  
+      row "Frame width" do |stock|
+        stock.stock_width
+      end
       row :image do |stock|
         stock.image.present? ? image_tag(stock.image.url, style: "max-width: 75px;") : nil
       end
@@ -159,14 +178,18 @@ ActiveAdmin.register Stock, as: "Frame" do
           render :partial => 'admin/bootstrap_modals/sub_category'
         end
       end
-     
-      f.input :clip_path, input_html: { disabled: 'disabled' }
+
+      f.input :clip_path
+      f.input :stock_height, label: 'Frame height'
+      f.input :stock_width, label: 'Frame width'
+
       # f.input :stocktype
       if f.object.image.url
         f.input :image, as: :file, label: 'Frame', hint: image_tag(f.object.image.url, width: '100px', height: '100px')
       else
         f.input :image, label: 'Frame'
       end
+
 
       # if f.object.svg.url
       #   f.input :svg, as: :file, hint: image_tag(f.object.svg.url, width: '100px', height: '100px'), input_html: { disabled: 'disabled' }

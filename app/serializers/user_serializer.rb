@@ -10,4 +10,8 @@ class UserSerializer < ActiveModel::Serializer
     object.confirmed_at ? true : false
   end
 
+  def location
+    object.location ? object.location : ""
+  end
+
 end
