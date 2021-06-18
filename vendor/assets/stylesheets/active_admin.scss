@@ -11,6 +11,18 @@
 // @import "active_admin/base";
 // The following variables override default ActiveMaterial values
 // $am-theme-primary: #00689f;
+#main_content_wrapper {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+}
+
+.paginated_collection_contents {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+}
+
 .select2 {
     width: 260px !important;
 }

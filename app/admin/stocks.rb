@@ -1,6 +1,6 @@
 ActiveAdmin.register Stock do
   permit_params :title, :description, :url, :category_id, :sub_category_id, :json, :image, :frame, :svg, :stocktype, :specs, :title_ar, :svg_thumb, :stock_tags, :tags, :tag_ids, :is_active, :pro, :price, :clip_path 
-  actions :all, except: [:new, :edit, :update, :destroy]
+  actions :all, except: [:new, :edit, :edit, :destroy]
   filter :title
   filter :title_ar
   filter :category_title, as: :string , label: 'Category'

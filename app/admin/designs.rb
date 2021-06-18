@@ -68,7 +68,11 @@ ActiveAdmin.register Design do
     column :id
     column :title
     column :description
-    column :user
+    # column :user
+    column 'User' do |design|
+      # debugger
+      link_to design.user.first_name, admin_user_path(design.user)
+    end
     column :image do |design|
       if Rails.env.development?
         image_tag "https://tesmem-production.s3.amazonaws.com#{design.image.url}", style: "max-width: 75px;"
