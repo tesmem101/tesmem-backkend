@@ -1,7 +1,8 @@
 ActiveAdmin.register User, as: "DesignerDashboard" do
     menu parent: :dashboards
+    actions :all, except: [:new, :edit, :edit, :destroy]
     filter :role, as: :select, collection: User.roles.select {|k,v| ['designer', 'lead_designer'].include?(k)}
-    filter :created_at 
+    filter :created_at, label: 'Joining Date'
 
     order_by(:designs_count) do |order_clause|
         ['number_of_designs', order_clause.order].join(' ')
@@ -41,17 +42,17 @@ ActiveAdmin.register User, as: "DesignerDashboard" do
         end
 
 
-        # column 'Rate per design' do
-        #     'Coming Soon'
-        # end
+        column 'Rate per design' do
+            'Coming Soon'
+        end
 
-        # column 'Paid amount' do
-        #     'Coming Soon'
-        # end
+        column 'Paid amount' do
+            'Coming Soon'
+        end
 
-        # column 'Number of used designs' do |user|
-        #     'Coming soon'
-        # end
+        column 'Number of used designs' do |user|
+            'Coming soon'
+        end
 
     end
 end
