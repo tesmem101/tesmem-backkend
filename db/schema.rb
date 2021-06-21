@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210611095157) do
+ActiveRecord::Schema.define(version: 20210616121023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -191,6 +191,8 @@ ActiveRecord::Schema.define(version: 20210611095157) do
     t.string "clip_path"
     t.boolean "pro"
     t.float "price"
+    t.string "stock_height"
+    t.string "stock_width"
   end
 
   create_table "sub_categories", force: :cascade do |t|
