@@ -1,5 +1,5 @@
 ActiveAdmin.register User, as: "DesignerDashboard" do
-    menu parent: :dashboards
+    menu parent: :dashboards, :label => "Designer"
     actions :all, except: [:new, :edit, :edit, :destroy]
     filter :role, as: :select, collection: User.roles.select {|k,v| ['designer', 'lead_designer'].include?(k)}
     filter :created_at, label: 'Joining Date'
