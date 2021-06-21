@@ -1,6 +1,7 @@
 ActiveAdmin.register Design, as: "DesignDashboard" do
     menu parent: :dashboards, :label => "Design"
     actions :all, except: [:new, :edit, :edit, :destroy]
+    menu false
     # filter :role, as: :select, collection: User.roles.select {|k,v| ['designer', 'lead_designer'].include?(k)}
     # filter :created_at, label: 'Joining Date'
 
