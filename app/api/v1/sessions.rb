@@ -15,13 +15,13 @@ module V1
             { code: RESPONSE_CODE[:not_found], message: I18n.t('errors.not_found') }
         ]}
       params do
-        optional :username, type: String, desc: 'Username'
+        # optional :username, type: String, desc: 'Username'
         requires :email, type: String, desc: 'Email'
         requires :password, type: String, desc: 'Password'
-        requires :password_confirmation, type: String, desc: 'Password confirmation'
-        requires :first_name, type: String, desc: 'user first name'
-        optional :last_name, type: String, desc: 'user last name'
-        optional :location, type: String, desc: 'Location'
+        # requires :password_confirmation, type: String, desc: 'Password confirmation'
+        # requires :first_name, type: String, desc: 'user first name'
+        # optional :last_name, type: String, desc: 'user last name'
+        # optional :location, type: String, desc: 'Location'
       end
 
       post :sign_up do
