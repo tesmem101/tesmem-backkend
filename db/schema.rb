@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210616121023) do
+ActiveRecord::Schema.define(version: 20210629065425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20210616121023) do
     t.boolean "is_deleted", default: false
     t.boolean "is_active", default: true
     t.boolean "pro"
-    t.float "price"
+    t.float "rate_per_design"
   end
 
   create_table "designs", force: :cascade do |t|
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20210616121023) do
     t.string "width"
     t.integer "is_trashed", default: 0, null: false
     t.integer "cat_id"
+    t.float "price"
     t.index ["user_id"], name: "design_by_user"
   end
 
