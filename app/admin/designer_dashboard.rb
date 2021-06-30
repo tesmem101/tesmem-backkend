@@ -43,10 +43,12 @@ ActiveAdmin.register User, as: "DesignerDashboard" do
 
 
         column 'Rate per design' do
+            # user.designs.joins(:designer)
             'Coming Soon'
         end
 
         column 'Paid amount' do
+            # (user.designs.joins(:designer).where("designers.approved = ? ", true).count) * ()
             'Coming Soon'
         end
 
