@@ -15,7 +15,7 @@ module V1
       end
       post :feedback do
         user = authenticate_user
-        user.feedbacks.create(happy: params[:happy], feedback: params[:feedback])
+        user.create_feedback(happy: params[:happy], feedback: params[:feedback])
         render_success(nil, 'Thanks for submitting the feedback!')
       end
 

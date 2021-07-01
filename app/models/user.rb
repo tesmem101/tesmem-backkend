@@ -16,7 +16,7 @@ class User < ApplicationRecord
   has_many :uploads, dependent: :destroy
   has_many :images, as: :image, dependent: :destroy
   has_many :formatted_texts, dependent: :destroy
-  has_many :feedbacks, dependent: :destroy
+  has_one :feedback, dependent: :destroy
   has_many :custom_fonts, dependent: :destroy
   has_many :used_designs
 

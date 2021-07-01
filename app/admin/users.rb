@@ -1,6 +1,6 @@
 ActiveAdmin.register User do
   menu priority: 1 # so it's on the very left
-  permit_params :first_name, :last_name, :email, :username, :role, :profile, :is_deleted, :password
+  permit_params :first_name, :last_name, :email, :username, :role, :profile, :is_deleted, :password, :location, :want_to_change_password
   config.batch_actions = false
   filter :first_name
   filter :last_name
@@ -61,6 +61,7 @@ ActiveAdmin.register User do
       f.input :first_name
       f.input :last_name
       f.input :username
+      f.input :location
       f.input :email
 
       if current_user.role.eql?('super_admin')
