@@ -154,6 +154,16 @@ module V1
         render_success(design.as_json)
       end
 
+      desc "Design Used By",
+           { consumes: ["application/x-www-form-urlencoded"],
+             http_codes: [{ code: 200, message: "success" }] }
+      get "/:id/used_by" do
+        user = authenticate_user
+        design = Design.find(params[:id])
+        used_design_saved = user.used_designs.create(user_id: design.user.id, design_id: params[:id])
+        render_success(used_design_saved.as_json)
+      end
+
     end
   end
 end
