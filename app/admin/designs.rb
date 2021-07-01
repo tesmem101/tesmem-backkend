@@ -87,6 +87,7 @@ ActiveAdmin.register Design do
     column 'Template' do |design|
       design.designer
     end
+    column :price
     actions
   end
 
@@ -110,6 +111,7 @@ ActiveAdmin.register Design do
       row 'Template' do |design|
         design.designer
       end
+      row :price
     end
   end
 

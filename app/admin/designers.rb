@@ -1,6 +1,6 @@
 ActiveAdmin.register Designer, as: "Templates" do
   menu :label => "Templates", priority: 5
-  permit_params :design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids, :is_active, :pro, :price
+  permit_params :design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids, :is_active, :pro, :rate_per_design
   # action_item :new, only: :index do
   #   link_to('New Template', new_admin_designer_path)
   # end
@@ -76,7 +76,7 @@ ActiveAdmin.register Designer, as: "Templates" do
     private
 
     def template_params
-      params.require(:designer).permit(:design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids, :is_active, :pro, :price)
+      params.require(:designer).permit(:design_id, :category_id, :sub_category_id, :approved, :private, :url, :template_tags, :tags, :tag_ids, :is_active, :pro, :rate_per_design)
     end
 
   end
@@ -111,7 +111,7 @@ ActiveAdmin.register Designer, as: "Templates" do
     column :tags
     column :is_active
     column :pro
-    column :price
+    column :rate_per_design
     actions
   end
 
@@ -134,7 +134,7 @@ ActiveAdmin.register Designer, as: "Templates" do
       row :tags
       row :is_active
       row :pro
-      row :price
+      row :rate_per_design
     end
   end
 
@@ -164,7 +164,7 @@ ActiveAdmin.register Designer, as: "Templates" do
       end
       f.input :is_active
       f.input :pro
-      f.input :price
+      f.input :rate_per_design
     end
     actions
   end

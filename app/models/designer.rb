@@ -7,4 +7,12 @@ class Designer < ApplicationRecord
   has_many :tags, through: :template_tags
   scope :approved, -> { where(approved: true) }
   validates :design_id, uniqueness: { scope: :sub_category_id, message: "is already under selected Sub Category" }
+
+  after_create :set_design_price
+
+  def set_design_price
+    self.design.price = self.rate_per_design
+    self.design.save!
+  end
+
 end

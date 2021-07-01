@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210616121023) do
+ActiveRecord::Schema.define(version: 20210701064906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20210616121023) do
     t.boolean "is_deleted", default: false
     t.boolean "is_active", default: true
     t.boolean "pro"
-    t.float "price"
+    t.float "rate_per_design"
   end
 
   create_table "designs", force: :cascade do |t|
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20210616121023) do
     t.string "width"
     t.integer "is_trashed", default: 0, null: false
     t.integer "cat_id"
+    t.float "price"
     t.index ["user_id"], name: "design_by_user"
   end
 
@@ -231,6 +232,16 @@ ActiveRecord::Schema.define(version: 20210616121023) do
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 
+  create_table "used_designs", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "design_id"
+    t.integer "used_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["design_id"], name: "index_used_designs_on_design_id"
+    t.index ["user_id"], name: "index_used_designs_on_user_id"
+  end
+
   create_table "user_tokens", force: :cascade do |t|
     t.string "token"
     t.integer "user_id"
@@ -291,5 +302,7 @@ ActiveRecord::Schema.define(version: 20210616121023) do
   add_foreign_key "stock_tags", "tags"
   add_foreign_key "template_tags", "designers"
   add_foreign_key "template_tags", "tags"
+  add_foreign_key "used_designs", "designs"
+  add_foreign_key "used_designs", "users"
   add_foreign_key "visits", "users"
 end

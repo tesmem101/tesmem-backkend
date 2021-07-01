@@ -42,16 +42,18 @@ ActiveAdmin.register User, as: "DesignerDashboard" do
         end
 
 
-        column 'Rate per design' do
-            'Coming Soon'
+        column 'Rate per design' do |user|
+            begin user.designs.joins(:designer).where("designers.rate_per_design is not null").first.price rescue '' end
         end
 
-        column 'Paid amount' do
-            'Coming Soon'
+        column 'Paid amount' do |user|
+            begin (user.designs.joins(:designer).where("designers.approved = ? ", true).count) * (
+                user.designs.joins(:designer).where("designers.rate_per_design is not null").first.price
+            ) rescue '' end
         end
 
         column 'Number of used designs' do |user|
-            'Coming soon'
+            user.used_designs.count
         end
 
     end
