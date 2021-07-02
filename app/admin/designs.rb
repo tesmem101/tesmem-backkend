@@ -70,7 +70,6 @@ ActiveAdmin.register Design do
     column :description
     # column :user
     column 'User' do |design|
-      # debugger
       link_to design.user.first_name, admin_user_path(design.user)
     end
     column :image do |design|

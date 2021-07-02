@@ -6,6 +6,12 @@ ActiveAdmin.register Feedback do
 
   index do
     column :id
+    column 'User Name' do |feedback|
+      link_to feedback.user.first_name, admin_user_path(feedback.user)
+    end
+    column 'User Email' do |feedback|
+      link_to feedback.user.email, admin_user_path(feedback.user)
+    end
     column :happy
     column :feedback
     actions
