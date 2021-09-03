@@ -29,7 +29,7 @@ module V1
         title = params[:title]
         body = params[:body]
         UserMailer.help(title, body, user).deliver_later
-        Email.create(from: 'info@tesmem.com', to: 'dev@tesmem.com', title: title, body: body, sent_at: Time.now, email_type: 'help')
+        Email.create(from: 'dev@tesmem.com', to: 'dev@tesmem.com', title: title, body: body, sent_at: Time.now, email_type: 'help')
         render_success(nil, 'Thanks! we will respond back to you by email.')
       end
       
